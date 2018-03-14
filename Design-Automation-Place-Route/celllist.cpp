@@ -42,4 +42,5 @@ bool sortDValue(const std::vector<int> &vect1, const std::vector<int> &vect2)
     {
         return vect1[0] > vect2[0];
     }
+    return false;
 }
