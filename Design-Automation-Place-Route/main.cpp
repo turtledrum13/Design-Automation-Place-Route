@@ -72,17 +72,17 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
 
     //output the cutset and partitions to output file
     outFile<<cutset<<"\n";
-    for(int i=0; i<numOfCells/2; i++)
+    for(int i=0; i<mainPartition.size()/2; i++)
     {
         outFile<<mainPartition[i]+1<<"\t";
         std::cout<<mainPartition[i]<<"\t";
     }
     outFile<<"\n\n";
     std::cout<<"\n\n";
-    for(int i=0; i<numOfCells/2; i++)
+    for(int i=0; i<mainPartition.size()/2; i++)
     {
-        outFile<<mainPartition[i+numOfCells/2]+1<<"\t";
-        std::cout<<mainPartition[i+numOfCells/2]<<"\t";
+        outFile<<mainPartition[i+mainPartition.size()/2]+1<<"\t";
+        std::cout<<mainPartition[i+mainPartition.size()/2]<<"\t";
     }
     //std::cout<<cutset<<"\n";
 }

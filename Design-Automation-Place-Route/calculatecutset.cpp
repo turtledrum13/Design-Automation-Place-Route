@@ -17,7 +17,7 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells,
     int sum, Gmax, k, maxGain, pass=0, cutset2=0;
     std::vector<bool> truth(numOfNets, false);
     bool buffer=true;
-std::cout<<"here";
+    std::cout<<"here";
     for (int i=0; i<numOfCells; i+=2)
     {
         partitionA.push_back(fullPartition[i]);
@@ -57,7 +57,7 @@ std::cout<<"here";
     gains.resize(numOfCells/2, 0);
     //create loop to perform a pass
     while(buffer)
-    //while (true)
+        //while (true)
     {
         partitionAPrime = partitionA;
         partitionBPrime = partitionB;
@@ -85,7 +85,7 @@ std::cout<<"here";
 
         k = 0;
 
-std::cout<<"\n";
+        std::cout<<"\n";
         //find the max gain from the previous pass and find the k value
         for (unsigned int i = 0; i<numOfCells/2; i++)
         {
@@ -124,7 +124,7 @@ std::cout<<"\n";
         }
         else
         {
-                        //std::cout<<"what";
+            //std::cout<<"what";
 
             buffer=false;                                 //finish the algorithm
         }
@@ -146,7 +146,7 @@ std::cout<<"\n";
         std::cout<<partitionB[i]<<"\t";
     }*/
 
-        for(int i=0; i<numOfCells/2; i++)
+    for(int i=0; i<numOfCells/2; i++)
     {
         std::cout<<partitionA[i]<<"\t";
     }
@@ -163,16 +163,16 @@ std::cout<<"\n";
 
     if(newCells%2!=0)
     {
-        if(std::find(partitionA.begin(), partitionA.end(), placeCell) != partitionA.end())
-        {
-            partitionA.erase(std::remove(partitionA.begin(), partitionA.end(), placeCell), partitionA.end());
-            newCells-=1;
-        }
-        else
-        {
+        //if(std::find(partitionA.begin(), partitionA.end(), placeCell) != partitionA.end())
+        //{
+          //  partitionA.erase(std::remove(partitionA.begin(), partitionA.end(), placeCell), partitionA.end());
+            //newCells-=1;
+        //}
+        //else
+        //{
             partitionA.push_back(placeCell);
             newCells+=1;
-        }
+        //}
     }
 
     fullPartition.clear();
@@ -180,63 +180,65 @@ std::cout<<"\n";
     if(partitionA.size() != 1 && partitionA.size() != 2)
     {
         calculateCutset(partitionA, totalCells, netArray, cellList, newCells, numOfNets, cutset2, mainPartition);
-    } else
+    }
+    else
 
-    if(partitionA.size()==1)
-    {
-        mainPartition.push_back(partitionA[0]);
-    }
-    else if (partitionA.size()==2)
-    {
-        if (std::find(partitionA.begin(), partitionA.end(), placeCell) != partitionA.end())
-        {
-            partitionA.erase(std::remove(partitionA.begin(), partitionA.end(), placeCell), partitionA.end());
-            mainPartition.push_back(partitionA[0]);
-        }
-        else
+        if(partitionA.size()==1)
         {
             mainPartition.push_back(partitionA[0]);
-            mainPartition.push_back(partitionA[1]);
         }
-    }
+        else if (partitionA.size()==2)
+        {
+            //if (std::find(partitionA.begin(), partitionA.end(), placeCell) != partitionA.end())
+            //{
+              //  partitionA.erase(std::remove(partitionA.begin(), partitionA.end(), placeCell), partitionA.end());
+                //mainPartition.push_back(partitionA[0]);
+            //}
+            //else
+            //{
+                mainPartition.push_back(partitionA[0]);
+                mainPartition.push_back(partitionA[1]);
+            //}
+        }
 
     newCells = numOfCells/2;
 
     if(newCells%2!=0)
     {
-        if(std::find(partitionB.begin(), partitionB.end(), placeCell) != partitionB.end())
+        /*if(std::find(partitionB.begin(), partitionB.end(), placeCell) != partitionB.end())
         {
             partitionB.erase(std::remove(partitionB.begin(), partitionB.end(), placeCell), partitionB.end());
             newCells-=1;
         }
         else
-        {
+        {*/
             partitionB.push_back(placeCell);
             newCells+=1;
-        }
+        //}
     }
 
     if(partitionB.size() != 1 && partitionB.size() != 2)
     {
         calculateCutset(partitionB, totalCells, netArray, cellList, newCells, numOfNets, cutset2, mainPartition);
-    } else
+    }
+    else
 
-    if(partitionB.size()==1)
-    {
-        mainPartition.push_back(partitionB[0]);
-    }
-    else if (partitionB.size()==2)
-    {
-        if (std::find(partitionB.begin(), partitionB.end(), placeCell) != partitionB.end())
-        {
-            partitionB.erase(std::remove(partitionB.begin(), partitionB.end(), placeCell), partitionB.end());
-            mainPartition.push_back(partitionB[0]);
-        }
-        else
+        if(partitionB.size()==1)
         {
             mainPartition.push_back(partitionB[0]);
-            mainPartition.push_back(partitionB[1]);
         }
-    }
+        else if (partitionB.size()==2)
+        {
+            /*if (std::find(partitionB.begin(), partitionB.end(), placeCell) != partitionB.end())
+            {
+                partitionB.erase(std::remove(partitionB.begin(), partitionB.end(), placeCell), partitionB.end());
+                mainPartition.push_back(partitionB[0]);
+            }
+            else
+            {*/
+                mainPartition.push_back(partitionB[0]);
+                mainPartition.push_back(partitionB[1]);
+            //}
+        }
 
 }
