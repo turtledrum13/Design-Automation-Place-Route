@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9329330020589B6A00C10709 /* Hello.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 932932FF20589B6A00C10709 /* Hello.cpp */; };
 		93CEBC7D2058AD26009E55CE /* calculatecutset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93CEBC722058AD26009E55CE /* calculatecutset.cpp */; };
 		93CEBC7E2058AD26009E55CE /* linkedList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93CEBC742058AD26009E55CE /* linkedList.cpp */; };
 		93CEBC7F2058AD26009E55CE /* pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93CEBC752058AD26009E55CE /* pass.cpp */; };
@@ -31,7 +30,6 @@
 
 /* Begin PBXFileReference section */
 		932932FC20589B6A00C10709 /* Design-Automation-Place-Route */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Design-Automation-Place-Route"; sourceTree = BUILT_PRODUCTS_DIR; };
-		932932FF20589B6A00C10709 /* Hello.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Hello.cpp; sourceTree = "<group>"; };
 		93CEBC702058AD26009E55CE /* calculatecutset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = calculatecutset.h; sourceTree = "<group>"; };
 		93CEBC712058AD26009E55CE /* celllist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = celllist.h; sourceTree = "<group>"; };
 		93CEBC722058AD26009E55CE /* calculatecutset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = calculatecutset.cpp; sourceTree = "<group>"; };
@@ -90,7 +88,6 @@
 				93CEBC7A2058AD26009E55CE /* main.cpp */,
 				93CEBC752058AD26009E55CE /* pass.cpp */,
 				93CEBC7C2058AD26009E55CE /* pass.h */,
-				932932FF20589B6A00C10709 /* Hello.cpp */,
 			);
 			path = "Design-Automation-Place-Route";
 			sourceTree = "<group>";
@@ -159,7 +156,6 @@
 				93CEBC7E2058AD26009E55CE /* linkedList.cpp in Sources */,
 				93CEBC7D2058AD26009E55CE /* calculatecutset.cpp in Sources */,
 				93CEBC832058AD26009E55CE /* main.cpp in Sources */,
-				9329330020589B6A00C10709 /* Hello.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
