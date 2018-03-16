@@ -109,6 +109,11 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     //Routing///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     
+    for (int i=0; i<mainPartition.size(); i++)
+    {
+        if (mainPartition[i] > numOfCells2-1) mainPartition[i] = -1;
+    }
+    
     //First: Global Routing
     //layout.resize(6, std::vector<int>(7*mainPartition.size()-1));   //sizing the empty layout for single row placement (will want to make this 2:1 placement eventually)
     layout.resize(1, std::vector<int>(1)); addRows(5, layout);
