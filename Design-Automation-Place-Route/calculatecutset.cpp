@@ -95,7 +95,7 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells,
         }
 
         //swap the values in the partitions up to the k value
-        if (Gmax > 0)
+        /*if (Gmax > 0)
         {
             for (unsigned int i = 0; i<k+1; i++)
             {
@@ -107,9 +107,9 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells,
             cutset = cutset - Gmax;                       //recalculate cutset
         }
         else
-        {
+        {*/
             buffer=false;                                 //finish the algorithm
-        }
+        //}
 
         X.clear();
         Y.clear();
