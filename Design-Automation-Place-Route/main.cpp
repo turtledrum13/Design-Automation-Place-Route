@@ -92,7 +92,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     
     outFile<<"\n";
     std::cout<<"\n";
-    
+      
     for(int i=0; i<mainPartition.size()/2; i++)
     {
         outFile<<mainPartition[i+mainPartition.size()/2]+1<<"\t";
