@@ -85,19 +85,6 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     //end print netlist
     
     
-//    for (int i=0; i<netArray.size(); i++)
-//    {
-//        int index = netArray[i].size();
-//        printf("%i: \n",index);
-//
-//        for(int j=0; j<index; j++)
-//        {
-//            printf("%i ",netArray[i][j]);
-//        }
-//    }
-    
-    
-
     //split the cells into 2 partitions of equal size.
     for (int i=0; i<numOfCells/2; i++)
     {
@@ -117,33 +104,44 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
 
     
     
-    //Routing
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Routing///////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     
     //First: Global Routing
-    layout.resize(6, std::vector<int>(7*mainPartition.size()-1)); // single row placement
+    //layout.resize(6, std::vector<int>(7*mainPartition.size()-1));   //sizing the empty layout for single row placement (will want to make this 2:1 placement eventually)
+    layout.resize(1, std::vector<int>(1)); addRows(5, layout);
     
-    cellData.resize(mainPartition.size());
-    int iterate = 0;
+    cellData.resize(mainPartition.size());                          //vector that holds "cell" structures
+    int xPos = 1;
     
     for (int i=0; i<mainPartition.size(); i++)
     {
-        int cellNum = mainPartition[i];
-        cellData[cellNum].x = 5;
-        cellData[cellNum].y = iterate;
-        cellData[cellNum].r = 1;
-        cellData[cellNum].nets = 0;
-        cellData[cellNum].cell = cellNum;
+        int cellNum = mainPartition[i];     //grab cell number from mainPartition vector (base 0)
         
-        iterate += 7;
-        //create cell in layout
-        makeCell(cellData[cellNum], layout);
+        cellData[cellNum].x = xPos;         //x-coord of LL corner
+        cellData[cellNum].y = 5;            //y-coord of LL corner
+        cellData[cellNum].r = 1;            //all cells unrotated (rotation = 1)
+        cellData[cellNum].nets = 0;         //assumed 0 nets during initialization
+        cellData[cellNum].cell = cellNum;   //cell's number
+        
+        xPos += 7;                          //Placing cells side by side along x axis + one extra space in between
+        
+        addCols(7, layout);
+        makeCell(cellData[cellNum], layout);//create the cell in the 2D "layout" vector
     }
+    
     
     global();
     
     //Second: Channel Routing
     channel();
     
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     
     
 
