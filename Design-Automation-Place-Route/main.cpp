@@ -3,9 +3,13 @@
 #include <vector>
 #include <stdlib.h>
 #include <cmath>
+
 #include "lin.h"
 #include "celllist.h"
 #include "calculatecutset.h"
+#include "globalRouting.hpp"
+#include "channelRouting.hpp"
+
 
 int main()	    //use argc and argv to pass command prompt arguments to main()
 {
@@ -90,6 +94,20 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     //calculate the cutset
     calculateCutset(fullPartition, totalCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
 
+    
+    
+    //Routing
+    
+    //First: Global Routing
+    global();
+    
+    //Second: Channel Routing
+    channel();
+    
+    
+    
+    
+    
     
 
     //output the cutset and partitions to output file

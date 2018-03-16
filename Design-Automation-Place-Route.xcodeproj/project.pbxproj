@@ -14,6 +14,8 @@
 		93CEBC812058AD26009E55CE /* gain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93CEBC782058AD26009E55CE /* gain.cpp */; };
 		93CEBC822058AD26009E55CE /* celllist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93CEBC792058AD26009E55CE /* celllist.cpp */; };
 		93CEBC832058AD26009E55CE /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93CEBC7A2058AD26009E55CE /* main.cpp */; };
+		93CEBC89205B7EF7009E55CE /* globalRouting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93CEBC87205B7EF7009E55CE /* globalRouting.cpp */; };
+		93CEBC8C205B8017009E55CE /* channelRouting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93CEBC8A205B8017009E55CE /* channelRouting.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,6 +45,10 @@
 		93CEBC7A2058AD26009E55CE /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		93CEBC7B2058AD26009E55CE /* lin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lin.h; sourceTree = "<group>"; };
 		93CEBC7C2058AD26009E55CE /* pass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pass.h; sourceTree = "<group>"; };
+		93CEBC87205B7EF7009E55CE /* globalRouting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = globalRouting.cpp; sourceTree = "<group>"; };
+		93CEBC88205B7EF7009E55CE /* globalRouting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = globalRouting.hpp; sourceTree = "<group>"; };
+		93CEBC8A205B8017009E55CE /* channelRouting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = channelRouting.cpp; sourceTree = "<group>"; };
+		93CEBC8B205B8017009E55CE /* channelRouting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = channelRouting.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +94,10 @@
 				93CEBC7A2058AD26009E55CE /* main.cpp */,
 				93CEBC752058AD26009E55CE /* pass.cpp */,
 				93CEBC7C2058AD26009E55CE /* pass.h */,
+				93CEBC87205B7EF7009E55CE /* globalRouting.cpp */,
+				93CEBC88205B7EF7009E55CE /* globalRouting.hpp */,
+				93CEBC8A205B8017009E55CE /* channelRouting.cpp */,
+				93CEBC8B205B8017009E55CE /* channelRouting.hpp */,
 			);
 			path = "Design-Automation-Place-Route";
 			sourceTree = "<group>";
@@ -152,7 +162,9 @@
 				93CEBC802058AD26009E55CE /* dvalues.cpp in Sources */,
 				93CEBC822058AD26009E55CE /* celllist.cpp in Sources */,
 				93CEBC7F2058AD26009E55CE /* pass.cpp in Sources */,
+				93CEBC89205B7EF7009E55CE /* globalRouting.cpp in Sources */,
 				93CEBC812058AD26009E55CE /* gain.cpp in Sources */,
+				93CEBC8C205B8017009E55CE /* channelRouting.cpp in Sources */,
 				93CEBC7E2058AD26009E55CE /* linkedList.cpp in Sources */,
 				93CEBC7D2058AD26009E55CE /* calculatecutset.cpp in Sources */,
 				93CEBC832058AD26009E55CE /* main.cpp in Sources */,
