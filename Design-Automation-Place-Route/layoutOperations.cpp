@@ -30,7 +30,7 @@ void makeCell(cell C, std::vector<std::vector<int> > & layout)
         {
             for (int col=C.x; col<C.x+size; col++)
             {
-                layout[row][col] = C.nets;
+                layout[row][col] = C.cell;
             }
         }
     }
