@@ -9,9 +9,12 @@
 
 int main()	    //use argc and argv to pass command prompt arguments to main()
 {
-    //initialize variables
+    //initialize files
     std::ifstream fileIn ("b4.net");
     std::ofstream outFile ("out.txt");
+    std::ofstream outCSV ("magicCSV.csv");
+    
+    //intitilaize variables
     std::vector<numberList> cellList;
     std::vector<std::vector<int> > netArray;
     std::vector<int> netlist, partitionA, partitionB, gains, fullPartition, mainPartition;
@@ -32,7 +35,9 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
         }
     }
 
-    if(numOfCells2%2!=0)
+    
+    //if an odd number of cells is given, add one to make it even
+    if(numOfCells2 %2 !=0)
     {
         numOfCells=numOfCells2+1;
     }
@@ -43,6 +48,8 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
 
     totalCells = numOfCells;
 
+    
+    //calculate the number of partitions to be found
     m = log(numOfCells2)/log(2);
 
     if (m!=(int) m)
@@ -52,6 +59,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     numOfPartitions = m;
 
     cellList.resize(numOfCells);
+    
 
     //split the cells into 2 partitions of equal size.
     for (int i=0; i<numOfCells/2; i++)
@@ -70,19 +78,24 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     //calculate the cutset
     calculateCutset(fullPartition, totalCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
 
+    
+
     //output the cutset and partitions to output file
     outFile<<cutset<<"\n";
+    std::cout<<"\n"<<cutset<<"\n";
+    
     for(int i=0; i<mainPartition.size()/2; i++)
     {
         outFile<<mainPartition[i]+1<<"\t";
         std::cout<<mainPartition[i]<<"\t";
     }
-    outFile<<"\n\n";
-    std::cout<<"\n\n";
+    
+    outFile<<"\n";
+    std::cout<<"\n";
+    
     for(int i=0; i<mainPartition.size()/2; i++)
     {
         outFile<<mainPartition[i+mainPartition.size()/2]+1<<"\t";
         std::cout<<mainPartition[i+mainPartition.size()/2]<<"\t";
     }
-    //std::cout<<cutset<<"\n";
 }
