@@ -78,14 +78,6 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     cellList.resize(numOfCells);
 
 
-    //printing netlist for debugging
-    for (int i=0; i<netlist.size(); i=i+2)
-    {
-        printf("(%i,%i) --> (%i,%i)\n",netlist[i].first+1,netlist[i].second,netlist[i+1].first+1,netlist[i+1].second);
-    }
-    //end print netlist
-
-
     //split the cells into 2 partitions of equal size.
     for (int i=0; i<numOfCells/2; i++)
     {
