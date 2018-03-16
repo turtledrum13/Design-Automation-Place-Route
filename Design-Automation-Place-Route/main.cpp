@@ -18,7 +18,7 @@
 int main()	    //use argc and argv to pass command prompt arguments to main()
 {
     //initialize files
-    std::ifstream fileIn ("b1.net");
+    std::ifstream fileIn ("b4.net");
     std::ofstream outFile ("out.txt");
     std::ofstream outCSV ("magicCSV.csv");
 
