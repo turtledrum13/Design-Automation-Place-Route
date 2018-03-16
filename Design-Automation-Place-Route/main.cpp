@@ -18,7 +18,7 @@
 int main()	    //use argc and argv to pass command prompt arguments to main()
 {
     //initialize files
-    std::ifstream fileIn ("b4.net");
+    std::ifstream fileIn ("b1.net");
     std::ofstream outFile ("out.txt");
     std::ofstream outCSV ("magicCSV.csv");
     
@@ -26,7 +26,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     std::vector<numberList> cellList;
     std::vector<cell> cellData;
     std::vector<std::vector<int> > netArray, layout;
-    std::vector<int> partitionA, partitionB, gains, fullPartition, mainPartition;
+    std::vector<int> partitionA, partitionB, gains, fullPartition, mainPartition, boundaries;
     std::vector<std::pair <int,int> > netlist;
     
     //initialize variables
@@ -63,6 +63,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     }
 
     totalCells = numOfCells;
+    cellData.resize(numOfCells2);                          //vector that holds "cell" structures
 
     
     //calculate the number of partitions to be found
@@ -93,6 +94,16 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
         fullPartition.push_back(i);
         fullPartition.push_back(i+numOfCells/2);
     }
+    
+    
+    
+    //adding net info to cellData
+    for (int i=0; i<netlist.size(); i++)
+    {
+        cellData[netlist[i].first].nets++;
+        printf("cell %i has %i nets\n",netlist[i].first+1,cellData[netlist[i].first].nets);
+    }
+    
 
     //create the list of cells and point them to their net pair
     createCellList(numOfNets, netArray, partitionA, partitionB, cutset, cellList, netlist);
@@ -109,18 +120,18 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     //Routing///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     
+    //converting dummies to -1
     for (int i=0; i<mainPartition.size(); i++)
     {
         if (mainPartition[i] > numOfCells2-1) mainPartition[i] = -1;
     }
     
-    //First: Global Routing
+    //initial layout generation
     //layout.resize(6, std::vector<int>(7*mainPartition.size()-1));   //sizing the empty layout for single row placement (will want to make this 2:1 placement eventually)
     layout.resize(1, std::vector<int>(1)); addRows(5, layout);
     
-    cellData.resize(mainPartition.size());                          //vector that holds "cell" structures
-    int xPos = 1;
     
+    int xPos = 1;
     for (int i=0; i<mainPartition.size(); i++)
     {
         int cellNum = mainPartition[i];     //grab cell number from mainPartition vector (base 0)
@@ -128,8 +139,8 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
         cellData[cellNum].x = xPos;         //x-coord of LL corner
         cellData[cellNum].y = 5;            //y-coord of LL corner
         cellData[cellNum].r = 1;            //all cells unrotated (rotation = 1)
-        cellData[cellNum].nets = 0;         //assumed 0 nets during initialization
-        cellData[cellNum].cell = cellNum;   //cell's number
+        //cellData[cellNum].nets = 0;         //assumed 0 nets during initialization
+        cellData[cellNum].cell = cellNum+1; //cell's number
         
         xPos += 7;                          //Placing cells side by side along x axis + one extra space in between
         
@@ -137,7 +148,14 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
         makeCell(cellData[cellNum], layout);//create the cell in the 2D "layout" vector
     }
     
+//    //adding net info to cellData
+//    for (int i=0; i<netlist.size(); i++)
+//    {
+//        cellData[netlist[i].first].nets++;
+//    }
     
+    
+    //First: Global Routing
     global();
     
     //Second: Channel Routing
