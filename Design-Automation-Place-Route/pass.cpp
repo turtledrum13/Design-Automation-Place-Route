@@ -16,10 +16,8 @@ void passRun(std::vector<int> &A, int &numOfNets, std::vector<std::vector<int> >
 {
     std::vector<bool> truth2(numOfNets, false);
     std::vector<int> DummyPartition;
-    std::vector<std::vector<int> > dummyA, dummyB;
     int numCells = numOfCells;
-    int aValue, bValue, b=0;
-    int val1, val2;
+    int aValue, bValue, b=0, val1, val2;
 
     DummyPartition = A;
 
@@ -44,6 +42,7 @@ void passRun(std::vector<int> &A, int &numOfNets, std::vector<std::vector<int> >
     {
         D[i].setValue(0);
     }
+
     //calculate the intial d-values
     for (int i=0; i<numOfNets; i++)
     {
@@ -100,37 +99,7 @@ void passRun(std::vector<int> &A, int &numOfNets, std::vector<std::vector<int> >
             }
         }
 
-        //dummyA.clear();
-        //dummyB.clear();
-        //dummyA.resize(numCells/2, std::vector<int>(2, 0));
-        //dummyB.resize(numCells/2, std::vector<int>(2, 0));
-
-        //create a vector to keep track of the d values
-        /*for (unsigned int i =0; i<dummyA.size(); i++)
-        {
-            if(i<partitionAPrime.size())
-            {
-                dummyA[i][0] = D[partitionAPrime[i]].getValue();
-                dummyA[i][1] = partitionAPrime[i];
-            }
-        }
-
-        for (unsigned int i =0; i<dummyB.size(); i++)
-        {
-            if(i<partitionAPrime.size())
-            {
-                dummyB[i][0] = D[partitionBPrime[i]].getValue();
-                dummyB[i][1] = partitionBPrime[i];
-            }
-        }*/
-
-        //sort the d-values for each partition
-        //std::sort(dummyA.begin(), dummyA.end(), sortDValue);
-        //std::sort(dummyB.begin(), dummyB.end(), sortDValue);
-
         maxGain = val1+val2-2*cellList[aValue].getWeight(bValue);
-
-        //gain(numOfCells, cellList, maxGain, aValue, bValue, dummyA, dummyB);
 
         X.push_back(aValue);        //add the value from the A partition to X
         Y.push_back(bValue);        //add the value from the B partition to Y
@@ -155,26 +124,13 @@ void passRun(std::vector<int> &A, int &numOfNets, std::vector<std::vector<int> >
                 B.push_back(X[i]);
             }
         }
+
         //keep track of all the gains calculated
         if(b<gains.size())
         {
             gains[b] = maxGain;
-            //std::cout<<gains[b]<<"\n";
         }
         b++;
         numCells = numCells - 2;
-
-       /*     for(int i=0; i<numCells/2; i++)
-    {
-        std::cout<<partitionAPrime[i]<<"\t";
     }
-    std::cout<<"\n";
-    for(int i=0; i<numCells/2; i++)
-    {
-        std::cout<<partitionBPrime[i]<<"\t";
-    }*/
-
-    }
-    //std::cout<<"\n";
-
 }
