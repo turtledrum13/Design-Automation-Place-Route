@@ -6,7 +6,7 @@
 
 void createCellList(int numOfNets, std::vector<std::vector<int> > &netArray, std::vector<int> &partitionA,
                std::vector<int> &partitionB, int &cutset, std::vector<numberList> &cellList,
-               std::vector<int> &netlist)
+                    std::vector<std::pair<int,int> > &netlist)
 {
     int a = 0;
 
@@ -16,7 +16,7 @@ void createCellList(int numOfNets, std::vector<std::vector<int> > &netArray, std
     {
         for (int n= 0; n<2; n++)
         {
-            netArray[n][i] = netlist[a];
+            netArray[n][i] = netlist[a].first;
             ++a;
         }
     }

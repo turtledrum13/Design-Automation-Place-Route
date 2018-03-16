@@ -17,7 +17,8 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     //intitilaize variables
     std::vector<numberList> cellList;
     std::vector<std::vector<int> > netArray;
-    std::vector<int> netlist, partitionA, partitionB, gains, fullPartition, mainPartition;
+    std::vector<int> partitionA, partitionB, gains, fullPartition, mainPartition;
+    std::vector<std::pair <int,int> > netlist;
     int numOfCells, numOfNets, cutset=0, numOfCells2, numOfPartitions, totalCells;
     double m;
 
@@ -30,8 +31,11 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
         int n1, n2, n3, n4, n5;
         while (fileIn >> n1 and fileIn >> n2 and fileIn >> n3 and fileIn >> n4 and fileIn >> n5)
         {
-            netlist.push_back(n2-1);
-            netlist.push_back(n4-1);
+            std::pair <int,int> netPair1 (n2-1, n3);
+            std::pair <int,int> netPair2 (n4-1, n5);
+            
+            netlist.push_back(netPair1);
+            netlist.push_back(netPair2);
         }
     }
 
@@ -60,6 +64,14 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
 
     cellList.resize(numOfCells);
     
+    
+    //printing netlist for debugging
+                for (int i=0; i<netlist.size(); i=i+2)
+                {
+                    printf("(%i,%i) --> (%i,%i)\n",netlist[i].first+1,netlist[i].second,netlist[i+1].first+1,netlist[i+1].second);
+                }
+    //end print netlist
+    
 
     //split the cells into 2 partitions of equal size.
     for (int i=0; i<numOfCells/2; i++)
@@ -73,7 +85,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     //create the list of cells and point them to their net pair
     createCellList(numOfNets, netArray, partitionA, partitionB, cutset, cellList, netlist);
 
-    std::cout<<"propagated input"<<"\n";
+    std::cout<<"\npropagated input\n";
 
     //calculate the cutset
     calculateCutset(fullPartition, totalCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
