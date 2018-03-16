@@ -21,19 +21,18 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     std::ifstream fileIn ("b1.net");
     std::ofstream outFile ("out.txt");
     std::ofstream outCSV ("magicCSV.csv");
-    
+
     //intitilaize vectors
     std::vector<numberList> cellList;
     std::vector<cell> cellData;
     std::vector<std::vector<int> > netArray, layout;
     std::vector<int> partitionA, partitionB, gains, fullPartition, mainPartition, boundaries;
     std::vector<std::pair <int,int> > netlist;
-    
+
     //initialize variables
     int numOfCells, numOfNets, cutset=0, numOfCells2, numOfPartitions, totalCells;
     double m;
 
-    
     fileIn >> numOfCells2;
     fileIn >> numOfNets;
 
@@ -45,13 +44,13 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
         {
             std::pair <int,int> netPair1 (n2-1, n3);
             std::pair <int,int> netPair2 (n4-1, n5);
-            
+
             netlist.push_back(netPair1);
             netlist.push_back(netPair2);
         }
     }
 
-    
+
     //if an odd number of cells is given, add one to make it even
     if(numOfCells2 %2 !=0)
     {
@@ -65,7 +64,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     totalCells = numOfCells;
     cellData.resize(numOfCells2);                          //vector that holds "cell" structures
 
-    
+
     //calculate the number of partitions to be found
     m = log(numOfCells2)/log(2);
 
@@ -76,16 +75,16 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     numOfPartitions = m;
 
     cellList.resize(numOfCells);
-    
-    
+
+
     //printing netlist for debugging
-                for (int i=0; i<netlist.size(); i=i+2)
-                {
-                    printf("(%i,%i) --> (%i,%i)\n",netlist[i].first+1,netlist[i].second,netlist[i+1].first+1,netlist[i+1].second);
-                }
+    for (int i=0; i<netlist.size(); i=i+2)
+    {
+        printf("(%i,%i) --> (%i,%i)\n",netlist[i].first+1,netlist[i].second,netlist[i+1].first+1,netlist[i+1].second);
+    }
     //end print netlist
-    
-    
+
+
     //split the cells into 2 partitions of equal size.
     for (int i=0; i<numOfCells/2; i++)
     {
@@ -113,13 +112,13 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     //calculate the cutset
     calculateCutset(fullPartition, totalCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
 
-    
-    
-    
+
+
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //Routing///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     //converting dummies to -1
     for (int i=0; i<mainPartition.size(); i++)
     {
@@ -132,21 +131,25 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     
     
     int xPos = 1;
+
     for (int i=0; i<mainPartition.size(); i++)
     {
         int cellNum = mainPartition[i];     //grab cell number from mainPartition vector (base 0)
-        
+
         cellData[cellNum].x = xPos;         //x-coord of LL corner
         cellData[cellNum].y = 5;            //y-coord of LL corner
         cellData[cellNum].r = 1;            //all cells unrotated (rotation = 1)
+
         //cellData[cellNum].nets = 0;         //assumed 0 nets during initialization
         cellData[cellNum].cell = cellNum+1; //cell's number
         
+
         xPos += 7;                          //Placing cells side by side along x axis + one extra space in between
-        
+
         addCols(7, layout);
         makeCell(cellData[cellNum], layout);//create the cell in the 2D "layout" vector
     }
+
     
 //    //adding net info to cellData
 //    for (int i=0; i<netlist.size(); i++)
@@ -156,37 +159,38 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     
     
     //First: Global Routing
+
     global();
-    
+
     //Second: Channel Routing
     channel();
-    
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    
-    
+
+
 
     //output the cutset and partitions to output file
     outFile<<cutset<<"\n";
-    std::cout<<"\n"<<cutset<<"\n";
-    
+    std::cout<<"\ncutset: "<<cutset<<"\n";
+
     for(int i=0; i<mainPartition.size()/2; i++)
     {
         outFile<<mainPartition[i]+1<<"\t";
         std::cout<<mainPartition[i]<<"\t";
     }
-    
+
     outFile<<"\n";
     std::cout<<"\n";
-      
+
     for(int i=0; i<mainPartition.size()/2; i++)
     {
         outFile<<mainPartition[i+mainPartition.size()/2]+1<<"\t";
         std::cout<<mainPartition[i+mainPartition.size()/2]<<"\t";
     }
-    
+
     //print CSV -- using to paste into spreadsheet for debugging
     for (int i=0; i<layout.size(); i++)
     {
