@@ -16,6 +16,7 @@
 		93CEBC832058AD26009E55CE /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93CEBC7A2058AD26009E55CE /* main.cpp */; };
 		93CEBC89205B7EF7009E55CE /* globalRouting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93CEBC87205B7EF7009E55CE /* globalRouting.cpp */; };
 		93CEBC8C205B8017009E55CE /* channelRouting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93CEBC8A205B8017009E55CE /* channelRouting.cpp */; };
+		93CEBC8F205B8DC3009E55CE /* layoutOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93CEBC8D205B8DC3009E55CE /* layoutOperations.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,6 +50,9 @@
 		93CEBC88205B7EF7009E55CE /* globalRouting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = globalRouting.hpp; sourceTree = "<group>"; };
 		93CEBC8A205B8017009E55CE /* channelRouting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = channelRouting.cpp; sourceTree = "<group>"; };
 		93CEBC8B205B8017009E55CE /* channelRouting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = channelRouting.hpp; sourceTree = "<group>"; };
+		93CEBC8D205B8DC3009E55CE /* layoutOperations.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = layoutOperations.cpp; sourceTree = "<group>"; };
+		93CEBC8E205B8DC3009E55CE /* layoutOperations.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = layoutOperations.hpp; sourceTree = "<group>"; };
+		93CEBC90205B910A009E55CE /* structures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = structures.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +102,9 @@
 				93CEBC88205B7EF7009E55CE /* globalRouting.hpp */,
 				93CEBC8A205B8017009E55CE /* channelRouting.cpp */,
 				93CEBC8B205B8017009E55CE /* channelRouting.hpp */,
+				93CEBC8D205B8DC3009E55CE /* layoutOperations.cpp */,
+				93CEBC8E205B8DC3009E55CE /* layoutOperations.hpp */,
+				93CEBC90205B910A009E55CE /* structures.h */,
 			);
 			path = "Design-Automation-Place-Route";
 			sourceTree = "<group>";
@@ -168,6 +175,7 @@
 				93CEBC7E2058AD26009E55CE /* linkedList.cpp in Sources */,
 				93CEBC7D2058AD26009E55CE /* calculatecutset.cpp in Sources */,
 				93CEBC832058AD26009E55CE /* main.cpp in Sources */,
+				93CEBC8F205B8DC3009E55CE /* layoutOperations.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

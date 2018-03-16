@@ -9,6 +9,10 @@
 #include "calculatecutset.h"
 #include "globalRouting.hpp"
 #include "channelRouting.hpp"
+#include "layoutOperations.hpp"
+#include "structures.h"
+
+
 
 
 int main()	    //use argc and argv to pass command prompt arguments to main()
@@ -18,14 +22,18 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     std::ofstream outFile ("out.txt");
     std::ofstream outCSV ("magicCSV.csv");
     
-    //intitilaize variables
+    //intitilaize vectors
     std::vector<numberList> cellList;
-    std::vector<std::vector<int> > netArray;
+    std::vector<cell> cellData;
+    std::vector<std::vector<int> > netArray, layout;
     std::vector<int> partitionA, partitionB, gains, fullPartition, mainPartition;
     std::vector<std::pair <int,int> > netlist;
+    
+    //initialize variables
     int numOfCells, numOfNets, cutset=0, numOfCells2, numOfPartitions, totalCells;
     double m;
 
+    
     fileIn >> numOfCells2;
     fileIn >> numOfNets;
 
@@ -76,6 +84,19 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
                 }
     //end print netlist
     
+    
+//    for (int i=0; i<netArray.size(); i++)
+//    {
+//        int index = netArray[i].size();
+//        printf("%i: \n",index);
+//
+//        for(int j=0; j<index; j++)
+//        {
+//            printf("%i ",netArray[i][j]);
+//        }
+//    }
+    
+    
 
     //split the cells into 2 partitions of equal size.
     for (int i=0; i<numOfCells/2; i++)
@@ -99,13 +120,29 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     //Routing
     
     //First: Global Routing
+    layout.resize(6, std::vector<int>(7*mainPartition.size()-1)); // single row placement
+    
+    cellData.resize(mainPartition.size());
+    int iterate = 0;
+    
+    for (int i=0; i<mainPartition.size(); i++)
+    {
+        int cellNum = mainPartition[i];
+        cellData[cellNum].x = 5;
+        cellData[cellNum].y = iterate;
+        cellData[cellNum].r = 1;
+        cellData[cellNum].nets = 0;
+        cellData[cellNum].cell = cellNum;
+        
+        iterate += 7;
+        //create cell in layout
+        makeCell(cellData[cellNum], layout);
+    }
+    
     global();
     
     //Second: Channel Routing
     channel();
-    
-    
-    
     
     
     
@@ -128,4 +165,19 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
         outFile<<mainPartition[i+mainPartition.size()/2]+1<<"\t";
         std::cout<<mainPartition[i+mainPartition.size()/2]<<"\t";
     }
+    
+    //print CSV -- using to paste into spreadsheet for debugging
+    for (int i=0; i<layout.size(); i++)
+    {
+        printf("\n\n");
+        int index = layout[i].size();
+
+        for(int j=0; j<index; j++)
+        {
+            printf("%i ",layout[i][j]);
+            outCSV << layout[i][j] << ",";
+        }
+        outCSV << "\n";
+    }
 }
+
