@@ -18,6 +18,21 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vecto
     std::vector<dValues> D(totalCells);
     bool buffer=true;
 
+    if(totalCells==numOfCells)
+    {
+        for (int i=0; i<numOfCells/2; i++)
+        {
+            fullPartition.push_back(i);
+            fullPartition.push_back(i+numOfCells/2);
+        }
+    }
+
+        if(numOfCells%2!=0)
+    {
+        fullPartition.push_back(totalCells-1);
+        numOfCells+=1;
+    }
+
     for (int i=0; i<numOfCells; i+=2)
     {
         partitionA.push_back(fullPartition[i]);
@@ -108,7 +123,7 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vecto
         }
         else
         {*/
-            buffer=false;                                 //finish the algorithm
+        buffer=false;                                 //finish the algorithm
         //}
 
         X.clear();
@@ -117,21 +132,9 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vecto
 
     newCells = numOfCells/2;
 
-    if(newCells%2!=0)
-    {
-        partitionA.push_back(totalCells-1);
-        newCells+=1;
-    }
-
-    fullPartition.clear();
-
-    if(partitionA.size() != 1 && partitionA.size() != 2)
+    if(partitionA.size() > 2)
     {
         calculateCutset(partitionA, totalCells, netArray, cellList, newCells, numOfNets, cutset2, mainPartition);
-    }
-    else if(partitionA.size()==1)
-    {
-        mainPartition.push_back(partitionA[0]);
     }
     else if (partitionA.size()==2)
     {
@@ -141,19 +144,9 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vecto
 
     newCells = numOfCells/2;
 
-    if(newCells%2!=0)
-    {
-        partitionB.push_back(totalCells-1);
-        newCells+=1;
-    }
-
-    if(partitionB.size() != 1 && partitionB.size() != 2)
+    if(partitionB.size() > 2)
     {
         calculateCutset(partitionB, totalCells, netArray, cellList, newCells, numOfNets, cutset2, mainPartition);
-    }
-    else if(partitionB.size()==1)
-    {
-        mainPartition.push_back(partitionB[0]);
     }
     else if (partitionB.size()==2)
     {

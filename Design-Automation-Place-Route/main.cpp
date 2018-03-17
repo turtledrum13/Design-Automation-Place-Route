@@ -76,11 +76,6 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     cellList.resize(numOfCells);
 
     //split the cells into 2 partitions of equal size.
-    for (int i=0; i<numOfCells/2; i++)
-    {
-        fullPartition.push_back(i);
-        fullPartition.push_back(i+numOfCells/2);
-    }
 
     //adding net info to cellData
     for (int i=0; i<netlist.size(); i++)
