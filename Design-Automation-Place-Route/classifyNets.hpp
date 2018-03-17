@@ -13,6 +13,12 @@
 #include <vector>
 #include "structures.h"
 
-std::vector<bool> findBoundaries(std::vector<cell> cells, std::vector<std::vector<int> > & layout);
+void findBoundaries(std::vector<cell> cells, std::vector<std::vector<int> > layout, std::vector<bool> & boundaryLoc);
+
+void makeBoundaryVec (std::vector<bool> locations, std::vector<int> & vec);
+
+void makeChannelVec (std::vector<bool> locations, std::vector<int> & vec);
+
+void classifyNets(std::vector<cell> cells, std::vector<std::vector<int> > layout, std::vector<int> & global, std::vector<int> & channel);
 
 #endif /* classifyNets_hpp */
