@@ -43,7 +43,7 @@ void makeChannelVec (std::vector<bool> locations, std::vector<std::pair<int,int>
     
     int bottomBoundary = 0, topBoundary = 0;
     
-    for (int i=locations.size()-2; i>0; i=i-2)  //from the second boundary location to the second last boundary location by twos
+    for (int i=locations.size()-2; i>0; i--)  //from the second boundary location to the second last boundary location
     {
         if (locations[i])
         {
@@ -52,17 +52,21 @@ void makeChannelVec (std::vector<bool> locations, std::vector<std::pair<int,int>
                 if (bottomBoundary == 0)
                 {
                     bottomBoundary = i;
+                    printf("bottom boundary found: %i\n", i);
                 }
                 else
                 {
                     topBoundary = i;
+                    printf("top boundary found: %i\n", i);
                 }
             }
-            else
-            {
-                std::pair<int,int> nextChannel (bottomBoundary, topBoundary);
-                vec.push_back(nextChannel);
-            }
+        }
+        
+        if (bottomBoundary!= 0 && topBoundary != 0)
+        {
+            std::pair<int,int> nextChannel (bottomBoundary, topBoundary);
+            vec.push_back(nextChannel);
+            bottomBoundary = 0; topBoundary = 0;
         }
     }
     

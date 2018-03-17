@@ -98,7 +98,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     //initial layout generation
     //layout.resize(6, std::vector<int>(7*mainPartition.size()-1));   //sizing the empty layout for single row placement (will want to make this 2:1 placement eventually)
     layout.resize(1, std::vector<int>(1));
-    addRows(15, layout);
+    addRows(12, layout);
 
 
     int xPos = 1;
