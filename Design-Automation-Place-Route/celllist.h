@@ -5,7 +5,7 @@
 #include "lin.h"
 
 void createCellList(int numOfNets, std::vector<std::vector<int> > &netArray, std::vector<numberList> &cellList,
-                    std::vector<std::pair<int,int> > &netlist);
+                    std::vector<std::pair<int,int> > &netlist, int numOfCells);
 
 bool sortDValue(const std::vector<int> &vect1, const std::vector<int> &vect2);
 

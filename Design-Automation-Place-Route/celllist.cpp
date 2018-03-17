@@ -5,9 +5,19 @@
 #include "lin.h"
 
 void createCellList(int numOfNets, std::vector<std::vector<int> > &netArray, std::vector<numberList> &cellList,
-                    std::vector<std::pair<int,int> > &netlist)
+                    std::vector<std::pair<int,int> > &netlist, int numOfCells)
 {
     int a = 0;
+
+    if(numOfCells %2 !=0)
+    {
+        cellList.resize(numOfCells+1);
+    }
+    else
+    {
+        cellList.resize(numOfCells);
+    }
+
 
     netArray.resize(2, std::vector<int>(numOfNets, 0));
 
