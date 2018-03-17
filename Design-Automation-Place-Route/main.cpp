@@ -32,10 +32,10 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     std::vector<std::pair <int,int> > netlist;
 
     //initialize variables
-    int numOfCells, numOfNets, cutset=0, numOfCells2, numOfPartitions, totalCells;
+    int numOfNets, cutset=0, numOfCells, numOfPartitions;
     double m;
 
-    fileIn >> numOfCells2;
+    fileIn >> numOfCells;
     fileIn >> numOfNets;
 
     //add the numbers to the vector while the file is open
@@ -53,28 +53,25 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     }
 
     //if an odd number of cells is given, add one to make it even
-    if(numOfCells2 %2 !=0)
+    if(numOfCells %2 !=0)
     {
-        numOfCells=numOfCells2+1;
+        cellList.resize(numOfCells+1);
     }
     else
     {
-        numOfCells=numOfCells2;
+        cellList.resize(numOfCells);
     }
 
-    totalCells = numOfCells;
-    cellData.resize(numOfCells2);                          //vector that holds "cell" structures
+    cellData.resize(numOfCells);                          //vector that holds "cell" structures
 
     //calculate the number of partitions to be found
-    m = log(numOfCells2)/log(2);
+    m = log(numOfCells)/log(2);
 
     if (m!=(int) m)
     {
         m+=1;
     }
     numOfPartitions = m;
-
-    cellList.resize(numOfCells);
 
     //split the cells into 2 partitions of equal size.
 
@@ -91,7 +88,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     std::cout<<"\npropagated input\n";
 
     //calculate the cutset
-    calculateCutset(fullPartition, totalCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
+    calculateCutset(fullPartition, numOfCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
 
 
 
@@ -103,7 +100,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     //converting dummies to -1
     for (int i=0; i<mainPartition.size(); i++)
     {
-        if (mainPartition[i] > numOfCells2-1) mainPartition[i] = -1;
+        if (mainPartition[i] > numOfCells-1) mainPartition[i] = -1;
     }
 
     //initial layout generation
@@ -119,7 +116,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
 
         cellData[cellNum].x = xPos;         //x-coord of LL corner
         cellData[cellNum].y = 5;            //y-coord of LL corner
-        if (cellNum < numOfCells2) cellData[cellNum].r = 1;            //all cells unrotated (rotation = 1)
+        if (cellNum < numOfCells) cellData[cellNum].r = 1;            //all cells unrotated (rotation = 1)
 
         //cellData[cellNum].nets = 0;         //assumed 0 nets during initialization
         cellData[cellNum].cell = cellNum+1; //cell's number
@@ -136,7 +133,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     std::vector<int> netsGlobal;
     std::vector<std::pair<int,int> > netsChannel;
     classifyNets(cellData, layout, netsGlobal, netsChannel);
-    
+
     global();
 
     //Second: Channel Routing

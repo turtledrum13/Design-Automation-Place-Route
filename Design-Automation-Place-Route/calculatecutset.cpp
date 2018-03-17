@@ -15,19 +15,20 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vecto
     int sum, Gmax, k, maxGain, pass=0, cutset2=0, newCells;
     std::vector<int> partitionAPrime, partitionBPrime, A, B, X, Y, gains, partitionA, partitionB;
     std::vector<bool> truth(numOfNets, false);
-    std::vector<dValues> D(totalCells);
     bool buffer=true;
 
     if(totalCells==numOfCells)
     {
-        for (int i=0; i<numOfCells/2; i++)
+        if(numOfCells%2!=0) totalCells+=1;
+        for (int i=0; i<totalCells/2; i++)
         {
             fullPartition.push_back(i);
-            fullPartition.push_back(i+numOfCells/2);
+            fullPartition.push_back(i+totalCells/2);
         }
     }
 
-        if(numOfCells%2!=0)
+std::vector<dValues> D(totalCells);
+    if(numOfCells%2!=0)
     {
         fullPartition.push_back(totalCells-1);
         numOfCells+=1;
