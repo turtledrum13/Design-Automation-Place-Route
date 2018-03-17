@@ -19,8 +19,8 @@
 int main()	    //use argc and argv to pass command prompt arguments to main()
 {
     //initialize files
-    std::ifstream fileIn ("Resources/v1.2/1");
-    //std::ifstream fileIn ("1");
+    //std::ifstream fileIn ("Resources/v1.2/1");
+    std::ifstream fileIn ("1");
     std::ofstream outFile ("out.txt");
     std::ofstream outCSV ("magicCSV.csv");
 
@@ -53,14 +53,6 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     }
 
     //if an odd number of cells is given, add one to make it even
-    if(numOfCells %2 !=0)
-    {
-        cellList.resize(numOfCells+1);
-    }
-    else
-    {
-        cellList.resize(numOfCells);
-    }
 
     cellData.resize(numOfCells);                          //vector that holds "cell" structures
 
@@ -83,7 +75,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     }
 
     //create the list of cells and point them to their net pair
-    createCellList(numOfNets, netArray, cellList, netlist);
+    createCellList(numOfNets, netArray, cellList, netlist, numOfCells);
 
     std::cout<<"\npropagated input\n";
 
@@ -105,7 +97,8 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
 
     //initial layout generation
     //layout.resize(6, std::vector<int>(7*mainPartition.size()-1));   //sizing the empty layout for single row placement (will want to make this 2:1 placement eventually)
-    layout.resize(1, std::vector<int>(1)); addRows(5, layout);
+    layout.resize(1, std::vector<int>(1));
+    addRows(5, layout);
 
 
     int xPos = 1;

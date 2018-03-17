@@ -27,7 +27,7 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vecto
         }
     }
 
-std::vector<dValues> D(totalCells);
+    std::vector<dValues> D(totalCells);
     if(numOfCells%2!=0)
     {
         fullPartition.push_back(totalCells-1);
