@@ -11,8 +11,6 @@
 #include "channelRouting.hpp"
 #include "layoutOperations.hpp"
 #include "structures.h"
-#include "classifyNets.hpp"
-
 
 
 
@@ -29,7 +27,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     std::vector<numberList> cellList;
     std::vector<cell> cellData;
     std::vector<std::vector<int> > netArray, layout;
-    std::vector<int> partitionA, partitionB, gains, fullPartition, mainPartition, boundaries;
+    std::vector<int> gains, fullPartition, mainPartition, boundaries;
     std::vector<std::pair <int,int> > netlist;
 
     //initialize variables
@@ -53,7 +51,6 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
         }
     }
 
-
     //if an odd number of cells is given, add one to make it even
     if(numOfCells2 %2 !=0)
     {
@@ -67,7 +64,6 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     totalCells = numOfCells;
     cellData.resize(numOfCells2);                          //vector that holds "cell" structures
 
-
     //calculate the number of partitions to be found
     m = log(numOfCells2)/log(2);
 
@@ -79,17 +75,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
 
     cellList.resize(numOfCells);
 
-
     //split the cells into 2 partitions of equal size.
-    for (int i=0; i<numOfCells/2; i++)
-    {
-        partitionA.push_back(i);
-        partitionB.push_back(i+numOfCells/2);
-        fullPartition.push_back(i);
-        fullPartition.push_back(i+numOfCells/2);
-    }
-
-
 
     //adding net info to cellData
     for (int i=0; i<netlist.size(); i++)
@@ -98,9 +84,8 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
         printf("cell %i has %i nets\n",netlist[i].first+1,cellData[netlist[i].first].nets);
     }
 
-
     //create the list of cells and point them to their net pair
-    createCellList(numOfNets, netArray, partitionA, partitionB, cutset, cellList, netlist);
+    createCellList(numOfNets, netArray, cellList, netlist);
 
     std::cout<<"\npropagated input\n";
 
