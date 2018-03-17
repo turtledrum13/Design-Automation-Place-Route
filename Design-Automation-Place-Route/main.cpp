@@ -123,7 +123,8 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
 
 
     //First: Global Routing
-    std::vector<int> netsGlobal, netsChannel;
+    std::vector<int> netsGlobal;
+    std::vector<std::pair<int,int> > netsChannel;
     classifyNets(cellData, layout, netsGlobal, netsChannel);
 
     global();
