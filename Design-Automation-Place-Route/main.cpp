@@ -31,7 +31,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     std::vector<std::pair <int,int> > netlist;
 
     //initialize variables
-    int numOfCells, numOfNets, cutset=0, numOfCells2, numOfPartitions, totalCells;
+    int numOfNets, cutset=0, numOfCells2, numOfPartitions;
     double m;
 
     fileIn >> numOfCells2;
@@ -54,14 +54,13 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     //if an odd number of cells is given, add one to make it even
     if(numOfCells2 %2 !=0)
     {
-        numOfCells=numOfCells2+1;
+        cellList.resize(numOfCells2+1);
     }
     else
     {
-        numOfCells=numOfCells2;
+        cellList.resize(numOfCells2);
     }
 
-    totalCells = numOfCells;
     cellData.resize(numOfCells2);                          //vector that holds "cell" structures
 
     //calculate the number of partitions to be found
@@ -72,8 +71,6 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
         m+=1;
     }
     numOfPartitions = m;
-
-    cellList.resize(numOfCells);
 
     //split the cells into 2 partitions of equal size.
 
@@ -90,7 +87,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     std::cout<<"\npropagated input\n";
 
     //calculate the cutset
-    calculateCutset(fullPartition, totalCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
+    calculateCutset(fullPartition, numOfCells2, netArray, cellList, numOfCells2, numOfNets, cutset, mainPartition);
 
 
 
