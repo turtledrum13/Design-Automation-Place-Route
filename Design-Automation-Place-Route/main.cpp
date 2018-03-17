@@ -108,7 +108,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
 
     //initial layout generation
     //layout.resize(6, std::vector<int>(7*mainPartition.size()-1));   //sizing the empty layout for single row placement (will want to make this 2:1 placement eventually)
-    layout.resize(1, std::vector<int>(1)); addRows(6, layout);
+    layout.resize(1, std::vector<int>(1)); addRows(5, layout);
 
 
     int xPos = 1;
@@ -118,7 +118,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
         int cellNum = mainPartition[i];     //grab cell number from mainPartition vector (base 0)
 
         cellData[cellNum].x = xPos;         //x-coord of LL corner
-        cellData[cellNum].y = 6;            //y-coord of LL corner
+        cellData[cellNum].y = 5;            //y-coord of LL corner
         if (cellNum < numOfCells2) cellData[cellNum].r = 1;            //all cells unrotated (rotation = 1)
 
         //cellData[cellNum].nets = 0;         //assumed 0 nets during initialization
