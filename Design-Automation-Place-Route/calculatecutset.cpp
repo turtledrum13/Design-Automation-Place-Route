@@ -8,11 +8,11 @@
 #include "dvalues.h"
 #include "pass.h"
 
-void calculateCutset(std::vector<int> &fullPartition, int totalCells,
-                     std::vector<std::vector<int> > &netArray,
-                     std::vector<numberList> &cellList, int numOfCells, int numOfNets, int &cutset, std::vector<int> &mainPartition)
+void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vector<std::vector<int> > &netArray,
+                     std::vector<numberList> &cellList, int numOfCells, int numOfNets, int &cutset,
+                     std::vector<int> &mainPartition)
 {
-    int sum, Gmax, k, maxGain, pass=0, cutset2=0, placeCell, newCells;
+    int sum, Gmax, k, maxGain, pass=0, cutset2=0, newCells;
     std::vector<int> partitionAPrime, partitionBPrime, A, B, X, Y, gains, partitionA, partitionB;
     std::vector<bool> truth(numOfNets, false);
     std::vector<dValues> D(totalCells);
@@ -115,12 +115,11 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells,
         Y.clear();
     }
 
-    placeCell = totalCells-1;
     newCells = numOfCells/2;
 
     if(newCells%2!=0)
     {
-        partitionA.push_back(placeCell);
+        partitionA.push_back(totalCells-1);
         newCells+=1;
     }
 
@@ -144,7 +143,7 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells,
 
     if(newCells%2!=0)
     {
-        partitionB.push_back(placeCell);
+        partitionB.push_back(totalCells-1);
         newCells+=1;
     }
 

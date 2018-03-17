@@ -4,8 +4,7 @@
 #include "celllist.h"
 #include "lin.h"
 
-void createCellList(int numOfNets, std::vector<std::vector<int> > &netArray, std::vector<int> &partitionA,
-               std::vector<int> &partitionB, int &cutset, std::vector<numberList> &cellList,
+void createCellList(int numOfNets, std::vector<std::vector<int> > &netArray, std::vector<numberList> &cellList,
                     std::vector<std::pair<int,int> > &netlist)
 {
     int a = 0;
