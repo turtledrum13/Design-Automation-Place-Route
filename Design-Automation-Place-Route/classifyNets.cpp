@@ -36,18 +36,29 @@ void makeBoundaryVec (std::vector<bool> locations, std::vector<int> & vec)
     }
 }
 
-void makeChannelVec (std::vector<bool> locations, std::vector<int> & vec)
+void makeChannelVec (std::vector<bool> locations, std::vector<std::pair<int,int> > & vec)
 {
-    for (int i=locations.size()-1; i>=0; i--)
+    std::pair<int,int> firstChannel (locations.size()-1, locations.size()-1);
+    vec.push_back(firstChannel);
+    
+    int bottomBoundary, topBoundary;
+    
+    for (int i=locations.size()-2; i>0; i=i-2)  //from the second boundary location to the second last boundary location by twos
     {
+        std::pair<int,int> nextChannel;
+        
+        
         if (locations[i]) vec.push_back(i);
     }
+    std::pair<int,int> lastChannel (0, 0);
+    vec.push_back(lastChannel);
 }
 
 
-void classifyNets(std::vector<cell> CELLS, std::vector<std::vector<int> > LAYOUT, std::vector<int> & GLOBAL, std::vector<int> & CHANNEL)
+void classifyNets(std::vector<cell> CELLS, std::vector<std::vector<int> > LAYOUT, std::vector<int> & GLOBAL, std::vector<std::pair<int,int> > & CHANNEL)
 {
-    std::vector<int> boundaryVec, channelVec;
+    std::vector<int> boundaryVec;
+    std::vector<std::pair<int,int> > channelVec;
     std::vector<bool> boundaryLoc, channelLoc;
     
     findBoundaries(CELLS, LAYOUT, boundaryLoc);

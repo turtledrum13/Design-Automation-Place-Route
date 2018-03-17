@@ -19,6 +19,6 @@ void makeBoundaryVec (std::vector<bool> locations, std::vector<int> & vec);
 
 void makeChannelVec (std::vector<bool> locations, std::vector<int> & vec);
 
-void classifyNets(std::vector<cell> cells, std::vector<std::vector<int> > layout, std::vector<int> & global, std::vector<int> & channel);
+void classifyNets(std::vector<cell> cells, std::vector<std::vector<int> > layout, std::vector<int> & global, std::vector<std::pair<int,int> > & channel);
 
 #endif /* classifyNets_hpp */
