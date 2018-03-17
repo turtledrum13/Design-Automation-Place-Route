@@ -144,15 +144,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     }
 
 
-//    //adding net info to cellData
-//    for (int i=0; i<netlist.size(); i++)
-//    {
-//        cellData[netlist[i].first].nets++;
-//    }
-
-
     //First: Global Routing
-
     global();
 
     //Second: Channel Routing
