@@ -16,7 +16,7 @@
 
 
 
-int main()	    //use argc and argv to pass command prompt arguments to main()
+int main()        //use argc and argv to pass command prompt arguments to main()
 {
     //initialize files
     std::ifstream fileIn ("Resources/v1.2/1");
@@ -148,7 +148,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
         cellData[cellNum].cell = cellNum;           //cell's number
 
 
-        xPos += 7;                          //Placing cells side by side along x axis + one extra space in between
+        xPos += 7;                                  //Placing cells side by side along x axis + one extra space in between
 
         if (xPos > layout[0].size()) addCols(7, layout);
         makeCell(cellData[cellNum], layout);//create the cell in the 2D "layout" vector
