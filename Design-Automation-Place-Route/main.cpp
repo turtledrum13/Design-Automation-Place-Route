@@ -20,7 +20,6 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
 {
     //initialize files
     std::ifstream fileIn ("Resources/v1.2/1");
-    //std::ifstream fileIn ("1");
     std::ofstream outFile ("out.txt");
     std::ofstream outCSV ("magicCSV.csv");
 
@@ -107,7 +106,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     for (int i=0; i<mainPartition.size(); i++)
     {
         if (i>mainPartition.size()/2) yPos = 12;
-        
+
         int cellNum = mainPartition[i];     //grab cell number from mainPartition vector (base 0)
 
         cellData[cellNum].x = xPos;         //x-coord of LL corner
