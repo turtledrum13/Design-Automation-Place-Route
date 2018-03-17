@@ -41,15 +41,31 @@ void makeChannelVec (std::vector<bool> locations, std::vector<std::pair<int,int>
     std::pair<int,int> firstChannel (locations.size()-1, locations.size()-1);
     vec.push_back(firstChannel);
     
-    int bottomBoundary, topBoundary;
+    int bottomBoundary = 0, topBoundary = 0;
     
     for (int i=locations.size()-2; i>0; i=i-2)  //from the second boundary location to the second last boundary location by twos
     {
-        std::pair<int,int> nextChannel;
-        
-        
-        if (locations[i]) vec.push_back(i);
+        if (locations[i])
+        {
+            if (topBoundary == 0)
+            {
+                if (bottomBoundary == 0)
+                {
+                    bottomBoundary = i;
+                }
+                else
+                {
+                    topBoundary = i;
+                }
+            }
+            else
+            {
+                std::pair<int,int> nextChannel (bottomBoundary, topBoundary);
+                vec.push_back(nextChannel);
+            }
+        }
     }
+    
     std::pair<int,int> lastChannel (0, 0);
     vec.push_back(lastChannel);
 }
@@ -80,7 +96,7 @@ void classifyNets(std::vector<cell> CELLS, std::vector<std::vector<int> > LAYOUT
     printf("\n\nchannel locations:\n");
     for (int i=0; i<channelVec.size(); i++)
     {
-        printf("%i ",channelVec[i]);
+        printf("(%i,%i) ",channelVec[i].first, channelVec[i].second);
     }
 }
 
