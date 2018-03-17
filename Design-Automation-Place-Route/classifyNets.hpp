@@ -10,5 +10,9 @@
 #define classifyNets_hpp
 
 #include <stdio.h>
+#include <vector>
+#include "structures.h"
+
+std::vector<bool> findBoundaries(std::vector<cell> cells, std::vector<std::vector<int> > & layout);
 
 #endif /* classifyNets_hpp */
