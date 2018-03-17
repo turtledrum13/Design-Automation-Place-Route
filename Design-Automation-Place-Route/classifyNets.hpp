@@ -19,6 +19,10 @@ void makeBoundaryVec (std::vector<bool> locations, std::vector<int> & vec);
 
 void makeChannelVec (std::vector<bool> locations, std::vector<int> & vec);
 
-void classifyNets(std::vector<cell> cells, std::vector<std::vector<int> > layout, std::vector<int> & global, std::vector<std::pair<int,int> > & channel);
+void isGlobal(std::vector<std::pair<int,int> > channels, std::vector<net> & netlist, std::vector<cell> cells);
+
+int terminalOffset(int terminal, int rotation);
+
+void classifyNets(std::vector<cell> CELLS, std::vector<std::vector<int> > LAYOUT, std::vector<net> & GLOBAL, std::vector<net> & CHANNEL, std::vector<net> & NETLIST);
 
 #endif /* classifyNets_hpp */

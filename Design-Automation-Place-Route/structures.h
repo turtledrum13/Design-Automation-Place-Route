@@ -18,4 +18,13 @@ struct cell
     int cell;   //cell number (base 0)
 };
 
+struct net
+{
+    std::pair<int,int> c1, c2;  //first and second cells connected by the net
+    int num;                    //net number
+    bool placed;                //whether the net has been placed yet or not
+    bool global;                //true if net needs to be routed globally
+    int channel;                //channel number if channel routing is possible
+};
+
 #endif /* structures_h */

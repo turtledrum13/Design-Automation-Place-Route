@@ -20,13 +20,13 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
 {
     //initialize files
     std::ifstream fileIn ("Resources/v1.2/1");
-    //std::ifstream fileIn ("1");
     std::ofstream outFile ("out.txt");
     std::ofstream outCSV ("magicCSV.csv");
 
     //intitilaize vectors
     std::vector<numberList> cellList;
     std::vector<cell> cellData;
+    std::vector<net> netlistPairs, netsGlobal, netsChannel;
     std::vector<std::vector<int> > netArray, layout;
     std::vector<int> gains, fullPartition, mainPartition, boundaries;
     std::vector<std::pair <int,int> > netlist;
@@ -46,15 +46,23 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
         {
             std::pair <int,int> netPair1 (n2-1, n3);
             std::pair <int,int> netPair2 (n4-1, n5);
-
             netlist.push_back(netPair1);
             netlist.push_back(netPair2);
+            
+            net newNet;             //net structure which contains two pairs (cell, terminal) and (cell, terminal), net number, placed/not
+            newNet.c1 = netPair1;
+            newNet.c2 = netPair2;
+            newNet.num = n1;
+            newNet.placed = false;
+            
+            netlistPairs.push_back(newNet);
         }
     }
 
-    //if an odd number of cells is given, add one to make it even
-
     cellData.resize(numOfCells);                          //vector that holds "cell" structures
+    
+    
+    //if an odd number of cells is given, add one to make it even
 
     //calculate the number of partitions to be found
     m = log(numOfCells)/log(2);
@@ -71,7 +79,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     for (int i=0; i<netlist.size(); i++)
     {
         cellData[netlist[i].first].nets++;
-        printf("cell %i has %i nets\n",netlist[i].first+1,cellData[netlist[i].first].nets);
+        //printf("cell %i has %i nets\n",netlist[i].first+1,cellData[netlist[i].first].nets);
     }
 
     //create the list of cells and point them to their net pair
@@ -92,13 +100,17 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
     //converting dummies to -1
     for (int i=0; i<mainPartition.size(); i++)
     {
-        if (mainPartition[i] > numOfCells-1) mainPartition[i] = -1;
+        if (mainPartition[i] > numOfCells-1) mainPartition[i] = 0;
+        else mainPartition[i]++;
     }
 
-    //initial layout generation
+    
+    ///// Below this line should be deleted or moved /////
+    
+    //SAMPLE LAYOUT GENERATION -- need to build a function to take any number of cells into a 2:1 rectangular partition
     //layout.resize(6, std::vector<int>(7*mainPartition.size()-1));   //sizing the empty layout for single row placement (will want to make this 2:1 placement eventually)
     layout.resize(1, std::vector<int>(1));
-    addRows(12, layout);
+    addRows(26, layout);
 
 
     int xPos = 1;
@@ -106,30 +118,47 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
 
     for (int i=0; i<mainPartition.size(); i++)
     {
-        if (i>mainPartition.size()/2) yPos = 12;
+        if (i>=mainPartition.size()/4 && i<mainPartition.size()/2)
+        {
+            if (yPos != 12) {xPos =1;}
+            
+            yPos = 12;
+        }
+        if (i>=mainPartition.size()/2 && i<3*mainPartition.size()/4)
+        {
+            if (yPos != 19) {xPos =1;}
+            
+            yPos = 19;
+        }
+        if (i>=3*mainPartition.size()/4)
+        {
+            if (yPos != 26) {xPos =1;}
+            
+            yPos = 26;
+        }
         
-        int cellNum = mainPartition[i];     //grab cell number from mainPartition vector (base 0)
+        
+        int cellNum = mainPartition[i];             //grab cell number from mainPartition vector (base 0)
 
-        cellData[cellNum].x = xPos;         //x-coord of LL corner
-        cellData[cellNum].y = yPos;            //y-coord of LL corner
-        if (cellNum < numOfCells) cellData[cellNum].r = 1;            //all cells unrotated (rotation = 1)
+        cellData[cellNum].x = xPos;                 //x-coord of LL corner
+        cellData[cellNum].y = yPos;                 //y-coord of LL corner
+        if (cellNum > 0) cellData[cellNum].r = 1;   //all cells unrotated (rotation = 1)
 
-        //cellData[cellNum].nets = 0;         //assumed 0 nets during initialization
-        cellData[cellNum].cell = cellNum+1; //cell's number
+        //cellData[cellNum].nets = 0;               //assumed 0 nets during initialization
+        cellData[cellNum].cell = cellNum;           //cell's number
 
 
         xPos += 7;                          //Placing cells side by side along x axis + one extra space in between
 
-        addCols(7, layout);
+        if (xPos > layout[0].size()) addCols(7, layout);
         makeCell(cellData[cellNum], layout);//create the cell in the 2D "layout" vector
     }
+    ///// Above this line should be deleted or moved /////
 
-
+    
+    
     //First: Global Routing
-    std::vector<int> netsGlobal;
-    std::vector<std::pair<int,int> > netsChannel;
-    classifyNets(cellData, layout, netsGlobal, netsChannel);
-
+    classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs);
     global();
 
     //Second: Channel Routing

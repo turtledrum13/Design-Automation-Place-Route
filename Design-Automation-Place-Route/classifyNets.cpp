@@ -52,12 +52,10 @@ void makeChannelVec (std::vector<bool> locations, std::vector<std::pair<int,int>
                 if (bottomBoundary == 0)
                 {
                     bottomBoundary = i;
-                    printf("bottom boundary found: %i\n", i);
                 }
                 else
                 {
                     topBoundary = i;
-                    printf("top boundary found: %i\n", i);
                 }
             }
         }
@@ -74,34 +72,122 @@ void makeChannelVec (std::vector<bool> locations, std::vector<std::pair<int,int>
     vec.push_back(lastChannel);
 }
 
+int terminalOffset(int terminal, int rotation)
+{
+    int offset = 0;
+    switch(rotation)
+    {
+        case 1 :
+            switch(terminal)
+            {
+                case 1 : offset = -5;
+                case 2 : offset = -5;
+                case 3 : offset = 0;
+                case 4 : offset = 0;
+            }
+        case 2 :
+            switch(terminal)
+            {
+                case 1 : offset = -5;
+                case 2 : offset = 0;
+                case 3 : offset = -5;
+                case 4 : offset = 0;
+            }
+        case 3 :
+            switch(terminal)
+            {
+                case 1 : offset = 0;
+                case 2 : offset = 0;
+                case 3 : offset = -5;
+                case 4 : offset = -5;
+            }
+        case 4 :
+            switch(terminal)
+            {
+                case 1 : offset = 0;
+                case 2 : offset = -5;
+                case 3 : offset = 0;
+                case 4 : offset = -5;
+            }
+        default : offset = 0;
+    }
+    
+    return offset;
+}
 
-void classifyNets(std::vector<cell> CELLS, std::vector<std::vector<int> > LAYOUT, std::vector<int> & GLOBAL, std::vector<std::pair<int,int> > & CHANNEL)
+void isGlobal(std::vector<std::pair<int,int> > channels, std::vector<net> & netlist, std::vector<cell> cells)
+{
+    for (int i=0; i<netlist.size(); i++)
+    {
+        
+        cell cellA = cells[netlist[i].c1.first];
+        int termA = netlist[i].c1.second;
+        cell cellB = cells[netlist[i].c2.first];
+        int termB = netlist[i].c2.second;
+        
+        //find boundary lines each terminal falls on
+        int boundaryA = cellA.y + terminalOffset(termA, cellA.r);
+        int boundaryB = cellB.y + terminalOffset(termB, cellB.r);
+        
+        // see if both boundaries are in same channel
+        if (abs(boundaryA-boundaryB) < 3)
+        {
+            netlist[i].global = false;
+            
+            for (int j=0; j<channels.size(); j++)
+            {
+                if (boundaryA == channels[j].first || boundaryA == channels[j].second)
+                {
+                    if (boundaryB == channels[j].first || boundaryB == channels[j].second)
+                        netlist[i].channel = j; printf("net %i in channel %i\n", i+1, j); break;
+                }
+            }
+            
+        }
+        else
+        {
+            netlist[i].global = true; printf("net %i is global\n", i+1);
+                                             
+        }
+    }
+}
+
+
+void classifyNets(std::vector<cell> CELLS, std::vector<std::vector<int> > LAYOUT, std::vector<net> & GLOBAL, std::vector<net> & CHANNEL, std::vector<net> & NETLIST)
 {
     std::vector<int> boundaryVec;
     std::vector<std::pair<int,int> > channelVec;
     std::vector<bool> boundaryLoc, channelLoc;
     
     findBoundaries(CELLS, LAYOUT, boundaryLoc);
-    
     makeBoundaryVec(boundaryLoc, boundaryVec);
     makeChannelVec(boundaryLoc, channelVec);
     
-    printf("\n\nboundary bool:\n");
-    for (int i=0; i<boundaryLoc.size(); i++)
+    isGlobal(channelVec, NETLIST, CELLS);
+    
+    for (int i=0; i<NETLIST.size(); i++)
     {
-        printf(boundaryLoc[i] ? "1 " : "0 ");
+        if (NETLIST[i].global) GLOBAL.push_back(NETLIST[i]);
+        else CHANNEL.push_back(NETLIST[i]);
     }
     
-    printf("\n\nboundary locations:\n");
-    for (int i=0; i<boundaryVec.size(); i++)
-    {
-        printf("%i ",boundaryVec[i]);
-    }
-    printf("\n\nchannel locations:\n");
-    for (int i=0; i<channelVec.size(); i++)
-    {
-        printf("(%i,%i) ",channelVec[i].first, channelVec[i].second);
-    }
+  
+//    printf("\n\nboundary bool:\n");
+//    for (int i=0; i<boundaryLoc.size(); i++)
+//    {
+//        printf(boundaryLoc[i] ? "1 " : "0 ");
+//    }
+//
+//    printf("\n\nboundary locations:\n");
+//    for (int i=0; i<boundaryVec.size(); i++)
+//    {
+//        printf("%i ",boundaryVec[i]);
+//    }
+//    printf("\n\nchannel locations:\n");
+//    for (int i=0; i<channelVec.size(); i++)
+//    {
+//        printf("(%i,%i) ",channelVec[i].first, channelVec[i].second);
+//    }
 }
 
 
