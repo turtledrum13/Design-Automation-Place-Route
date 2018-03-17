@@ -18,19 +18,19 @@ void findBoundaries(std::vector<cell> cells, std::vector<std::vector<int> > layo
     
     for (int i=0; i<cells.size(); i++)
     {
-        int boundaryRow1 = cells[i].y;
-        int boundaryRow2 = boundaryRow1+5;
-        
-        boundaryLoc[boundaryRow1] = true;
-        boundaryLoc[boundaryRow2] = true;
+        if (cells[i].r > 0)
+        {
+            int boundaryRow1 = cells[i].y;
+            int boundaryRow2 = boundaryRow1-5;
+            boundaryLoc[boundaryRow1] = true;
+            boundaryLoc[boundaryRow2] = true;
+        }
     }
-    
-    //return boundaryLoc;
 }
 
 void makeBoundaryVec (std::vector<bool> locations, std::vector<int> & vec)
 {
-    for (int i=locations.size(); i>0; i--)
+    for (int i=locations.size()-1; i>=0; i--)
     {
         if (locations[i]) vec.push_back(i);
     }
@@ -38,7 +38,7 @@ void makeBoundaryVec (std::vector<bool> locations, std::vector<int> & vec)
 
 void makeChannelVec (std::vector<bool> locations, std::vector<int> & vec)
 {
-    for (int i=locations.size(); i>0; i--)
+    for (int i=locations.size()-1; i>=0; i--)
     {
         if (locations[i]) vec.push_back(i);
     }
@@ -54,6 +54,12 @@ void classifyNets(std::vector<cell> CELLS, std::vector<std::vector<int> > LAYOUT
     
     makeBoundaryVec(boundaryLoc, boundaryVec);
     makeChannelVec(boundaryLoc, channelVec);
+    
+    printf("\n\nboundary bool:\n");
+    for (int i=0; i<boundaryLoc.size(); i++)
+    {
+        printf(boundaryLoc[i] ? "1 " : "0 ");
+    }
     
     printf("\n\nboundary locations:\n");
     for (int i=0; i<boundaryVec.size(); i++)

@@ -11,6 +11,7 @@
 #include "channelRouting.hpp"
 #include "layoutOperations.hpp"
 #include "structures.h"
+#include "classifyNets.hpp"
 
 
 
@@ -115,7 +116,7 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
 
         cellData[cellNum].x = xPos;         //x-coord of LL corner
         cellData[cellNum].y = 5;            //y-coord of LL corner
-        cellData[cellNum].r = 1;            //all cells unrotated (rotation = 1)
+        if (cellNum < numOfCells2) cellData[cellNum].r = 1;            //all cells unrotated (rotation = 1)
 
         //cellData[cellNum].nets = 0;         //assumed 0 nets during initialization
         cellData[cellNum].cell = cellNum+1; //cell's number
@@ -129,6 +130,9 @@ int main()	    //use argc and argv to pass command prompt arguments to main()
 
 
     //First: Global Routing
+    std::vector<int> netsGlobal, netsChannel;
+    classifyNets(cellData, layout, netsGlobal, netsChannel);
+    
     global();
 
     //Second: Channel Routing
