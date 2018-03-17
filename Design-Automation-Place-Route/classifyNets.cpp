@@ -28,6 +28,7 @@ void findBoundaries(std::vector<cell> cells, std::vector<std::vector<int> > layo
     }
 }
 
+
 void makeBoundaryVec (std::vector<bool> locations, std::vector<int> & vec)
 {
     for (int i=locations.size()-1; i>=0; i--)
@@ -35,6 +36,7 @@ void makeBoundaryVec (std::vector<bool> locations, std::vector<int> & vec)
         if (locations[i]) vec.push_back(i);
     }
 }
+
 
 void makeChannelVec (std::vector<bool> locations, std::vector<std::pair<int,int> > & vec)
 {
@@ -71,6 +73,7 @@ void makeChannelVec (std::vector<bool> locations, std::vector<std::pair<int,int>
     std::pair<int,int> lastChannel (0, 0);
     vec.push_back(lastChannel);
 }
+
 
 int terminalOffset(int terminal, int rotation)
 {
@@ -114,6 +117,7 @@ int terminalOffset(int terminal, int rotation)
     
     return offset;
 }
+
 
 void isGlobal(std::vector<std::pair<int,int> > channels, std::vector<net> & netlist, std::vector<cell> cells)
 {
