@@ -8,14 +8,14 @@
 
 #include "classifyNets.hpp"
 #include <vector>
-
+#include <stdlib.h>
 
 void findBoundaries(std::vector<cell> cells, std::vector<std::vector<int> > layout, std::vector<bool> & boundaryLoc)
 {
     int length = layout.size(); //parameter equal to number of rows in layout
-    
+
     boundaryLoc.resize (length, false);
-    
+
     for (int i=0; i<cells.size(); i++)
     {
         if (cells[i].r > 0)
@@ -42,9 +42,9 @@ void makeChannelVec (std::vector<bool> locations, std::vector<std::pair<int,int>
 {
     std::pair<int,int> firstChannel (locations.size()-1, locations.size()-1);
     vec.push_back(firstChannel);
-    
+
     int bottomBoundary = 0, topBoundary = 0;
-    
+
     for (int i=locations.size()-2; i>0; i--)  //from the second boundary location to the second last boundary location
     {
         if (locations[i])
@@ -61,7 +61,7 @@ void makeChannelVec (std::vector<bool> locations, std::vector<std::pair<int,int>
                 }
             }
         }
-        
+
         if (bottomBoundary!= 0 && topBoundary != 0)
         {
             std::pair<int,int> nextChannel (bottomBoundary, topBoundary);
@@ -69,7 +69,7 @@ void makeChannelVec (std::vector<bool> locations, std::vector<std::pair<int,int>
             bottomBoundary = 0; topBoundary = 0;
         }
     }
-    
+
     std::pair<int,int> lastChannel (0, 0);
     vec.push_back(lastChannel);
 }
@@ -114,7 +114,7 @@ int terminalOffset(int terminal, int rotation)
             }
         default : offset = 0;
     }
-    
+
     return offset;
 }
 
@@ -123,21 +123,21 @@ void isGlobal(std::vector<std::pair<int,int> > channels, std::vector<net> & netl
 {
     for (int i=0; i<netlist.size(); i++)
     {
-        
+
         cell cellA = cells[netlist[i].c1.first];
         int termA = netlist[i].c1.second;
         cell cellB = cells[netlist[i].c2.first];
         int termB = netlist[i].c2.second;
-        
+
         //find boundary lines each terminal falls on
         int boundaryA = cellA.y + terminalOffset(termA, cellA.r);
         int boundaryB = cellB.y + terminalOffset(termB, cellB.r);
-        
+
         // see if both boundaries are in same channel
         if (abs(boundaryA-boundaryB) < 3)
         {
             netlist[i].global = false;
-            
+
             for (int j=0; j<channels.size(); j++)
             {
                 if (boundaryA == channels[j].first || boundaryA == channels[j].second)
@@ -146,12 +146,12 @@ void isGlobal(std::vector<std::pair<int,int> > channels, std::vector<net> & netl
                         netlist[i].channel = j; printf("net %i in channel %i\n", i+1, j); break;
                 }
             }
-            
+
         }
         else
         {
             netlist[i].global = true; printf("net %i is global\n", i+1);
-                                             
+
         }
     }
 }
@@ -162,20 +162,20 @@ void classifyNets(std::vector<cell> CELLS, std::vector<std::vector<int> > LAYOUT
     std::vector<int> boundaryVec;
     std::vector<std::pair<int,int> > channelVec;
     std::vector<bool> boundaryLoc, channelLoc;
-    
+
     findBoundaries(CELLS, LAYOUT, boundaryLoc);
     makeBoundaryVec(boundaryLoc, boundaryVec);
     makeChannelVec(boundaryLoc, channelVec);
-    
+
     isGlobal(channelVec, NETLIST, CELLS);
-    
+
     for (int i=0; i<NETLIST.size(); i++)
     {
         if (NETLIST[i].global) GLOBAL.push_back(NETLIST[i]);
         else CHANNEL.push_back(NETLIST[i]);
     }
-    
-  
+
+
 //    printf("\n\nboundary bool:\n");
 //    for (int i=0; i<boundaryLoc.size(); i++)
 //    {

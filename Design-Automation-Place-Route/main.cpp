@@ -48,21 +48,20 @@ int main()        //use argc and argv to pass command prompt arguments to main()
             std::pair <int,int> netPair2 (n4-1, n5);
             netlist.push_back(netPair1);
             netlist.push_back(netPair2);
-            
+
             net newNet;             //net structure which contains two pairs (cell, terminal) and (cell, terminal), net number, placed/not
             newNet.c1 = netPair1;
             newNet.c2 = netPair2;
             newNet.num = n1;
             newNet.placed = false;
-            
+
             netlistPairs.push_back(newNet);
         }
     }
 
-    cellData.resize(numOfCells);                          //vector that holds "cell" structures
-    
-    
-    //if an odd number of cells is given, add one to make it even
+    cellData.resize(numOfCells);
+
+    //std::cout<<cellData[0].x;                          //vector that holds "cell" structures
 
     //calculate the number of partitions to be found
     m = log(numOfCells)/log(2);
@@ -90,7 +89,12 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     //calculate the cutset
     calculateCutset(fullPartition, numOfCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
 
+    /*for (int i=0; i<cellData.size();i++)
+    {
+        std::cout<<"\n"<<cellData[i].cellNum;
+    }*/
 
+    createArray(cellData, mainPartition, numOfCells);
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,9 +108,9 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         else mainPartition[i]++;
     }
 
-    
+
     ///// Below this line should be deleted or moved /////
-    
+
     //SAMPLE LAYOUT GENERATION -- need to build a function to take any number of cells into a 2:1 rectangular partition
     //layout.resize(6, std::vector<int>(7*mainPartition.size()-1));   //sizing the empty layout for single row placement (will want to make this 2:1 placement eventually)
     layout.resize(1, std::vector<int>(1));
@@ -116,28 +120,28 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     int xPos = 1;
     int yPos = 5;
 
-    for (int i=0; i<mainPartition.size(); i++)
+    /*for (int i=0; i<mainPartition.size(); i++)
     {
         if (i>=mainPartition.size()/4 && i<mainPartition.size()/2)
         {
             if (yPos != 12) {xPos =1;}
-            
+
             yPos = 12;
         }
         if (i>=mainPartition.size()/2 && i<3*mainPartition.size()/4)
         {
             if (yPos != 19) {xPos =1;}
-            
+
             yPos = 19;
         }
         if (i>=3*mainPartition.size()/4)
         {
             if (yPos != 26) {xPos =1;}
-            
+
             yPos = 26;
         }
-        
-        
+
+
         int cellNum = mainPartition[i];             //grab cell number from mainPartition vector (base 0)
 
         cellData[cellNum].x = xPos;                 //x-coord of LL corner
@@ -152,13 +156,13 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
         if (xPos > layout[0].size()) addCols(7, layout);
         makeCell(cellData[cellNum], layout);//create the cell in the 2D "layout" vector
-    }
+    }*/
     ///// Above this line should be deleted or moved /////
 
-    
-    
+
+
     //First: Global Routing
-    classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs);
+    //classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs);
     global();
 
     //Second: Channel Routing
