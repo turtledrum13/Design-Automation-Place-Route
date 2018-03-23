@@ -80,19 +80,16 @@ void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, i
 
 void funct4(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
-    std::cout<<"here\n";
     for (int i=xNum; i<xNum+2; i++)
     {
-        std::cout<<"there\n";
         for(int j=yNum; j<yNum+2; j++)
         {
-            //std::cout<<cellData[mainPartition[z]];
-            std::cout<<z<<"\n";
-
             if (mainPartition[z]!=numOfCells)
             {
                 cellData[mainPartition[z]].x = i;
                 cellData[mainPartition[z]].y = j;
+                cellData[mainPartition[z]].cell = mainPartition[z];
+
             }
             z++;
         }
@@ -102,7 +99,6 @@ void funct4(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector
 void funct8(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
     funct4(xNum, yNum, z, cellData, mainPartition, numOfCells);
-    std::cout<<z<<"\t\n";
     funct4(xNum, yNum+2, z, cellData, mainPartition, numOfCells);
 }
 void funct16(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)

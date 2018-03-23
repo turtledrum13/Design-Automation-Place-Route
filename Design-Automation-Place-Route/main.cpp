@@ -27,7 +27,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     std::vector<numberList> cellList;
     std::vector<cell> cellData;
     std::vector<net> netlistPairs, netsGlobal, netsChannel;
-    std::vector<std::vector<int> > netArray, layout;
+    std::vector<std::vector<int> > netArray, layout, dummyLayout;
     std::vector<int> gains, fullPartition, mainPartition, boundaries;
     std::vector<std::pair <int,int> > netlist;
 
@@ -83,20 +83,28 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     //create the list of cells and point them to their net pair
     createCellList(numOfNets, netArray, cellList, netlist, numOfCells);
-
     std::cout<<"\npropagated input\n";
 
     //calculate the cutset
     calculateCutset(fullPartition, numOfCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
 
-    /*for (int i=0; i<cellData.size();i++)
-    {
-        std::cout<<"\n"<<cellData[i].cellNum;
-    }*/
-
+    //
     createArray(cellData, mainPartition, numOfCells);
+    dummyLayout.resize(sqrt(mainPartition.size()), std::vector<int>(sqrt(mainPartition.size()), 0));
 
+    for (int i=0; i<cellData.size() ; i++)
+    {
+        dummyLayout[cellData[i].x][cellData[i].y] = cellData[i].cell;
+    }
 
+    for (int i=0; i<dummyLayout.size(); i++)
+    {
+        for(int j=0; j<dummyLayout[i].size(); j++)
+        {
+            std::cout<<dummyLayout[i][j]<<"\t";
+        }
+        std::cout<<"\n";
+    }
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //Routing///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,6 +123,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     //layout.resize(6, std::vector<int>(7*mainPartition.size()-1));   //sizing the empty layout for single row placement (will want to make this 2:1 placement eventually)
     layout.resize(1, std::vector<int>(1));
     addRows(26, layout);
+
 
 
     int xPos = 1;
