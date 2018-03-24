@@ -22,6 +22,6 @@ void wave(coord src, coord dest, std::vector<std::vector<int> > lay);
 
 void global();
 
-
+void updateCells(std::vector<cell> &cellData, int numX, int numY);
 
 #endif /* globalRouting_hpp */

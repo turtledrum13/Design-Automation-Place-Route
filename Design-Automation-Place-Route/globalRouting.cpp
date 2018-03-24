@@ -15,15 +15,15 @@ void lees(std::vector<net> & globalNets, std::vector<cell> cellData, std::vector
 {
     //Lee's Algorithm on one net at a time
     coord source, destination;
-    
+
     for(int i=0; i<globalNets.size(); i++)
     {
         source = terminalCoords(globalNets[i].c1, cellData);
         destination = terminalCoords(globalNets[i].c2, cellData);
-        
+
         wave(source, destination, layout);
     }
-    
+
 }
 
 coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
@@ -31,10 +31,10 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
     coord result;
     int cellNum = cell_term.first; printf("cell num: %i  ",cellNum);
     int termNum = cell_term.second; printf("term num: %i  ",termNum);
-    
+
     result.x = cell_data[cellNum-1].x;
     result.y = cell_data[cellNum-1].y;
-    
+
     switch(cell_data[cellNum-1].r)
     {
         case 1 :
@@ -71,7 +71,7 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
         }
         default : result.x+=1; result.y-=5;
     }
-    
+
     return result;
 }
 
@@ -84,4 +84,18 @@ void wave(coord src, coord dest, std::vector<std::vector<int> > lay)
 void global()
 {
     printf("\n\nDid global routing\n\n");
+}
+
+void updateCells(std::vector<cell> &cellData, int numX, int numY)
+{
+    for (int i=0;i<cellData.size();i++)
+    {
+        if (cellData[i].y==numY)
+        {
+            if(cellData[i].x > numX)
+            {
+                cellData[i].x += 3;
+            }
+        }
+    }
 }
