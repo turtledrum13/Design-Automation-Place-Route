@@ -9,6 +9,8 @@
 #ifndef structures_h
 #define structures_h
 
+#include <stdio.h>
+
 struct cell
 {
     int x;      //x-coordinate of lower left block
@@ -25,6 +27,11 @@ struct net
     bool placed;                //whether the net has been placed yet or not
     bool global;                //true if net needs to be routed globally
     int channel;                //channel number if channel routing is possible
+};
+
+struct coord
+{
+    int x, y;
 };
 
 #endif /* structures_h */
