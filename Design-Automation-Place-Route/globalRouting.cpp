@@ -20,7 +20,7 @@ void global(std::vector<net> & globalNets, std::vector<cell> & cellData, std::ve
     {
         source = terminalCoords(globalNets[i].c1, cellData);
         destination = terminalCoords(globalNets[i].c2, cellData);
-        
+
         //update the layout and cellData vector with new pass through cells
         coord newCell = findVertical(source, destination, layout, boundaries);
         updateLayout(newCell, layout);
@@ -119,7 +119,7 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
     bool up = dest.y < src.y;           //if the destination is above the source in the layout
     bool right = dest.x >= src.x;        //if the destination is to the right of the source in the layout
     bool top;
-    
+
     for(int i=0; i<bound.size(); i++)
     {
         if (src.y == bound[i]) top = i; break;
@@ -127,7 +127,7 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
 
     //find where the x,y coordinate this net will terminate at, conditional upon direction of desintation and boundary top/bottom
     coord result;
-    
+
     //find the boundary row in which the partial net will terminate. This is the y-coordinate
     if(top)
     {
@@ -139,7 +139,7 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
         if(up) result.y = src.y;            //bottom edge & destination is above
         else result.y = src.y+2;            //bottom edge & destination is below
     }
-    
+
     //search in the direction of the destination for a column in which the partial net can terminate. This is the x-coordinate
     if(right)
     {
