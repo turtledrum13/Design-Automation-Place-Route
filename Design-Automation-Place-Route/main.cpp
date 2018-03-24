@@ -105,7 +105,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     for (int i=0; i<mainPartition.size(); i++)
     {
         if (mainPartition[i] > numOfCells-1) mainPartition[i] = 0;
-        else mainPartition[i]++;
+        else mainPartition[i]++;                        //add 1 to mainPartition Cells (not base 0)
     }
 
 
