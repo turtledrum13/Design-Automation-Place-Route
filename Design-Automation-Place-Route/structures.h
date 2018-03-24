@@ -9,7 +9,10 @@
 #ifndef structures_h
 #define structures_h
 
+<<<<<<< HEAD
 #include <stdio.h>
+=======
+>>>>>>> 14d7733df67cdc69df5d474a77158ecfc1a83212
 #include <iostream>
 
 struct cell

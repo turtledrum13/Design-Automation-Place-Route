@@ -71,7 +71,10 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
         }
         default : result.x+=1; result.y-=5;
     }
+    
+    return result;
 }
+
 
 void global()
 {
