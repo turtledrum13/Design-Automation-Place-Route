@@ -8,6 +8,8 @@
 
 #include "layoutOperations.hpp"
 #include <vector>
+#include <iostream>
+
 
 void makeCell(cell C, std::vector<std::vector<int> > & layout)
 {
@@ -76,61 +78,64 @@ void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, i
     else if (mainPartition.size()==1024) funct1024(0, 0, z, cellData, mainPartition, numOfCells);
 }
 
-void funct4(int n, int m, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
+void funct4(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
-    for (int i=n; i<n+2; i++)
+    for (int i=xNum; i<xNum+2; i++)
     {
-        for(int j=m; m<m+2; m++)
+        for(int j=yNum; j<yNum+2; j++)
         {
             printf("z=%i, mP=%i\n",mainPartition[z]);
             if (mainPartition[z]!=numOfCells)
             {
                 cellData[mainPartition[z]].x = i;
                 cellData[mainPartition[z]].y = j;
+                cellData[mainPartition[z]].cell = mainPartition[z];
+
             }
             z++;
         }
     }
 }
 
-void funct8(int n, int m, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
+void funct8(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
-    funct4(n, m, z, cellData, mainPartition, numOfCells);
-    funct4(n, m+2, z, cellData, mainPartition, numOfCells);
+    funct4(xNum, yNum, z, cellData, mainPartition, numOfCells);
+    funct4(xNum, yNum+2, z, cellData, mainPartition, numOfCells);
 }
-void funct16(int n, int m, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
+void funct16(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
-    funct8(n, m, z, cellData, mainPartition, numOfCells);
-    funct8(n+2, m, z, cellData, mainPartition, numOfCells);
+    funct8(xNum, yNum, z, cellData, mainPartition, numOfCells);
+    funct8(xNum+2, yNum, z, cellData, mainPartition, numOfCells);
 }
-void funct32(int n, int m, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
+void funct32(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
-    funct16(n, m, z, cellData, mainPartition, numOfCells);
-    funct16(n, m+4, z, cellData, mainPartition, numOfCells);
+    funct16(xNum, yNum, z, cellData, mainPartition, numOfCells);
+    funct16(xNum, yNum+4, z, cellData, mainPartition, numOfCells);
 
 }
-void funct64(int n, int m, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
+void funct64(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
-    funct32(n, m, z, cellData, mainPartition, numOfCells);
-    funct32(n+4, m, z, cellData, mainPartition, numOfCells);
+    funct32(xNum, yNum, z, cellData, mainPartition, numOfCells);
+    funct32(xNum+4, yNum, z, cellData, mainPartition, numOfCells);
 }
-void funct128(int n, int m, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
+void funct128(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
-    funct64(n, m, z, cellData, mainPartition, numOfCells);
-    funct64(n, m+8, z, cellData, mainPartition, numOfCells);
+    funct64(xNum, yNum, z, cellData, mainPartition, numOfCells);
+
+    funct64(xNum, yNum+8, z, cellData, mainPartition, numOfCells);
 }
-void funct256(int n, int m, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
+void funct256(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
-    funct128(n, m, z, cellData, mainPartition, numOfCells);
-    funct128(n+8, m, z, cellData, mainPartition, numOfCells);
+    funct128(xNum, yNum, z, cellData, mainPartition, numOfCells);
+    funct128(xNum+8, yNum, z, cellData, mainPartition, numOfCells);
 }
-void funct512(int n, int m, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
+void funct512(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
-    funct256(n, m, z, cellData, mainPartition, numOfCells);
-    funct256(n, m+16, z, cellData, mainPartition, numOfCells);
+    funct256(xNum, yNum, z, cellData, mainPartition, numOfCells);
+    funct256(xNum, yNum+16, z, cellData, mainPartition, numOfCells);
 }
-void funct1024(int n, int m, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
+void funct1024(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
-    funct512(n, m, z, cellData, mainPartition, numOfCells);
-    funct512(n+16, m, z, cellData, mainPartition, numOfCells);
+    funct512(xNum, yNum, z, cellData, mainPartition, numOfCells);
+    funct512(xNum+16, yNum, z, cellData, mainPartition, numOfCells);
 }
