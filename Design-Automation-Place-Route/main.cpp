@@ -88,23 +88,9 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     //calculate the cutset
     calculateCutset(fullPartition, numOfCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
 
-    //
-    createArray(cellData, mainPartition, numOfCells);
-    dummyLayout.resize(sqrt(mainPartition.size()), std::vector<int>(sqrt(mainPartition.size()), 0));
+    //Create the 2d array for the placement layout
+    createArray(cellData, mainPartition, numOfCells, dummyLayout);
 
-    for (int i=0; i<cellData.size() ; i++)
-    {
-        dummyLayout[cellData[i].x][cellData[i].y] = cellData[i].cell;
-    }
-
-    for (int i=0; i<dummyLayout.size(); i++)
-    {
-        for(int j=0; j<dummyLayout[i].size(); j++)
-        {
-            std::cout<<dummyLayout[i][j]<<"\t";
-        }
-        std::cout<<"\n";
-    }
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //Routing///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
