@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 
-void lees(std::vector<net> & globalNets, std::vector<cell> cellData, std::vector<std::vector<int> > layout, std::vector<int> boundaries)
+void global(std::vector<net> & globalNets, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries)
 {
     //Lee's Algorithm on one net at a time
     coord source, destination;
@@ -21,7 +21,10 @@ void lees(std::vector<net> & globalNets, std::vector<cell> cellData, std::vector
         source = terminalCoords(globalNets[i].c1, cellData);
         destination = terminalCoords(globalNets[i].c2, cellData);
         
-        findVertical(source, destination, layout, boundaries);
+        //update the layout and cellData vector with new pass through cells
+        coord newCell = findVertical(source, destination, layout, boundaries);
+        updateLayout(newCell, layout);
+        updateCells(cellData, newCell);
     }
 
 }
@@ -169,18 +172,13 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
 }
 
 
-void global()
-{
-    printf("\n\nDid global routing\n\n");
-}
-
-void updateCells(std::vector<cell> &cellData, int numX, int numY)
+void updateCells(std::vector<cell> &cellData, coord XY)
 {
     for (int i=0; i<cellData.size(); i++)
     {
-        if (cellData[i].y==numY)
+        if (cellData[i].y==XY.y)
         {
-            if(cellData[i].x > numX)
+            if(cellData[i].x > XY.x)
             {
                 cellData[i].x += 3;
             }
@@ -188,12 +186,13 @@ void updateCells(std::vector<cell> &cellData, int numX, int numY)
     }
 }
 
-void updateLayout(int numX, int numY, std::vector<std::vector<int> > &layout)
+void updateLayout(coord XY, std::vector<std::vector<int> > &layout)
 {
     //std::vector<int>::iterator it;
     //it = layout[numX][numY];
     for(int i=0; i<6; i++)
     {
-        layout[numX+i].insert(layout[numX+i].begin()+numY,3, 0);
+        layout[XY.x+i].insert(layout[XY.x+i].begin()+XY.y,3, 0);
     }
 }
+

@@ -14,15 +14,14 @@
 #include <stdio.h>
 #include <vector>
 
-void lees(std::vector<net> & globalNets, std::vector<cell> cellData, std::vector<std::vector<int> > layout);
+void global(std::vector<net> & globalNets, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries);
 
 coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data);
 
 coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout, std::vector<int> bound);
 
-void global();
+void updateCells(std::vector<cell> &cellData, coord XY);
 
-void updateCells(std::vector<cell> &cellData, int numX, int numY);
+void updateLayout(coord XY, std::vector<std::vector<int> > &layout);
 
-void updateLayout(int numX, int numY, std::vector<std::vector<int> > &layout);
 #endif /* globalRouting_hpp */
