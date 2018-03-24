@@ -142,7 +142,14 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
 
     for(int i=0; i<bound.size(); i++)
     {
-        if (src.y == bound[i]) top = i; break;
+        if (src.y == bound[i])
+        {
+            if (i%2 != 0)
+            {
+                top = true;
+                break;
+            }
+        }
     }
 
     //find where the x,y coordinate this net will terminate at, conditional upon direction of desintation and boundary top/bottom
@@ -171,8 +178,8 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
                 result.x = index;
                 break;
             }
-            if(index<layout[result.y].size()-1) index++;
-            else result.x = index-5; break;
+            if(index<layout[result.y].size()-1) {index++; printf("right?%i, index: %i\n",right, index);}
+            else {result.x = index-5; break;}
         }
     }
     else
@@ -185,11 +192,13 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
                 result.x = index;
                 break;
             }
-            if(index>0) index--;
-            else result.x = 0; break;
+            
+            if(index>0){index--; printf("right?%i, index: %i\n",right, index);}
+            else{result.x = 0; break;}
         }
     }
 
+    printf("top = %d and result = %i,%i\n", top, result.x, result.y);
     return result;
 }
 
