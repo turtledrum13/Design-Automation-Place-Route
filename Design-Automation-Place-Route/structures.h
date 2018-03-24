@@ -14,11 +14,12 @@
 
 struct cell
 {
-    int x;      //x-coordinate of lower left block
-    int y;      //y-coordinate of lower left block
-    int r;      //rotation of cell (1, 2, 3, or 4)
-    int nets;   //number of nets attached to cell
-    int cell;   //cell number (base 0)
+    int x;                      //x-coordinate of lower left block
+    int y;                      //y-coordinate of lower left block
+    int r;                      //rotation of cell (1, 2, 3, or 4, or 5 for through-cell)
+    int nets;                   //number of nets attached to cell
+    int cell;                   //cell number (base 0)
+    std::vector<int> netIndex;  //indeces in the netPairs array where up to four nets could exist
 };
 
 struct net

@@ -10,6 +10,7 @@
 #define globalRouting_hpp
 
 #include "structures.h"
+#include "layoutOperations.hpp"
 #include <stdio.h>
 #include <vector>
 

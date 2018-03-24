@@ -78,6 +78,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     for (int i=0; i<netlist.size(); i++)
     {
         cellData[netlist[i].first].nets++;
+        cellData[netlist[i].first].netIndex.push_back(i);
         printf("cell %i has %i nets\n",netlist[i].first+1,cellData[netlist[i].first].nets);
     }
 
