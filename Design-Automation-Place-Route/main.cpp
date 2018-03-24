@@ -112,6 +112,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     }
 
 
+<<<<<<< HEAD
     ///// Below this line should be deleted or moved /////
 
     //SAMPLE LAYOUT GENERATION -- need to build a function to take any number of cells into a 2:1 rectangular partition
@@ -161,9 +162,11 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     ///// Above this line should be deleted or moved /////
 
 
+=======
+>>>>>>> dd44385788a651a28cdb391a8c0ebed00e134cb9
 
     //First: Global Routing
-    //classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs);
+    classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs);
     global();
 
     //Second: Channel Routing

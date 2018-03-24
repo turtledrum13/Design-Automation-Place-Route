@@ -9,7 +9,13 @@
 #ifndef globalRouting_hpp
 #define globalRouting_hpp
 
+#include "structures.h"
 #include <stdio.h>
+#include <vector>
+
+coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data);
+
+void lees(std::vector<net> & globalNets);
 
 void global();
 
