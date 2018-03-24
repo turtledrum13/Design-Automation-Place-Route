@@ -16,13 +16,14 @@ void findBoundaries(std::vector<cell> cells, std::vector<std::vector<int> > layo
 
     boundaryLoc.resize (length, false);
 
-    for (int i=0; i<cells.size(); i++)
+    for (int i=0; i<cells.size(); i++)          //for all the cells
     {
-        if (cells[i].r > 0)
+        if (cells[i].r > 0)                     //if the cell is not a dummy
         {
-            int boundaryRow1 = cells[i].y;
-            int boundaryRow2 = boundaryRow1-5;
+            int boundaryRow1 = cells[i].y;      //its lower edge is a boundary
             boundaryLoc[boundaryRow1] = true;
+            
+            int boundaryRow2 = boundaryRow1-5;  //its upper edge is a boundary
             boundaryLoc[boundaryRow2] = true;
         }
     }
@@ -157,14 +158,13 @@ void isGlobal(std::vector<std::pair<int,int> > channels, std::vector<net> & netl
 }
 
 
-void classifyNets(std::vector<cell> CELLS, std::vector<std::vector<int> > LAYOUT, std::vector<net> & GLOBAL, std::vector<net> & CHANNEL, std::vector<net> & NETLIST)
+void classifyNets(std::vector<cell> CELLS, std::vector<std::vector<int> > LAYOUT, std::vector<net> & GLOBAL, std::vector<net> & CHANNEL, std::vector<net> & NETLIST, std::vector<int> & BOUNDARIES)
 {
-    std::vector<int> boundaryVec;
     std::vector<std::pair<int,int> > channelVec;
     std::vector<bool> boundaryLoc, channelLoc;
-
+    
     findBoundaries(CELLS, LAYOUT, boundaryLoc);
-    makeBoundaryVec(boundaryLoc, boundaryVec);
+    makeBoundaryVec(boundaryLoc, BOUNDARIES);
     makeChannelVec(boundaryLoc, channelVec);
 
     isGlobal(channelVec, NETLIST, CELLS);
@@ -182,11 +182,11 @@ void classifyNets(std::vector<cell> CELLS, std::vector<std::vector<int> > LAYOUT
 //        printf(boundaryLoc[i] ? "1 " : "0 ");
 //    }
 //
-//    printf("\n\nboundary locations:\n");
-//    for (int i=0; i<boundaryVec.size(); i++)
-//    {
-//        printf("%i ",boundaryVec[i]);
-//    }
+    printf("\n\nboundary locations:\n");
+    for (int i=0; i<BOUNDARIES.size(); i++)
+    {
+        printf("%i ",BOUNDARIES[i]);
+    }
 //    printf("\n\nchannel locations:\n");
 //    for (int i=0; i<channelVec.size(); i++)
 //    {

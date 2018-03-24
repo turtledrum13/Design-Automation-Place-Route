@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 
-void lees(std::vector<net> & globalNets, std::vector<cell> cellData, std::vector<std::vector<int> > layout)
+void lees(std::vector<net> & globalNets, std::vector<cell> cellData, std::vector<std::vector<int> > layout, std::vector<int> boundaries)
 {
     //Lee's Algorithm on one net at a time
     coord source, destination;
@@ -21,7 +21,7 @@ void lees(std::vector<net> & globalNets, std::vector<cell> cellData, std::vector
         source = terminalCoords(globalNets[i].c1, cellData);
         destination = terminalCoords(globalNets[i].c2, cellData);
         
-        wave(source, destination, layout);
+        findVertical(source, destination, layout, boundaries);
     }
     
 }
@@ -75,9 +75,61 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
     return result;
 }
 
-void wave(coord src, coord dest, std::vector<std::vector<int> > lay)
+coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout, std::vector<int> bound)
 {
-    //do the wave propagation
+    bool up = dest.y < src.y;           //if the destination is above the source in the layout
+    bool right = dest.x >= src.x;        //if the destination is to the right of the source in the layout
+    bool top;
+    
+    for(int i=0; i<bound.size(); i++)
+    {
+        if (src.y == bound[i]) top = i; break;
+    }
+
+    //find where the x,y coordinate this net will terminate at, conditional upon direction of desintation and boundary top/bottom
+    coord result;
+    
+    //find the boundary row in which the partial net will terminate. This is the y-coordinate
+    if(top)
+    {
+        if(not up) result.y = src.y+5;        //top edge & destination is below
+        else result.y = src.y-2;            //top edge & destination is above
+    }
+    else
+    {
+        if(up) result.y = src.y;            //bottom edge & destination is above
+        else result.y = src.y+2;            //bottom edge & destination is below
+    }
+    
+    //search in the direction of the destination for a column in which the partial net can terminate. This is the x-coordinate
+    if(right)
+    {
+        int index = src.x;
+        while (true)
+        {
+            if(layout[result.y][index] < 1 || layout[result.y][index] > 4)
+            {
+                result.x = index;
+                break;
+            }
+            index++;
+        }
+    }
+    else
+    {
+        int index = src.x;
+        while (true)
+        {
+            if(layout[result.y][index] < 1 || layout[result.y][index] > 4)
+            {
+                result.x = index;
+                break;
+            }
+            index--;
+        }
+    }
+
+    return result;
 }
 
 

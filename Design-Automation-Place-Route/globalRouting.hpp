@@ -18,7 +18,7 @@ void lees(std::vector<net> & globalNets, std::vector<cell> cellData, std::vector
 
 coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data);
 
-void wave(coord src, coord dest, std::vector<std::vector<int> > lay);
+coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout, std::vector<int> bound);
 
 void global();
 
