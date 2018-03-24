@@ -111,53 +111,6 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         else mainPartition[i]++;                        //add 1 to mainPartition Cells (not base 0)
     }
 
-    ///// Below this line should be deleted or moved /////
-
-    //SAMPLE LAYOUT GENERATION -- need to build a function to take any number of cells into a 2:1 rectangular partition
-
-
-
-    int xPos = 1;
-    int yPos = 5;
-
-    /*for (int i=0; i<mainPartition.size(); i++)
-    {
-        if (i>=mainPartition.size()/4 && i<mainPartition.size()/2)
-        {
-            if (yPos != 12) {xPos =1;}
-
-            yPos = 12;
-        }
-        if (i>=mainPartition.size()/2 && i<3*mainPartition.size()/4)
-        {
-            if (yPos != 19) {xPos =1;}
-
-            yPos = 19;
-        }
-        if (i>=3*mainPartition.size()/4)
-        {
-            if (yPos != 26) {xPos =1;}
-
-            yPos = 26;
-        }
-
-
-        int cellNum = mainPartition[i];             //grab cell number from mainPartition vector (base 0)
-
-        cellData[cellNum].x = xPos;                 //x-coord of LL corner
-        cellData[cellNum].y = yPos;                 //y-coord of LL corner
-        if (cellNum > 0) cellData[cellNum].r = 1;   //all cells unrotated (rotation = 1)
-
-        //cellData[cellNum].nets = 0;               //assumed 0 nets during initialization
-        cellData[cellNum].cell = cellNum;           //cell's number
-
-
-        xPos += 7;                                  //Placing cells side by side along x axis + one extra space in between
-
-        if (xPos > layout[0].size()) addCols(7, layout);
-        makeCell(cellData[cellNum], layout);//create the cell in the 2D "layout" vector
-    }*/
-    ///// Above this line should be deleted or moved /////
 
     //First: Global Routing
     classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs);
