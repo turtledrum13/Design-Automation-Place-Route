@@ -89,7 +89,16 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     calculateCutset(fullPartition, numOfCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
 
     //Create the 2d array for the placement layout
-    createArray(cellData, mainPartition, numOfCells, dummyLayout);
+    createArray(cellData, mainPartition, numOfCells, layout);
+
+    for (int i=0; i<56; i++)
+    {
+        for(int j=0; j<9; j++)
+        {
+            std::cout<<layout[i][j]<<"\t";
+        }
+        std::cout<<"\n";
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //Routing///////////////////////////////////////////////////////////////////////////////////////////
@@ -106,9 +115,6 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     ///// Below this line should be deleted or moved /////
 
     //SAMPLE LAYOUT GENERATION -- need to build a function to take any number of cells into a 2:1 rectangular partition
-    //layout.resize(6, std::vector<int>(7*mainPartition.size()-1));   //sizing the empty layout for single row placement (will want to make this 2:1 placement eventually)
-    layout.resize(1, std::vector<int>(1));
-    addRows(26, layout);
 
 
 
