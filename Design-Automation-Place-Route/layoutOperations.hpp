@@ -22,7 +22,7 @@ void addRows(int numRows, std::vector<std::vector<int> > & layout);
 void addCols(int numCols, std::vector<std::vector<int> > & layout);
 
 void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells,
-                 std::vector<std::vector<int> > &dummyLayout);
+                 std::vector<std::vector<int> > &layout);
 void funct4(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells);
 void funct8(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells);
 void funct16(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells);

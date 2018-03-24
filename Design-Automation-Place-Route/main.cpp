@@ -89,7 +89,16 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     calculateCutset(fullPartition, numOfCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
 
     //Create the 2d array for the placement layout
-    createArray(cellData, mainPartition, numOfCells, dummyLayout);
+    createArray(cellData, mainPartition, numOfCells, layout);
+
+    for (int i=0; i<56; i++)
+    {
+        for(int j=0; j<9; j++)
+        {
+            std::cout<<layout[i][j]<<"\t";
+        }
+        std::cout<<"\n";
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //Routing///////////////////////////////////////////////////////////////////////////////////////////
@@ -103,6 +112,58 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     }
 
 
+<<<<<<< HEAD
+    ///// Below this line should be deleted or moved /////
+
+    //SAMPLE LAYOUT GENERATION -- need to build a function to take any number of cells into a 2:1 rectangular partition
+
+
+
+    int xPos = 1;
+    int yPos = 5;
+
+    /*for (int i=0; i<mainPartition.size(); i++)
+    {
+        if (i>=mainPartition.size()/4 && i<mainPartition.size()/2)
+        {
+            if (yPos != 12) {xPos =1;}
+
+            yPos = 12;
+        }
+        if (i>=mainPartition.size()/2 && i<3*mainPartition.size()/4)
+        {
+            if (yPos != 19) {xPos =1;}
+
+            yPos = 19;
+        }
+        if (i>=3*mainPartition.size()/4)
+        {
+            if (yPos != 26) {xPos =1;}
+
+            yPos = 26;
+        }
+
+
+        int cellNum = mainPartition[i];             //grab cell number from mainPartition vector (base 0)
+
+        cellData[cellNum].x = xPos;                 //x-coord of LL corner
+        cellData[cellNum].y = yPos;                 //y-coord of LL corner
+        if (cellNum > 0) cellData[cellNum].r = 1;   //all cells unrotated (rotation = 1)
+
+        //cellData[cellNum].nets = 0;               //assumed 0 nets during initialization
+        cellData[cellNum].cell = cellNum;           //cell's number
+
+
+        xPos += 7;                                  //Placing cells side by side along x axis + one extra space in between
+
+        if (xPos > layout[0].size()) addCols(7, layout);
+        makeCell(cellData[cellNum], layout);//create the cell in the 2D "layout" vector
+    }*/
+    ///// Above this line should be deleted or moved /////
+
+
+=======
+>>>>>>> dd44385788a651a28cdb391a8c0ebed00e134cb9
 
     //First: Global Routing
     classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs);
