@@ -171,7 +171,8 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
                 result.x = index;
                 break;
             }
-            index++;
+            if(index<layout[result.y].size()-1) index++;
+            else result.x = index-5; break;
         }
     }
     else
@@ -184,7 +185,8 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
                 result.x = index;
                 break;
             }
-            index--;
+            if(index>0) index--;
+            else result.x = 0; break;
         }
     }
 
