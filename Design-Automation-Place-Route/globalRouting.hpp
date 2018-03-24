@@ -15,7 +15,7 @@
 
 coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data);
 
-void lees(std::vector<net> & globalNets);
+void lees(std::vector<net> & globalNets, std::vector<cell> cellData);
 
 void global();
 
