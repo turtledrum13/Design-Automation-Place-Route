@@ -111,8 +111,6 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         else mainPartition[i]++;                        //add 1 to mainPartition Cells (not base 0)
     }
 
-
-<<<<<<< HEAD
     ///// Below this line should be deleted or moved /////
 
     //SAMPLE LAYOUT GENERATION -- need to build a function to take any number of cells into a 2:1 rectangular partition
@@ -160,10 +158,6 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         makeCell(cellData[cellNum], layout);//create the cell in the 2D "layout" vector
     }*/
     ///// Above this line should be deleted or moved /////
-
-
-=======
->>>>>>> dd44385788a651a28cdb391a8c0ebed00e134cb9
 
     //First: Global Routing
     classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs);
