@@ -11,17 +11,17 @@
 #include <stdio.h>
 
 
-void lees(std::vector<net> & globalNets, std::vector<cell> cellData)
+void lees(std::vector<net> & globalNets, std::vector<cell> cellData, std::vector<std::vector<int> > layout)
 {
     //Lee's Algorithm on one net at a time
-    std::pair<int,int> source, destination;
+    coord source, destination;
     
     for(int i=0; i<globalNets.size(); i++)
     {
-        //source = terminalCoords(globalNets[i].c1, cellData);
-        //destination = terminalCoords(globalNets[i].c2, cellData);
+        source = terminalCoords(globalNets[i].c1, cellData);
+        destination = terminalCoords(globalNets[i].c2, cellData);
         
-        //wave(source, destination, layout)
+        wave(source, destination, layout);
     }
     
 }
@@ -29,13 +29,13 @@ void lees(std::vector<net> & globalNets, std::vector<cell> cellData)
 coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
 {
     coord result;
-    int cellNum = cell_term.first;
-    int termNum = cell_term.second;
+    int cellNum = cell_term.first; printf("cell num: %i  ",cellNum);
+    int termNum = cell_term.second; printf("term num: %i  ",termNum);
     
-    result.x = cell_data[cellNum].x;
-    result.y = cell_data[cellNum].y;
+    result.x = cell_data[cellNum-1].x;
+    result.y = cell_data[cellNum-1].y;
     
-    switch(cell_data[cellNum].r)
+    switch(cell_data[cellNum-1].r)
     {
         case 1 :
             switch(termNum)
@@ -73,6 +73,11 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
     }
     
     return result;
+}
+
+void wave(coord src, coord dest, std::vector<std::vector<int> > lay)
+{
+    //do the wave propagation
 }
 
 

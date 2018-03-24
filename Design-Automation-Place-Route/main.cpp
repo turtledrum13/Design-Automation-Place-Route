@@ -78,7 +78,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     for (int i=0; i<netlist.size(); i++)
     {
         cellData[netlist[i].first].nets++;
-        //printf("cell %i has %i nets\n",netlist[i].first+1,cellData[netlist[i].first].nets);
+        printf("cell %i has %i nets\n",netlist[i].first+1,cellData[netlist[i].first].nets);
     }
 
     //create the list of cells and point them to their net pair
@@ -113,7 +113,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
 
     //First: Global Routing
-    classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs);
+    //classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs);
     global();
 
     //Second: Channel Routing

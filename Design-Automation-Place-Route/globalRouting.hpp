@@ -13,9 +13,11 @@
 #include <stdio.h>
 #include <vector>
 
+void lees(std::vector<net> & globalNets, std::vector<cell> cellData, std::vector<std::vector<int> > layout);
+
 coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data);
 
-void lees(std::vector<net> & globalNets, std::vector<cell> cellData);
+void wave(coord src, coord dest, std::vector<std::vector<int> > lay);
 
 void global();
 
