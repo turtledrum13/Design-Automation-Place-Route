@@ -24,4 +24,5 @@ void global();
 
 void updateCells(std::vector<cell> &cellData, int numX, int numY);
 
+void updateLayout(int numX, int numY, std::vector<std::vector<int> > &layout);
 #endif /* globalRouting_hpp */

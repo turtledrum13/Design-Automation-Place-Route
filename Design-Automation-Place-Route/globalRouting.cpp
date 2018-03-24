@@ -29,47 +29,83 @@ void lees(std::vector<net> & globalNets, std::vector<cell> cellData, std::vector
 coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
 {
     coord result;
-    int cellNum = cell_term.first; printf("cell num: %i  ",cellNum);
-    int termNum = cell_term.second; printf("term num: %i  ",termNum);
+    int cellNum = cell_term.first;
+    printf("cell num: %i  ",cellNum);
+    int termNum = cell_term.second;
+    printf("term num: %i  ",termNum);
 
     result.x = cell_data[cellNum-1].x;
     result.y = cell_data[cellNum-1].y;
 
     switch(cell_data[cellNum-1].r)
     {
+    case 1 :
+        switch(termNum)
+        {
         case 1 :
-            switch(termNum)
-        {
-            case 1 : result.x+=1; result.y-=5;
-            case 2 : result.x+=4; result.y-=5;
-            case 3 : result.x+=1; result.y-=0;
-            case 4 : result.x+=4; result.y-=0;
-        }
+            result.x+=1;
+            result.y-=5;
         case 2 :
-            switch(termNum)
-        {
-            case 1 : result.x+=4; result.y-=5;
-            case 2 : result.x+=4; result.y-=0;
-            case 3 : result.x+=1; result.y-=5;
-            case 4 : result.x+=1; result.y-=0;
-        }
+            result.x+=4;
+            result.y-=5;
         case 3 :
-            switch(termNum)
-        {
-            case 1 : result.x+=4; result.y-=0;
-            case 2 : result.x+=1; result.y-=0;
-            case 3 : result.x+=4; result.y-=5;
-            case 4 : result.x+=1; result.y-=5;
-        }
+            result.x+=1;
+            result.y-=0;
         case 4 :
-            switch(termNum)
-        {
-            case 1 : result.x+=1; result.y-=0;
-            case 2 : result.x+=1; result.y-=5;
-            case 3 : result.x+=4; result.y-=0;
-            case 4 : result.x+=4; result.y-=5;
+            result.x+=4;
+            result.y-=0;
         }
-        default : result.x+=1; result.y-=5;
+    case 2 :
+        switch(termNum)
+        {
+        case 1 :
+            result.x+=4;
+            result.y-=5;
+        case 2 :
+            result.x+=4;
+            result.y-=0;
+        case 3 :
+            result.x+=1;
+            result.y-=5;
+        case 4 :
+            result.x+=1;
+            result.y-=0;
+        }
+    case 3 :
+        switch(termNum)
+        {
+        case 1 :
+            result.x+=4;
+            result.y-=0;
+        case 2 :
+            result.x+=1;
+            result.y-=0;
+        case 3 :
+            result.x+=4;
+            result.y-=5;
+        case 4 :
+            result.x+=1;
+            result.y-=5;
+        }
+    case 4 :
+        switch(termNum)
+        {
+        case 1 :
+            result.x+=1;
+            result.y-=0;
+        case 2 :
+            result.x+=1;
+            result.y-=5;
+        case 3 :
+            result.x+=4;
+            result.y-=0;
+        case 4 :
+            result.x+=4;
+            result.y-=5;
+        }
+    default :
+        result.x+=1;
+        result.y-=5;
     }
 
     return result;
@@ -88,7 +124,7 @@ void global()
 
 void updateCells(std::vector<cell> &cellData, int numX, int numY)
 {
-    for (int i=0;i<cellData.size();i++)
+    for (int i=0; i<cellData.size(); i++)
     {
         if (cellData[i].y==numY)
         {
@@ -97,5 +133,15 @@ void updateCells(std::vector<cell> &cellData, int numX, int numY)
                 cellData[i].x += 3;
             }
         }
+    }
+}
+
+void updateLayout(int numX, int numY, std::vector<std::vector<int> > &layout)
+{
+    //std::vector<int>::iterator it;
+    //it = layout[numX][numY];
+    for(int i=0; i<6; i++)
+    {
+        layout[numX+i].insert(layout[numX+i].begin()+numY,3, 0);
     }
 }
