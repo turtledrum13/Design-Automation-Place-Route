@@ -84,7 +84,6 @@ void funct4(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector
     {
         for(int j=yNum; j<yNum+2; j++)
         {
-            printf("z=%i, mP=%i\n",mainPartition[z]);
             if (mainPartition[z]!=numOfCells)
             {
                 cellData[mainPartition[z]].x = i;
