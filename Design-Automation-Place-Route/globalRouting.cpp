@@ -26,7 +26,6 @@ void global(std::vector<net> & globalNets, std::vector<cell> & cellData, std::ve
         updateLayout(newCell, layout);
         updateCells(cellData, newCell);
     }
-
 }
 
 coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
@@ -34,7 +33,7 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
     coord result;
     int cellNum = cell_term.first;
     printf("\ncell num: %i  ",cellNum+1);
-    
+
     int termNum = cell_term.second;
     printf("term num: %i  \n",termNum);
 
@@ -64,7 +63,7 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
             break;
         }
         break;
-            
+
     case 2 :
         switch(termNum)
         {
@@ -86,7 +85,7 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
             break;
         }
         break;
-            
+
     case 3 :
         switch(termNum)
         {
@@ -213,7 +212,7 @@ void updateLayout(coord XY, std::vector<std::vector<int> > &layout)
     //it = layout[numX][numY];
     for(int i=0; i<6; i++)
     {
-        layout[XY.x+i].insert(layout[XY.x+i].begin()+XY.y,3, 5);
+        layout[XY.x-i].insert(layout[XY.x-i].begin()+XY.y,3, 5);
     }
 }
 
