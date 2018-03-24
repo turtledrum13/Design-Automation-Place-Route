@@ -9,6 +9,7 @@
 #ifndef structures_h
 #define structures_h
 
+#include <stdio.h>
 #include <iostream>
 
 struct cell
