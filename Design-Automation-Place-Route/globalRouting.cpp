@@ -33,14 +33,15 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
 {
     coord result;
     int cellNum = cell_term.first;
-    printf("cell num: %i  ",cellNum);
+    printf("\ncell num: %i  ",cellNum+1);
+    
     int termNum = cell_term.second;
-    printf("term num: %i  ",termNum);
+    printf("term num: %i  \n",termNum);
 
-    result.x = cell_data[cellNum-1].x;
-    result.y = cell_data[cellNum-1].y;
+    result.x = cell_data[cellNum].x;
+    result.y = cell_data[cellNum].y;
 
-    switch(cell_data[cellNum-1].r)
+    switch(cell_data[cellNum].r)
     {
     case 1 :
         switch(termNum)
@@ -48,67 +49,87 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
         case 1 :
             result.x+=1;
             result.y-=5;
+            break;
         case 2 :
             result.x+=4;
             result.y-=5;
+            break;
         case 3 :
             result.x+=1;
             result.y-=0;
+            break;
         case 4 :
             result.x+=4;
             result.y-=0;
+            break;
         }
+        break;
+            
     case 2 :
         switch(termNum)
         {
         case 1 :
             result.x+=4;
             result.y-=5;
+            break;
         case 2 :
             result.x+=4;
             result.y-=0;
+            break;
         case 3 :
             result.x+=1;
             result.y-=5;
+            break;
         case 4 :
             result.x+=1;
             result.y-=0;
+            break;
         }
+        break;
+            
     case 3 :
         switch(termNum)
         {
         case 1 :
             result.x+=4;
             result.y-=0;
+            break;
         case 2 :
             result.x+=1;
             result.y-=0;
+            break;
         case 3 :
             result.x+=4;
             result.y-=5;
+            break;
         case 4 :
             result.x+=1;
             result.y-=5;
+            break;
         }
+        break;
     case 4 :
         switch(termNum)
         {
         case 1 :
             result.x+=1;
             result.y-=0;
+            break;
         case 2 :
             result.x+=1;
             result.y-=5;
+            break;
         case 3 :
             result.x+=4;
             result.y-=0;
+            break;
         case 4 :
             result.x+=4;
             result.y-=5;
+            break;
         }
-    default :
-        result.x+=1;
-        result.y-=5;
+        break;
+    default : break;
     }
 
     return result;
@@ -192,7 +213,7 @@ void updateLayout(coord XY, std::vector<std::vector<int> > &layout)
     //it = layout[numX][numY];
     for(int i=0; i<6; i++)
     {
-        layout[XY.x+i].insert(layout[XY.x+i].begin()+XY.y,3, 0);
+        layout[XY.x+i].insert(layout[XY.x+i].begin()+XY.y,3, 5);
     }
 }
 

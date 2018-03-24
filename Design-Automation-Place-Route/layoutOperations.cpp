@@ -33,7 +33,7 @@ void makeCell(cell C, std::vector<std::vector<int> > & layout)
         {
             for (int col=C.x; col<C.x+size; col++)
             {
-                layout[row][col] = C.r;
+                layout[row][col] = C.cell;
             }
         }
     }
@@ -89,7 +89,7 @@ void funct4(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector
             {
                 cellData[mainPartition[z]].x = i*7;
                 cellData[mainPartition[z]].y = j*7+5;
-                cellData[mainPartition[z]].cell = mainPartition[z];
+                cellData[mainPartition[z]].cell = mainPartition[z]+1;
 
             }
             z++;

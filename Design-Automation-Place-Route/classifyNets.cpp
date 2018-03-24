@@ -84,36 +84,42 @@ int terminalOffset(int terminal, int rotation)
         case 1 :
             switch(terminal)
             {
-                case 1 : offset = -5;
-                case 2 : offset = -5;
-                case 3 : offset = 0;
-                case 4 : offset = 0;
+                case 1 : offset = -5; break;
+                case 2 : offset = -5; break;
+                case 3 : offset = 0; break;
+                case 4 : offset = 0; break;
             }
+            break;
+            
         case 2 :
             switch(terminal)
             {
-                case 1 : offset = -5;
-                case 2 : offset = 0;
-                case 3 : offset = -5;
-                case 4 : offset = 0;
+                case 1 : offset = -5; break;
+                case 2 : offset = 0; break;
+                case 3 : offset = -5; break;
+                case 4 : offset = 0; break;
             }
+            break;
+            
         case 3 :
             switch(terminal)
             {
-                case 1 : offset = 0;
-                case 2 : offset = 0;
-                case 3 : offset = -5;
-                case 4 : offset = -5;
+                case 1 : offset = 0; break;
+                case 2 : offset = 0; break;
+                case 3 : offset = -5; break;
+                case 4 : offset = -5; break;
             }
+            break;
+            
         case 4 :
             switch(terminal)
             {
-                case 1 : offset = 0;
-                case 2 : offset = -5;
-                case 3 : offset = 0;
-                case 4 : offset = -5;
+                case 1 : offset = 0; break;
+                case 2 : offset = -5; break;
+                case 3 : offset = 0; break;
+                case 4 : offset = -5; break;
             }
-        default : offset = 0;
+        default : break;
     }
 
     return offset;
