@@ -65,8 +65,7 @@ void addCols(int numCols, std::vector<std::vector<int> > & layout)
     }
 }
 
-void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells,
-                 std::vector<std::vector<int> > &layout)
+void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
     int z = 0;
     if (mainPartition.size()==4) funct4(0, 0, z, cellData, mainPartition, numOfCells);
@@ -78,20 +77,6 @@ void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, i
     else if (mainPartition.size()==256) funct256(0, 0, z, cellData, mainPartition, numOfCells);
     else if (mainPartition.size()==512) funct512(0, 0, z, cellData, mainPartition, numOfCells);
     else if (mainPartition.size()==1024) funct1024(0, 0, z, cellData, mainPartition, numOfCells);
-
-    layout.resize(sqrt(mainPartition.size())*7, std::vector<int>(sqrt(mainPartition.size())*7, 0));
-
-    for (int i=0; i<cellData.size() ; i++)
-    {
-        for (int y=0; y<6; y++)
-        {
-            for(int j=0; j<6; j++)
-            {
-                cellData[i].r = 1;
-                layout[cellData[i].x+y][cellData[i].y+j] = cellData[i].r;
-            }
-        }
-    }
 }
 
 void funct4(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
@@ -103,7 +88,7 @@ void funct4(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector
             if (mainPartition[z]!=numOfCells)
             {
                 cellData[mainPartition[z]].x = i*7;
-                cellData[mainPartition[z]].y = j*7;
+                cellData[mainPartition[z]].y = j*7+5;
                 cellData[mainPartition[z]].cell = mainPartition[z];
 
             }
