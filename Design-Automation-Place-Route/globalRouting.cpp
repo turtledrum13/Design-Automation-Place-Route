@@ -233,8 +233,6 @@ void updateCells(std::vector<cell> &cellData, coord XY)
 
 void updateLayout(coord XY, std::vector<std::vector<int> > &layout)
 {
-    //std::vector<int>::iterator it;
-    //it = layout[numX][numY];
     for(int i=0; i<6; i++)
     {
         layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,3, 5);
