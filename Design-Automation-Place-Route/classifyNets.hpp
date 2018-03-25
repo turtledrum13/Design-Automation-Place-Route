@@ -23,6 +23,6 @@ void isGlobal(std::vector<std::pair<int,int> > channels, std::vector<net> & netl
 
 int terminalOffset(int terminal, int rotation);
 
-void classifyNets(std::vector<cell> CELLS, std::vector<std::vector<int> > LAYOUT, std::vector<net> & GLOBAL, std::vector<net> & CHANNEL, std::vector<net> & NETLIST, std::vector<int> & BOUNDARIES);
+void classifyNets(std::vector<cell> cellData, std::vector<std::vector<int> > layout, std::vector<net> & netsGlobal, std::vector<net> & netsChannel, std::vector<net> & netlistPairs, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels);
 
 #endif /* classifyNets_hpp */

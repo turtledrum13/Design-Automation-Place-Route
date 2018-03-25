@@ -26,7 +26,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     std::vector<net> netlistPairs, netsGlobal, netsChannel;
     std::vector<std::vector<int> > netArray, layout, dummyLayout;
     std::vector<int> gains, fullPartition, mainPartition, boundaries;
-    std::vector<std::pair <int,int> > netlist;
+    std::vector<std::pair <int,int> > netlist, channels;
 
     //initialize variables
     int numOfNets, cutset=0, numOfCells, numOfPartitions;
@@ -97,14 +97,14 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         makeCell(cellData[i], layout);
     }
 
-    for (int i=0; i<55; i++)
-    {
-        for(int j=0; j<9; j++)
-        {
-            std::cout<<layout[i][j]<<"\t";
-        }
-        std::cout<<"\n";
-    }
+//    for (int i=0; i<55; i++)
+//    {
+//        for(int j=0; j<9; j++)
+//        {
+//            std::cout<<layout[i][j]<<"\t";
+//        }
+//        std::cout<<"\n";
+//    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //Routing///////////////////////////////////////////////////////////////////////////////////////////
@@ -119,14 +119,16 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
 
     //First: Global Routing
-    classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs, boundaries);
+    classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs, boundaries, channels);
 
     global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, outCSV);
     
-//    for(int i=0; i<cellData.size(); i++)
-//    {
-//        printf("\ncell#: %i, cell rotation: %i",cellData[i].cell, cellData[i].r);
-//    }
+    
+    for(int i=0; i<netlistPairs.size(); i++)
+    {
+        printf("\n<%i,%i> <%i,%i>",netlistPairs[i].c1.first,netlistPairs[i].c1.second,netlistPairs[i].c2.first,netlistPairs[i].c2.second);
+    }
+    
 
     //Second: Channel Routing
     channel();

@@ -87,10 +87,10 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
 {
     coord result;
     int cellNum = cell_term.first;
-    printf("\ncell num: %i  ",cellNum+1);
+    //printf("\ncell num: %i  ",cellNum+1);
 
     int termNum = cell_term.second;
-    printf("term num: %i  \n",termNum);
+    //printf("term num: %i  \n",termNum);
 
     result.x = cell_data[cellNum].x;
     result.y = cell_data[cellNum].y;
@@ -205,10 +205,10 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
 coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout, std::vector<int> bound, bool & topTerm)
 {
     bool up = dest.y < src.y;           //if the destination is above the source in the layout
-    bool right = dest.x >= src.x;        //if the destination is to the right of the source in the layout
+    bool right = dest.x >= src.x;       //if the destination is to the right of the source in the layout
     bool top = false;
 
-    for(int i=0; i<bound.size(); i++)
+    for(int i=0; i<bound.size(); i++)   //determine if the boundary is on a top edge or bottom edge
     {
         if (src.y == bound[i])
         {
@@ -220,33 +220,33 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
         }
     }
 
-    //find where the x,y coordinate this net will terminate at, conditional upon direction of desintation and boundary top/bottom
+    //find where the x,y coordinate this net will terminate, conditional upon direction of desintation and boundary top/bottom
     coord result;
 
     //find the boundary row in which the partial net will terminate. This is the y-coordinate
     if(top)
     {
-        if(not up)
+        if(up)
         {
-            result.y = src.y+5;        //top edge & destination is below
-            topTerm = true;
+            result.y = src.y-2;         //top edge & destination is above
+            topTerm = false;
         }
         else
         {
-            result.y = src.y-2;            //top edge & destination is above
-            topTerm = false;
+            result.y = src.y+5;         //top edge & destination is below
+            topTerm = true;
         }
     }
-    else
+    else //if bottom
     {
         if(up)
         {
-            result.y = src.y;            //bottom edge & destination is above
+            result.y = src.y;           //bottom edge & destination is above
             topTerm = false;
         }
         else
         {
-            result.y = src.y+7;            //bottom edge & destination is below
+            result.y = src.y+7;         //bottom edge & destination is below
             topTerm = true;
         }
     }
@@ -282,7 +282,7 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
         }
     }
 
-    printf("top = %d and result = %i,%i\n", top, result.x, result.y);
+    //printf("top = %d and result = %i,%i\n", top, result.x, result.y);
     return result;
 }
 
@@ -303,8 +303,6 @@ void updateCells(std::vector<cell> &cellData, coord XY)
 
 void updateLayout(coord XY, std::vector<std::vector<int> > &layout)
 {
-    //std::vector<int>::iterator it;
-    //it = layout[numX][numY];
     for(int i=0; i<6; i++)
     {
         layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,3, 5);
