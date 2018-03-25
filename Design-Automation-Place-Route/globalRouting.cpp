@@ -31,7 +31,7 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
 {
 //    int size = netlistPairs.size();  //temporary until we fix looping through the newly added nets after the split
 //    for(int i=0; i<size; i++)
-    
+
     int i = 0;
     bool finished = false;
     while(not finished)
@@ -47,7 +47,7 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
             //printf("\n<%i,%i> %i\t\t", newCoord.x, newCoord.y, i);
             updateLayout(newCoord, layout, cellData.size()+1);
             updateCells(cellData, newCoord);
-        
+
             //adding pass-through cell to end of cellData
             cell newCell;
             newCell.r = 5;
@@ -77,14 +77,14 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
 
             netlistPairs[i].c2 = srcNet;                //replace second cell with new pass through cell
             isGlobal(channels, netlistPairs[i], cellData);
-            
+
             netlistPairs.back().c1 = destNet;           //replace first cell with new pass through cell
             isGlobal(channels, netlistPairs.back(), cellData);
-    
+
         }
-        
+
         printf("\n<%i,%i> <%i,%i> global = %i",netlistPairs[i].c1.first+1,netlistPairs[i].c1.second,netlistPairs[i].c2.first+1,netlistPairs[i].c2.second, netlistPairs[i].global);
-        
+
         i++;
         if(i == netlistPairs.size()){finished = true; printOut(file, layout);}
     }
