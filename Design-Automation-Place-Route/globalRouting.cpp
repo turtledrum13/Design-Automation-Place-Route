@@ -38,7 +38,6 @@ void global(std::vector<net> & globalNets, std::vector<cell> & cellData, std::ve
         //update the layout and cellData vector with new pass through cells
         coord newCell = findVertical(source, destination, layout, boundaries);
         updateLayout(newCell, layout);
-        if (i == 2){ printOut(file, layout);}
         updateCells(cellData, newCell);
     }
 }
@@ -234,8 +233,6 @@ void updateCells(std::vector<cell> &cellData, coord XY)
 
 void updateLayout(coord XY, std::vector<std::vector<int> > &layout)
 {
-    //std::vector<int>::iterator it;
-    //it = layout[numX][numY];
     for(int i=0; i<6; i++)
     {
         layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,3, 5);
