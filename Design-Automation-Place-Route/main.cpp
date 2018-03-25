@@ -124,7 +124,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     //First: Global Routing
     classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs, boundaries);
 
-    global(netsGlobal, cellData, layout, boundaries);
+    global(netsGlobal, cellData, layout, boundaries, outCSV);
 
     //Second: Channel Routing
     channel();

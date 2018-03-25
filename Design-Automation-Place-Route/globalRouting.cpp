@@ -10,8 +10,22 @@
 #include "structures.h"
 #include <stdio.h>
 
+void printOut(std::ofstream & file, std::vector<std::vector<int> > & layout)
+{
+    //print CSV -- using to paste into spreadsheet for debugging
+    for (int i=0; i<layout.size(); i++)
+    {
+        int index = layout[i].size();
+        
+        for(int j=0; j<index; j++)
+        {
+            file << layout[i][j] << ",";
+        }
+        file << "\n";
+    }
+}
 
-void global(std::vector<net> & globalNets, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries)
+void global(std::vector<net> & globalNets, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries, std::ofstream & file)
 {
     //Lee's Algorithm on one net at a time
     coord source, destination;
@@ -24,6 +38,7 @@ void global(std::vector<net> & globalNets, std::vector<cell> & cellData, std::ve
         //update the layout and cellData vector with new pass through cells
         coord newCell = findVertical(source, destination, layout, boundaries);
         updateLayout(newCell, layout);
+        if (i == 20){ printOut(file, layout);}
         updateCells(cellData, newCell);
     }
 }

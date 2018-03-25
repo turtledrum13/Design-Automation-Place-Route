@@ -13,8 +13,12 @@
 #include "layoutOperations.hpp"
 #include <stdio.h>
 #include <vector>
+#include <fstream>
 
-void global(std::vector<net> & globalNets, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries);
+
+void printOut(std::ofstream & file, std::vector<std::vector<int> > & layout);
+
+void global(std::vector<net> & globalNets, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries, std::ofstream & file);
 
 coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data);
 
