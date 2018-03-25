@@ -16,7 +16,7 @@ void printOut(std::ofstream & file, std::vector<std::vector<int> > & layout)
     for (int i=0; i<layout.size(); i++)
     {
         int index = layout[i].size();
-        
+
         for(int j=0; j<index; j++)
         {
             file << layout[i][j] << ",";
@@ -38,7 +38,7 @@ void global(std::vector<net> & globalNets, std::vector<cell> & cellData, std::ve
         //update the layout and cellData vector with new pass through cells
         coord newCell = findVertical(source, destination, layout, boundaries);
         updateLayout(newCell, layout);
-        if (i == 20){ printOut(file, layout);}
+        if (i == 2){ printOut(file, layout);}
         updateCells(cellData, newCell);
     }
 }
@@ -179,7 +179,7 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
     else
     {
         if(up) result.y = src.y;            //bottom edge & destination is above
-        else result.y = src.y+2;            //bottom edge & destination is below
+        else result.y = src.y+7;            //bottom edge & destination is below
     }
 
     //search in the direction of the destination for a column in which the partial net can terminate. This is the x-coordinate
@@ -207,7 +207,7 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
                 result.x = index;
                 break;
             }
-            
+
             if(index>0){index--; printf("right?%i, index: %i\n",right, index);}
             else{result.x = 0; break;}
         }
@@ -238,7 +238,7 @@ void updateLayout(coord XY, std::vector<std::vector<int> > &layout)
     //it = layout[numX][numY];
     for(int i=0; i<6; i++)
     {
-        layout[XY.x-i].insert(layout[XY.x-i].begin()+XY.y,3, 5);
+        layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,3, 5);
     }
 }
 
