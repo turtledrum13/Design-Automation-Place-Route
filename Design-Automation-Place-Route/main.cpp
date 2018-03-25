@@ -77,7 +77,10 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         printf("cell %i has %i nets\n",netlist[i].first+1,cellData[netlist[i].first].nets);
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8b3d13674ae180d18ca01d77a8ac350ad2e3c448
     //create the list of cells and point them to their net pair
     createCellList(numOfNets, netArray, cellList, netlist, numOfCells);
     std::cout<<"\npropagated input\n";
@@ -91,12 +94,14 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     std::cout<<"\narray created\n";
 
     layout.resize(sqrt(mainPartition.size())*7-1, std::vector<int>(sqrt(mainPartition.size())*7-1, 0));
-
+    std::cout<<"\nlayout resized\n";
+    
     for(int i=0; i<cellData.size(); i++)
     {
         cellData[i].r = 1;
         makeCell(cellData[i], layout);
     }
+    std::cout<<"\ncells placed\n";
 
 //    for (int i=0; i<55; i++)
 //    {
@@ -121,6 +126,8 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     //First: Global Routing
     classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs, boundaries, channels);
+    
+    std::cout<<"\nnets classified\n";
     global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
 
     printf("\n\n\n\nTotal netlist printout:\n");
