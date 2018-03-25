@@ -13,9 +13,6 @@
 #include "structures.h"
 #include "classifyNets.hpp"
 
-
-
-
 int main()        //use argc and argv to pass command prompt arguments to main()
 {
     //initialize files
