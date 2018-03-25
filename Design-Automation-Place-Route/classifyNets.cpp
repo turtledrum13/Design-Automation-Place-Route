@@ -137,7 +137,7 @@ void isGlobal(std::vector<std::pair<int,int> > channels, net & netPair, std::vec
     cell cellB = cellData[netPair.c2.first];
     int termB = netPair.c2.second;
     
-    printf("<%i,%i> <%i,%i>  ",cellA.cell, termA, cellB.cell, termB);
+    //printf("<%i,%i> <%i,%i>  ",cellA.cell, termA, cellB.cell, termB);
 
     //find boundary lines each terminal falls on
     int boundaryA = cellA.y + terminalOffset(termA, cellA.r);
@@ -147,7 +147,7 @@ void isGlobal(std::vector<std::pair<int,int> > channels, net & netPair, std::vec
     if (abs(boundaryA-boundaryB) < 3)
     {
         netPair.global = false;
-        printf("channel\n");
+        //printf("channel\n");
         
         for (int j=0; j<channels.size(); j++)
         {
@@ -162,7 +162,7 @@ void isGlobal(std::vector<std::pair<int,int> > channels, net & netPair, std::vec
     else
     {
         netPair.global = true;
-        printf("global\n");
+        //printf("global\n");
     }
 }
 
@@ -178,7 +178,6 @@ void classifyNets(std::vector<cell> cellData, std::vector<std::vector<int> > lay
     for (int i=0; i<netlistPairs.size(); i++)
     {
         isGlobal(channels, netlistPairs[i], cellData);
-        //printf("net %i in channel %i\n", i+1, netlistPairs[i].channel);
     }
 
     for (int i=0; i<netlistPairs.size(); i++)

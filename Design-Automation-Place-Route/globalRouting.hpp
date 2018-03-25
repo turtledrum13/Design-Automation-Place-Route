@@ -18,7 +18,7 @@
 
 void printOut(std::ofstream & file, std::vector<std::vector<int> > & layout);
 
-void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries, std::ofstream & file);
+void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries,  std::vector<std::pair<int,int> > & channels, std::ofstream & file);
 
 coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data);
 

@@ -57,9 +57,8 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     }
 
     cellData.resize(numOfCells);
-
-    //std::cout<<cellData[0].x;                          //vector that holds "cell" structures
-
+    
+    
     //calculate the number of partitions to be found
     m = log(numOfCells)/log(2);
 
@@ -69,7 +68,6 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     }
     numOfPartitions = m;
 
-    //split the cells into 2 partitions of equal size.
 
     //adding net info to cellData
     for (int i=0; i<netlist.size(); i++)
@@ -79,6 +77,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         printf("cell %i has %i nets\n",netlist[i].first+1,cellData[netlist[i].first].nets);
     }
 
+    
     //create the list of cells and point them to their net pair
     createCellList(numOfNets, netArray, cellList, netlist, numOfCells);
     std::cout<<"\npropagated input\n";
@@ -91,7 +90,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     layout.resize(sqrt(mainPartition.size())*7-1, std::vector<int>(sqrt(mainPartition.size())*7-1, 0));
 
-    for(int i=0;i<cellData.size();i++)
+    for(int i=0; i<cellData.size(); i++)
     {
         cellData[i].r = 1;
         makeCell(cellData[i], layout);
@@ -120,13 +119,12 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     //First: Global Routing
     classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs, boundaries, channels);
-
-    global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, outCSV);
+    global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
     
-    
+    printf("\n\n\n\nTotal netlist printout:\n");
     for(int i=0; i<netlistPairs.size(); i++)
     {
-        printf("\n<%i,%i> <%i,%i>",netlistPairs[i].c1.first,netlistPairs[i].c1.second,netlistPairs[i].c2.first,netlistPairs[i].c2.second);
+        printf("\n<%i,%i> <%i,%i> global = %i",netlistPairs[i].c1.first+1,netlistPairs[i].c1.second,netlistPairs[i].c2.first+1,netlistPairs[i].c2.second, netlistPairs[i].global);
     }
     
 

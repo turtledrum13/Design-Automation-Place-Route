@@ -7,6 +7,7 @@
 //
 
 #include "globalRouting.hpp"
+#include "classifyNets.hpp"
 #include "structures.h"
 #include <stdio.h>
 
@@ -25,10 +26,14 @@ void printOut(std::ofstream & file, std::vector<std::vector<int> > & layout)
     }
 }
 
-void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries, std::ofstream & file)
+void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries,  std::vector<std::pair<int,int> > & channels, std::ofstream & file)
 {
-    int size = netlistPairs.size();  //temporary until we fix looping through the newly added nets after the split
-    for(int i=0; i<size; i++)
+//    int size = netlistPairs.size();  //temporary until we fix looping through the newly added nets after the split
+//    for(int i=0; i<size; i++)
+    
+    int i = 0;
+    bool finished = false;
+    while(not finished)
     {
         if(netlistPairs[i].global)
         {
@@ -52,8 +57,8 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
 
             //net splitting
             std::pair<int,int> srcNet, destNet;
-            srcNet.first = cellData.size();
-            destNet.first = cellData.size();
+            srcNet.first = cellData.size()-1;
+            destNet.first = cellData.size()-1;
 
             if(topTerminal)
             {
@@ -68,18 +73,18 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
 
             netlistPairs.push_back(netlistPairs[i]);    //copy the current netlist of focus to the end of the list
 
-            netlistPairs[i].c2 = srcNet;
-            netlistPairs[i].global = false;
-            //netlistPairs[i].channel = ?   -- need to find the channel number for new source net
-
-            netlistPairs[netlistPairs.size()-1].c1 = destNet;
-            //need to determine if new destination net is channel or global
-            //netlistPairs[netlistPairs.size()-1].global = ?
-
-            //if channel, need to find the channel number
-            //netlistPairs[netlistPairs.size()-1].channel = X
-
+            netlistPairs[i].c2 = srcNet;                //replace second cell with new pass through cell
+            isGlobal(channels, netlistPairs[i], cellData);
+            
+            netlistPairs.back().c1 = destNet;           //replace first cell with new pass through cell
+            isGlobal(channels, netlistPairs.back(), cellData);
+    
         }
+        
+        printf("\n<%i,%i> <%i,%i> global = %i",netlistPairs[i].c1.first+1,netlistPairs[i].c1.second,netlistPairs[i].c2.first+1,netlistPairs[i].c2.second, netlistPairs[i].global);
+        
+        i++;
+        if(i == 91) finished = true;
     }
 }
 

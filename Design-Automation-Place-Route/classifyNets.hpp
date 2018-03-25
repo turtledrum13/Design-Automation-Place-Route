@@ -13,13 +13,13 @@
 #include <vector>
 #include "structures.h"
 
-void findBoundaries(std::vector<cell> cells, std::vector<std::vector<int> > layout, std::vector<bool> & boundaryLoc);
+void findBoundaries(std::vector<cell> cellData, std::vector<std::vector<int> > layout, std::vector<bool> & boundaryLoc);
 
-void makeBoundaryVec (std::vector<bool> locations, std::vector<int> & vec);
+void makeBoundaryVec (std::vector<bool> boundaryLoc, std::vector<int> & boundaries);
 
-void makeChannelVec (std::vector<bool> locations, std::vector<int> & vec);
+void makeChannelVec (std::vector<bool> boundaryLoc, std::vector<int> & channels);
 
-void isGlobal(std::vector<std::pair<int,int> > channels, std::vector<net> & netlist, std::vector<cell> cells);
+void isGlobal(std::vector<std::pair<int,int> > channels, net & netPair, std::vector<cell> cellData);
 
 int terminalOffset(int terminal, int rotation);
 
