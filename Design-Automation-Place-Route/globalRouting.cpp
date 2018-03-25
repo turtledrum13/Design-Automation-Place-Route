@@ -310,9 +310,11 @@ void updateCells(std::vector<cell> &cellData, coord XY)
 
 void updateLayout(coord XY, std::vector<std::vector<int> > &layout, int cellNum)
 {
+    
+    addCols(3, layout);
+    
     for(int i=0; i<6; i++)
     {
-        addCols(3, layout);
         layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,3, cellNum);
     }
 }
