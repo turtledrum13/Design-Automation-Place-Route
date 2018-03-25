@@ -57,8 +57,8 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     }
 
     cellData.resize(numOfCells);
-    
-    
+
+
     //calculate the number of partitions to be found
     m = log(numOfCells)/log(2);
 
@@ -77,6 +77,10 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         printf("cell %i has %i nets\n",netlist[i].first+1,cellData[netlist[i].first].nets);
     }
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 8b3d13674ae180d18ca01d77a8ac350ad2e3c448
     //create the list of cells and point them to their net pair
     createCellList(numOfNets, netArray, cellList, netlist, numOfCells);
     std::cout<<"\npropagated input\n";
@@ -127,13 +131,13 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     
     std::cout<<"\nnets classified\n";
     global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
-    
+
     printf("\n\n\n\nTotal netlist printout:\n");
     for(int i=0; i<netlistPairs.size(); i++)
     {
         printf("\n<%i,%i> <%i,%i> global = %i",netlistPairs[i].c1.first+1,netlistPairs[i].c1.second,netlistPairs[i].c2.first+1,netlistPairs[i].c2.second, netlistPairs[i].global);
     }
-    
+
 
     //Second: Channel Routing
     channel();
