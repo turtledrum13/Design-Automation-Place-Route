@@ -16,7 +16,7 @@
 int main()        //use argc and argv to pass command prompt arguments to main()
 {
     //initialize files
-    std::ifstream fileIn ("Resources/v1.2/1");
+    std::ifstream fileIn ("Resources/v1.2/2");
     std::ofstream outFile ("out.txt");
     std::ofstream outCSV ("magicCSV.csv");
 
@@ -84,9 +84,11 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     //calculate the cutset
     calculateCutset(fullPartition, numOfCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
+    std::cout<<"\ncutset\n";
 
     //Create the 2d array for the placement layout
     createArray(cellData, mainPartition, numOfCells);
+    std::cout<<"\narray created\n";
 
     layout.resize(sqrt(mainPartition.size())*7-1, std::vector<int>(sqrt(mainPartition.size())*7-1, 0));
 
@@ -157,18 +159,18 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         std::cout<<mainPartition[i+mainPartition.size()/2]<<"\t";
     }
 
-    //print CSV -- using to paste into spreadsheet for debugging
-    for (int i=0; i<layout.size(); i++)
-    {
-        printf("\n\n");
-        int index = layout[i].size();
-
-        for(int j=0; j<index; j++)
-        {
-            printf("%i ",layout[i][j]);
-            outCSV << layout[i][j] << ",";
-        }
-        outCSV << "\n";
-    }
+//    //print CSV -- using to paste into spreadsheet for debugging
+//    for (int i=0; i<layout.size(); i++)
+//    {
+//        printf("\n\n");
+//        int index = layout[i].size();
+//
+//        for(int j=0; j<index; j++)
+//        {
+//            printf("%i ",layout[i][j]);
+//            outCSV << layout[i][j] << ",";
+//        }
+//        outCSV << "\n";
+//    }
 }
 

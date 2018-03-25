@@ -8,6 +8,7 @@
 
 #include "globalRouting.hpp"
 #include "classifyNets.hpp"
+#include "layoutOperations.hpp"
 #include "structures.h"
 #include <stdio.h>
 
@@ -43,7 +44,8 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
 
             //update the layout and cellData vector with new pass through cells
             coord newCoord = findVertical(source, destination, layout, boundaries, topTerminal);
-            updateLayout(newCoord, layout);
+            //printf("\n<%i,%i> %i\t\t", newCoord.x, newCoord.y, i);
+            updateLayout(newCoord, layout, cellData.size()+1);
             updateCells(cellData, newCoord);
         
             //adding pass-through cell to end of cellData
@@ -84,7 +86,7 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
         printf("\n<%i,%i> <%i,%i> global = %i",netlistPairs[i].c1.first+1,netlistPairs[i].c1.second,netlistPairs[i].c2.first+1,netlistPairs[i].c2.second, netlistPairs[i].global);
         
         i++;
-        if(i == 91) finished = true;
+        if(i == netlistPairs.size()){finished = true; printOut(file, layout);}
     }
 }
 
@@ -262,7 +264,7 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
         int index = src.x;
         while (true)
         {
-            if(layout[result.y][index] < 1 || layout[result.y][index] > 4)
+            if(layout[result.y][index] < 1 )//|| layout[result.y][index] > 4)
             {
                 result.x = index;
                 break;
@@ -276,7 +278,7 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
         int index = src.x;
         while (true)
         {
-            if(layout[result.y][index] < 1 || layout[result.y][index] > 4)
+            if(layout[result.y][index] < 1)//|| layout[result.y][index] > 4)
             {
                 result.x = index;
                 break;
@@ -298,7 +300,7 @@ void updateCells(std::vector<cell> &cellData, coord XY)
     {
         if (cellData[i].y==XY.y)
         {
-            if(cellData[i].x > XY.x)
+            if(cellData[i].x >= XY.x)
             {
                 cellData[i].x += 3;
             }
@@ -306,11 +308,12 @@ void updateCells(std::vector<cell> &cellData, coord XY)
     }
 }
 
-void updateLayout(coord XY, std::vector<std::vector<int> > &layout)
+void updateLayout(coord XY, std::vector<std::vector<int> > &layout, int cellNum)
 {
     for(int i=0; i<6; i++)
     {
-        layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,3, 5);
+        addCols(3, layout);
+        layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,3, cellNum);
     }
 }
 

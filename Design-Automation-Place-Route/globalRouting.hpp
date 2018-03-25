@@ -26,6 +26,6 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
 
 void updateCells(std::vector<cell> &cellData, coord XY);
 
-void updateLayout(coord XY, std::vector<std::vector<int> > &layout);
+void updateLayout(coord XY, std::vector<std::vector<int> > &layout, int cellNum);
 
 #endif /* globalRouting_hpp */
