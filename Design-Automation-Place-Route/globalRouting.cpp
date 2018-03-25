@@ -25,20 +25,61 @@ void printOut(std::ofstream & file, std::vector<std::vector<int> > & layout)
     }
 }
 
-void global(std::vector<net> & globalNets, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries, std::ofstream & file)
+void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries, std::ofstream & file)
 {
-    //Lee's Algorithm on one net at a time
-    coord source, destination;
-
-    for(int i=0; i<globalNets.size(); i++)
+    int size = netlistPairs.size();  //temporary until we fix looping through the newly added nets after the split
+    for(int i=0; i<size; i++)
     {
-        source = terminalCoords(globalNets[i].c1, cellData);
-        destination = terminalCoords(globalNets[i].c2, cellData);
+        if(netlistPairs[i].global)
+        {
+            coord source = terminalCoords(netlistPairs[i].c1, cellData);
+            coord destination = terminalCoords(netlistPairs[i].c2, cellData);
+            bool topTerminal;    //true if the pin of the pass-through cell that source is connecting to is on top
 
-        //update the layout and cellData vector with new pass through cells
-        coord newCell = findVertical(source, destination, layout, boundaries);
-        updateLayout(newCell, layout);
-        updateCells(cellData, newCell);
+            //update the layout and cellData vector with new pass through cells
+            coord newCoord = findVertical(source, destination, layout, boundaries, topTerminal);
+            updateLayout(newCoord, layout);
+            updateCells(cellData, newCoord);
+        
+            //adding pass-through cell to end of cellData
+            cell newCell;
+            newCell.r = 5;
+            newCell.x = newCoord.x;
+            newCell.y = newCoord.y;
+            newCell.cell = cellData.size()+1;
+
+            cellData.push_back(newCell);
+
+            //net splitting
+            std::pair<int,int> srcNet, destNet;
+            srcNet.first = cellData.size();
+            destNet.first = cellData.size();
+
+            if(topTerminal)
+            {
+                srcNet.second = 1;
+                destNet.second = 2;
+            }
+            else
+            {
+                srcNet.second = 2;
+                destNet.second = 1;
+            }
+
+            netlistPairs.push_back(netlistPairs[i]);    //copy the current netlist of focus to the end of the list
+
+            netlistPairs[i].c2 = srcNet;
+            netlistPairs[i].global = false;
+            //netlistPairs[i].channel = ?   -- need to find the channel number for new source net
+
+            netlistPairs[netlistPairs.size()-1].c1 = destNet;
+            //need to determine if new destination net is channel or global
+            //netlistPairs[netlistPairs.size()-1].global = ?
+
+            //if channel, need to find the channel number
+            //netlistPairs[netlistPairs.size()-1].channel = X
+
+        }
     }
 }
 
@@ -142,17 +183,30 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
             break;
         }
         break;
+    case 5 :
+        switch(termNum)
+        {
+        case 1 :
+            result.x+=1;
+            result.y-=5;
+            break;
+        case 2 :
+            result.x+=1;
+            result.y-=0;
+            break;
+        }
+        break;
     default : break;
     }
 
     return result;
 }
 
-coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout, std::vector<int> bound)
+coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout, std::vector<int> bound, bool & topTerm)
 {
     bool up = dest.y < src.y;           //if the destination is above the source in the layout
     bool right = dest.x >= src.x;        //if the destination is to the right of the source in the layout
-    bool top;
+    bool top = false;
 
     for(int i=0; i<bound.size(); i++)
     {
@@ -172,13 +226,29 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
     //find the boundary row in which the partial net will terminate. This is the y-coordinate
     if(top)
     {
-        if(not up) result.y = src.y+5;        //top edge & destination is below
-        else result.y = src.y-2;            //top edge & destination is above
+        if(not up)
+        {
+            result.y = src.y+5;        //top edge & destination is below
+            topTerm = true;
+        }
+        else
+        {
+            result.y = src.y-2;            //top edge & destination is above
+            topTerm = false;
+        }
     }
     else
     {
-        if(up) result.y = src.y;            //bottom edge & destination is above
-        else result.y = src.y+7;            //bottom edge & destination is below
+        if(up)
+        {
+            result.y = src.y;            //bottom edge & destination is above
+            topTerm = false;
+        }
+        else
+        {
+            result.y = src.y+7;            //bottom edge & destination is below
+            topTerm = true;
+        }
     }
 
     //search in the direction of the destination for a column in which the partial net can terminate. This is the x-coordinate
@@ -192,7 +262,7 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
                 result.x = index;
                 break;
             }
-            if(index<layout[result.y].size()-1) {index++; printf("right?%i, index: %i\n",right, index);}
+            if(index<layout[result.y].size()-1) {index++;}
             else {result.x = index-5; break;}
         }
     }
@@ -207,7 +277,7 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
                 break;
             }
 
-            if(index>0){index--; printf("right?%i, index: %i\n",right, index);}
+            if(index>0){index--;}
             else{result.x = 0; break;}
         }
     }
