@@ -16,7 +16,7 @@ void printOut(std::ofstream & file, std::vector<std::vector<int> > & layout)
     for (int i=0; i<layout.size(); i++)
     {
         int index = layout[i].size();
-        
+
         for(int j=0; j<index; j++)
         {
             file << layout[i][j] << ",";
@@ -206,7 +206,7 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
                 result.x = index;
                 break;
             }
-            
+
             if(index>0){index--; printf("right?%i, index: %i\n",right, index);}
             else{result.x = 0; break;}
         }
