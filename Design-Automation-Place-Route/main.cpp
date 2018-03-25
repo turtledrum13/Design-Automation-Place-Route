@@ -16,7 +16,7 @@
 int main()        //use argc and argv to pass command prompt arguments to main()
 {
     //initialize files
-    std::ifstream fileIn ("Resources/v1.2/2");
+    std::ifstream fileIn ("Resources/v1.2/1");
     std::ofstream outFile ("out.txt");
     std::ofstream outCSV ("magicCSV.csv");
 
@@ -77,7 +77,6 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         printf("cell %i has %i nets\n",netlist[i].first+1,cellData[netlist[i].first].nets);
     }
 
-    
     //create the list of cells and point them to their net pair
     createCellList(numOfNets, netArray, cellList, netlist, numOfCells);
     std::cout<<"\npropagated input\n";
@@ -91,12 +90,14 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     std::cout<<"\narray created\n";
 
     layout.resize(sqrt(mainPartition.size())*7-1, std::vector<int>(sqrt(mainPartition.size())*7-1, 0));
-
+    std::cout<<"\nlayout resized\n";
+    
     for(int i=0; i<cellData.size(); i++)
     {
         cellData[i].r = 1;
         makeCell(cellData[i], layout);
     }
+    std::cout<<"\ncells placed\n";
 
 //    for (int i=0; i<55; i++)
 //    {
@@ -121,6 +122,8 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     //First: Global Routing
     classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs, boundaries, channels);
+    
+    std::cout<<"\nnets classified\n";
     global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
     
     printf("\n\n\n\nTotal netlist printout:\n");
