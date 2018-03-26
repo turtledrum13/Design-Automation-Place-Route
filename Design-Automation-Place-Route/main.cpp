@@ -127,7 +127,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     std::cout<<"\nnets classified\n";
     global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
 
-    
+
     //Second: Channel Routing
     channel(cellData, layout, channels, boundaries);
 
