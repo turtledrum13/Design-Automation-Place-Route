@@ -19,6 +19,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     std::ifstream fileIn ("Resources/v1.2/1");
     std::ofstream outFile ("out.txt");
     std::ofstream outCSV ("magicCSV.csv");
+    std::ofstream outMag ("magFile.mag");
 
     //intitilaize vectors
     std::vector<numberList> cellList;
@@ -127,7 +128,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     std::cout<<"\nnets classified\n";
     global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
 
-    
+
     //Second: Channel Routing
     channel(cellData, layout, netlistPairs, channels, boundaries);
 
@@ -170,5 +171,34 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         }
         outCSV << "\n";
     }
+
+    //print out the magic file
+    outMag << "magic\ntech scmos\ntimestamp\n<< pdiffusion >>\n";
+    for(int i=0; i<cellData.size(); i++)
+    {
+        outMag << "rect\t" << cellData[i].x << "\t" << cellData[i].y << "\t";
+
+        if (cellData[i].cell <= numOfCells)
+        {
+            outMag << cellData[i].x + 6 << "\t" << cellData[i].y + 6 << "\n";
+        }
+        else
+        {
+            outMag << cellData[i].x + 3 << "\t" << cellData[i].y + 6 << "\n";
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
