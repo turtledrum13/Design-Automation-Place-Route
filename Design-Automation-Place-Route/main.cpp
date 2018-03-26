@@ -16,7 +16,7 @@
 int main()        //use argc and argv to pass command prompt arguments to main()
 {
     //initialize files
-    std::ifstream fileIn ("Resources/v1.2/1");
+    std::ifstream fileIn ("Resources/v1.2/2");
     std::ofstream outFile ("out.txt");
     std::ofstream outCSV ("magicCSV.csv");
 
@@ -97,7 +97,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     for(int i=0; i<cellData.size(); i++)
     {
-        cellData[i].r = 4;
+        cellData[i].r = 1;
         printf("cellData %i\n",i+1);
         printf("cellData is cell: %i  <%i,%i>\n",cellData[i].cell,cellData[i].x, cellData[i].y);
         if(i == 47)
@@ -125,11 +125,11 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs, boundaries, channels);
 
     std::cout<<"\nnets classified\n";
-    global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
+    //global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
 
 
     //Second: Channel Routing
-    channel(cellData, layout, channels, boundaries);
+    //channel(cellData, layout, channels, boundaries);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
