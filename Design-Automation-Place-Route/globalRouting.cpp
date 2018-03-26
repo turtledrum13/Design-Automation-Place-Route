@@ -12,20 +12,6 @@
 #include "structures.h"
 #include <stdio.h>
 
-void printOut(std::ofstream & file, std::vector<std::vector<int> > & layout)
-{
-    //print CSV -- using to paste into spreadsheet for debugging
-    for (int i=0; i<layout.size(); i++)
-    {
-        int index = layout[i].size();
-
-        for(int j=0; j<index; j++)
-        {
-            file << layout[i][j] << ",";
-        }
-        file << "\n";
-    }
-}
 
 void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries,  std::vector<std::pair<int,int> > & channels, std::ofstream & file)
 {
@@ -44,9 +30,8 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
 
             //update the layout and cellData vector with new pass through cells
             coord newCoord = findVertical(source, destination, layout, boundaries, topTerminal);
-            //printf("\n<%i,%i> %i\t\t", newCoord.x, newCoord.y, i);
             updateLayout(newCoord, layout, cellData.size()+1);
-            updateCells(cellData, newCoord);
+            updateCellsX(cellData, newCoord);
 
             //adding pass-through cell to end of cellData
             cell newCell;
@@ -83,10 +68,10 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
 
         }
 
-        printf("\n<%i,%i> <%i,%i> global = %i",netlistPairs[i].c1.first+1,netlistPairs[i].c1.second,netlistPairs[i].c2.first+1,netlistPairs[i].c2.second, netlistPairs[i].global);
+        //printf("\n<%i,%i> <%i,%i> global = %i",netlistPairs[i].c1.first+1,netlistPairs[i].c1.second,netlistPairs[i].c2.first+1,netlistPairs[i].c2.second, netlistPairs[i].global);
 
         i++;
-        if(i == netlistPairs.size()){finished = true; printOut(file, layout);}
+        if(i == netlistPairs.size()) finished = true;// printOut(file, layout);}
     }
 }
 
@@ -294,9 +279,9 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
 }
 
 
-void updateCells(std::vector<cell> &cellData, coord XY)
+void updateCellsX(std::vector<cell> &cellData, coord XY)
 {
-    for (int i=0; i<cellData.size(); i++)
+    for (size_t i=0; i<cellData.size(); i++)
     {
         if (cellData[i].y==XY.y)
         {
@@ -308,14 +293,46 @@ void updateCells(std::vector<cell> &cellData, coord XY)
     }
 }
 
+
 void updateLayout(coord XY, std::vector<std::vector<int> > &layout, int cellNum)
 {
-    
-    addCols(3, layout);
-    
+    //insert pass through
     for(int i=0; i<6; i++)
     {
         layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,3, cellNum);
+    }
+    
+    //check end of rows
+    int expansion = 0;
+    for(int i=1; i<4; i++)
+    {
+        std::vector<int> layoutRow = layout[XY.y];
+        if(layoutRow[layoutRow.size()-i] != 0) expansion++;
+    }
+
+    //expand columns as much as necessary
+    addCols(expansion, layout);
+    
+    //chop the nub
+    for(int i=0; i<6; i++)
+    {
+        layout[XY.y-i].resize(layout[XY.y-i].size()-3);
+    }
+}
+
+
+void printOut(std::ofstream & file, std::vector<std::vector<int> > & layout)
+{
+    //print CSV -- using to paste into spreadsheet for debugging
+    for (int i=0; i<layout.size(); i++)
+    {
+        size_t index = layout[i].size();
+        
+        for(int j=0; j<index; j++)
+        {
+            file << layout[i][j] << ",";
+        }
+        file << "\n";
     }
 }
 

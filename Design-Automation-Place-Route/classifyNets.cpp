@@ -12,7 +12,7 @@
 
 void findBoundaries(std::vector<cell> cellData, std::vector<std::vector<int> > layout, std::vector<bool> & boundaryLoc)
 {
-    int length = layout.size(); //parameter equal to number of rows in layout
+    size_t length = layout.size(); //parameter equal to number of rows in layout
 
     boundaryLoc.resize (length, false);
 
@@ -48,7 +48,7 @@ void makeChannelVec (std::vector<bool> boundaryLoc, std::vector<std::pair<int,in
     //from the second boundary location to the second last boundary location
     int bottomBoundary = 0, topBoundary = 0;
 
-    for (int i=boundaryLoc.size()-2; i>0; i--)
+    for (size_t i=boundaryLoc.size()-2; i>0; i--)
     {
         if (boundaryLoc[i])
         {
