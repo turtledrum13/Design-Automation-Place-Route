@@ -30,7 +30,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     //initialize variables
     int numOfNets, cutset=0, numOfCells, numOfPartitions;
-    double m;
+    double isSquare;
 
     fileIn >> numOfCells;
     fileIn >> numOfNets;
@@ -58,17 +58,6 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     cellData.resize(numOfCells);
 
-
-    //calculate the number of partitions to be found
-    m = log(numOfCells)/log(2);
-
-    if (m!=(int) m)
-    {
-        m+=1;
-    }
-    numOfPartitions = m;
-
-
     //adding net info to cellData
     for (int i=0; i<netlist.size(); i++)
     {
@@ -89,14 +78,32 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     createArray(cellData, mainPartition, numOfCells);
     std::cout<<"\narray created\n";
 
-    layout.resize(sqrt(mainPartition.size())*7-1, std::vector<int>(sqrt(mainPartition.size())*7-1, 0));
+    //calculate the sqrt of mainpartition
+    isSquare = sqrt(mainPartition.size());
+
+    //if the sqrt is not an integer, create a rectangular layout
+    if (isSquare==(int) isSquare)
+    {
+        layout.resize(isSquare*7-1, std::vector<int>(isSquare*7-1, 0));
+    }
+    else
+    {
+        isSquare = sqrt(mainPartition.size()*2);
+        layout.resize(isSquare*7-1, std::vector<int>((isSquare/2)*7-1, 0));
+
+    }
+
     std::cout<<"\nlayout resized\n";
-    
+
     for(int i=0; i<cellData.size(); i++)
     {
         cellData[i].r = 4;
         printf("cellData %i\n",i+1);
-        if(i == 47){printf("cellData is cell: %i  <%i,%i>\n",cellData[i].cell,cellData[i].x, cellData[i].y);}
+        printf("cellData is cell: %i  <%i,%i>\n",cellData[i].cell,cellData[i].x, cellData[i].y);
+        if(i == 47)
+        {
+            printf("cellData is cell: %i  <%i,%i>\n",cellData[i].cell,cellData[i].x, cellData[i].y);
+        }
         makeCell(cellData[i], layout);
     }
     std::cout<<"\ncells placed\n";
@@ -116,7 +123,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     //First: Global Routing
     classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs, boundaries, channels);
-    
+
     std::cout<<"\nnets classified\n";
     global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
 
