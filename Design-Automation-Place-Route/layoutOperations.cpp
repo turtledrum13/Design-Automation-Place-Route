@@ -43,14 +43,15 @@ void makeCell(cell C, std::vector<std::vector<int> > & layout)
     }
 }
 
-void addRows(int numRows, std::vector<std::vector<int> > & layout)
+//layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,3, cellNum);
+void addRows(int numRows, int atRow, std::vector<std::vector<int> > & layout)
 {
     for (int i=0; i<numRows; i++)
     {
-        int size = (layout[layout.size()-1].size());
+        size_t size = (layout[atRow].size());
         std::vector<int> insertVec (size, 0);
-
-        layout.push_back(insertVec);
+        
+        layout.insert(layout.begin()+atRow,1,insertVec);
     }
 }
 

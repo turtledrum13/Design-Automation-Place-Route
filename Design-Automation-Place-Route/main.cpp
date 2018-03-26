@@ -16,7 +16,7 @@
 int main()        //use argc and argv to pass command prompt arguments to main()
 {
     //initialize files
-    std::ifstream fileIn ("Resources/v1.2/2");
+    std::ifstream fileIn ("Resources/v1.2/1");
     std::ofstream outFile ("out.txt");
     std::ofstream outCSV ("magicCSV.csv");
 
@@ -63,7 +63,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     {
         cellData[netlist[i].first].nets++;
         cellData[netlist[i].first].netIndex.push_back(i);
-        printf("cell %i has %i nets\n",netlist[i].first+1,cellData[netlist[i].first].nets);
+        //printf("cell %i has %i nets\n",netlist[i].first+1,cellData[netlist[i].first].nets);
     }
 
     //create the list of cells and point them to their net pair
@@ -97,7 +97,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     for(int i=0; i<cellData.size(); i++)
     {
-        cellData[i].r = 1;
+        cellData[i].r = 4;
         printf("cellData %i\n",i+1);
         printf("cellData is cell: %i  <%i,%i>\n",cellData[i].cell,cellData[i].x, cellData[i].y);
         if(i == 47)
@@ -108,14 +108,6 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     }
     std::cout<<"\ncells placed\n";
 
-//    for (int i=0; i<55; i++)
-//    {
-//        for(int j=0; j<9; j++)
-//        {
-//            std::cout<<layout[i][j]<<"\t";
-//        }
-//        std::cout<<"\n";
-//    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //Routing///////////////////////////////////////////////////////////////////////////////////////////
@@ -135,15 +127,9 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     std::cout<<"\nnets classified\n";
     global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
 
-    printf("\n\n\n\nTotal netlist printout:\n");
-    for(int i=0; i<netlistPairs.size(); i++)
-    {
-        printf("\n<%i,%i> <%i,%i> global = %i",netlistPairs[i].c1.first+1,netlistPairs[i].c1.second,netlistPairs[i].c2.first+1,netlistPairs[i].c2.second, netlistPairs[i].global);
-    }
-
-
+    
     //Second: Channel Routing
-    channel();
+    channel(cellData, layout, channels, boundaries);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -171,18 +157,18 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         std::cout<<mainPartition[i+mainPartition.size()/2]<<"\t";
     }
 
-//    //print CSV -- using to paste into spreadsheet for debugging
-//    for (int i=0; i<layout.size(); i++)
-//    {
-//        printf("\n\n");
-//        int index = layout[i].size();
-//
-//        for(int j=0; j<index; j++)
-//        {
-//            printf("%i ",layout[i][j]);
-//            outCSV << layout[i][j] << ",";
-//        }
-//        outCSV << "\n";
-//    }
+    //print CSV -- using to paste into spreadsheet for debugging
+    for (int i=0; i<layout.size(); i++)
+    {
+        printf("\n\n");
+        size_t index = layout[i].size();
+
+        for(int j=0; j<index; j++)
+        {
+            printf("%i ",layout[i][j]);
+            outCSV << layout[i][j] << ",";
+        }
+        outCSV << "\n";
+    }
 }
 
