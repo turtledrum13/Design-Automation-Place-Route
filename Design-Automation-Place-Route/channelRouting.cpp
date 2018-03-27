@@ -16,18 +16,6 @@
 void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<net> & netlistPairs, std::vector<std::pair <int,int> > channels, std::vector<int> boundaries)
 {
     //Construct vector for each boundary in the channel
-
-    struct chan
-    {
-        std::vector<int> top, bottom;
-    };
-    
-    chan dummy;
-    dummy.top.resize(layout[0].size(), 0);
-    dummy.bottom.resize(layout[0].size(), 0);
-
-    std::vector<chan> channelVec (channels.size(), dummy);
-
     chan dummy;
     dummy.top.resize(layout[0].size(), 0);
     dummy.bottom.resize(layout[0].size(), 0);
@@ -154,7 +142,49 @@ std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int> 
     }
     
     //check for horizontal constraints and appending to each other if detected
-    //scan through top and bottom simultaneously. If on some index number there is a top and a bottom both greater than 0, then append the bottom to the top's list
+    //if any other IDs are at position equal to or within the focused one, add it to each other's list
+    for(size_t i=0; i<numNets; i++)
+    {
+        int currentNet = graph[i].findHead(); //graph[i].getHead() //net of focus is the head of the
+        
+        for(size_t j=0; j<bottom.size(); j++)
+        {
+            
+            size_t first = 0, last = 0;
+            if(first == 0)
+            {
+                if(top[j] == i || bottom[j] == i)
+                {
+                    if(top[j] == bottom[j])
+                    {
+                        first = j+1;
+                        last = j+1;
+                    }
+                    else
+                    {
+                        first = j+1;
+                    }
+                }
+            }
+            
+            if(first != 0 && last == 0)
+            {
+                if(top[j] > 0 || bottom[j] > 0)
+                {
+                    if(top[j] == i || bottom[j] == i)
+                    {
+                        last == j+1;
+                    }
+                    //add to graph of i and add i to its graph
+                    
+                    
+                }
+            }
+            
+            
+            
+        }
+    }
     
     return graph;
 }
