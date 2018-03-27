@@ -18,9 +18,10 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
 //    int size = netlistPairs.size();  //temporary until we fix looping through the newly added nets after the split
 //    for(int i=0; i<size; i++)
 
-    int i = 0;
-    bool finished = false;
-    while(not finished)
+//    int i = 0;
+//    bool finished = false;
+//    while(not finished)
+    for(size_t i=0; i<netlistPairs.size(); i++)
     {
         if(netlistPairs[i].global)
         {
@@ -70,14 +71,14 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
 
         //printf("\n<%i,%i> <%i,%i> global = %i",netlistPairs[i].c1.first+1,netlistPairs[i].c1.second,netlistPairs[i].c2.first+1,netlistPairs[i].c2.second, netlistPairs[i].global);
 
-        i++;
-        if(i == netlistPairs.size()) finished = true;// printOut(file, layout);}
+//        i++;
+//        if(i == netlistPairs.size()) finished = true;// printOut(file, layout);}
     }
 }
 
 coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
 {
-    coord result;
+    coord result(0,0);
     int cellNum = cell_term.first;
     //printf("\ncell num: %i  ",cellNum+1);
 
@@ -92,10 +93,7 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
     case 1 :
         switch(termNum)
         {
-        case 1 :
-            result.x+=1;
-            result.y-=5;
-            break;
+            case 1 : result.x+=1; result.y-=5; break;
         case 2 :
             result.x+=4;
             result.y-=5;
@@ -213,7 +211,7 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
     }
 
     //find where the x,y coordinate this net will terminate, conditional upon direction of desintation and boundary top/bottom
-    coord result;
+    coord result(0,0);
 
     //find the boundary row in which the partial net will terminate. This is the y-coordinate
     if(top)

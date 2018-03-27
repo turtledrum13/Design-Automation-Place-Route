@@ -35,11 +35,31 @@ struct net
 struct coord
 {
     int x, y;
+    
+    coord(int X, int Y)
+    {
+        x = X;
+        y = Y;
+    }
+    void adjust(int adjX, int adjY)
+    {
+        x += adjX;
+        y += adjY;
+    }
 };
 
 struct chan
 {
     std::vector<int> top, bottom;
+    size_t width;
+    int numNets;
+    
+    chan(size_t chanWidth, int initVal)
+    {
+        top.resize(chanWidth, initVal);
+        bottom.resize(chanWidth, initVal);
+        width = chanWidth;
+    }
 };
 
 #endif /* structures_h */

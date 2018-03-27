@@ -17,11 +17,8 @@
 void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<net> & netlistPairs, std::vector<std::pair <int,int> > channels, std::vector<int> boundaries)
 {
     //Construct vector for each boundary in the channel
-    chan dummy;
-    dummy.top.resize(layout[0].size(), 0);
-    dummy.bottom.resize(layout[0].size(), 0);
-
-    std::vector<chan> channelVec (channels.size(), dummy);
+    int width = layout[0].size();
+    std::vector<chan> channelVec (channels.size(), chan(width, 0));
 
     std::cout << channelVec.size() << std::endl;
     std::vector<int> netID (channels.size(),0);
@@ -34,39 +31,41 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         
         netID[index]++;
 
-        coord srcBound = terminalCoords(netlistPairs[i].c1, cellData);
-        coord destBound = terminalCoords(netlistPairs[i].c2, cellData);
+        coord srcTerm = terminalCoords(netlistPairs[i].c1, cellData);
+        coord destTerm = terminalCoords(netlistPairs[i].c2, cellData);
 
         //enter the source terminal into the appropriate boundary vector
-        if(srcBound.y == boundTop)
+        if(srcTerm.y == boundTop)
         {
-            channelVec[index].top[srcBound.x] = netID[index];
+            channelVec[index].top[srcTerm.x] = netID[index];
         }
-        else if(srcBound.y == boundBottom)
+        else if(srcTerm.y == boundBottom)
         {
-            channelVec[index].bottom[srcBound.x] = netID[index];
+            channelVec[index].bottom[srcTerm.x] = netID[index];
         }
 
         //enter the destination terminal into the appropriate boundary vector
-        if(destBound.y == boundTop)
+        if(destTerm.y == boundTop)
         {
-            channelVec[index].top[destBound.x] = netID[index];
+            channelVec[index].top[destTerm.x] = netID[index];
         }
-        else if(destBound.y == boundBottom)
+        else if(destTerm.y == boundBottom)
         {
-            channelVec[index].bottom[destBound.x] = netID[index];
+            channelVec[index].bottom[destTerm.x] = netID[index];
         }
     }
 
 
-    printf("\nnetID:\n");
+    printf("\nnumber of nets by channel:\n");
     for(size_t i=0; i<netID.size(); i++)
     {
+        channelVec[i].numNets = netID[i];
         printf("%i ",netID[i]);
     }
-    printf("\n\n");
+    printf("\n\n\n\n");
 
 
+    //printing out channel boundaries for debugging
     for(size_t i=0; i<channelVec.size(); i++)
     {
         for(size_t j=0; j<channelVec[i].top.size(); j++)
@@ -82,13 +81,13 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
     }
 
 
-    //For each channel
-    for(size_t N=5; N<6; N++) //channelVec.size()
+    //For each of the channels in layout
+    for(size_t N=1; N<2; N++) //channelVec.size()
     {
         //make room for the first track
         if (netID[N] > 0)
         {
-            addTrack(2, channels[N].second, cellData, layout);
+            addTrack(2, channels[N].second, cellData, layout, boundaries, channels);
         }
 
         //Loop through boundary vectors to create HCG (undirected graph)
@@ -102,7 +101,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         }
         
         //Loop through boundary vectors to create VCG (directed graph)
-        makeVCG(netID[N], channelVec[N].top, channelVec[N].bottom);
+        makeVCG(channelVec[N]);
 
         //Perform left-edge routing (with dogleg later)
         //Loop through HCG --> VCG
@@ -115,11 +114,11 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 
     }
 
-    printf("\n\nDid channel routing\n\n");
+    printf("\nDid channel routing\n\n");
 
 }
 
-void updateCellsY(int numRows, int atRow, std::vector<cell> & cellData)
+void updateBelow(int numRows, int atRow, std::vector<cell> & cellData, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels)
 {
     for (size_t i=0; i<cellData.size(); i++)
     {
@@ -128,15 +127,35 @@ void updateCellsY(int numRows, int atRow, std::vector<cell> & cellData)
             cellData[i].y += numRows;
         }
     }
+    
+    for (size_t j=0; j<boundaries.size(); j++)
+    {
+        if (boundaries[j] >= atRow)
+        {
+            boundaries[j] += numRows;
+        }
+    }
+    
+    for (size_t k=0; k<channels.size(); k++)
+    {
+        if (channels[k].second >= atRow)
+        {
+            channels[k].second += numRows;
+        }
+        if (channels[k].first >= atRow)
+        {
+            channels[k].first += numRows;
+        }
+    }
 }
 
-void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout)
+
+void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels)
 {
     addRows(numRows, atRow, layout);
-    updateCellsY(numRows, atRow, cellData);
-    //need to update boundaries and channel pairs, too
-    //might need to update layout things as well?? - probably not
+    updateBelow(numRows, atRow, cellData, boundaries, channels);
 }
+
 
 std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<int> bottom)
 {
@@ -250,16 +269,31 @@ std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<i
     return orderedGraph;
 }
 
-std::vector<numberList> makeVCG(int numNets, std::vector<int> top, std::vector<int> bottom)
-{
-    std::vector<numberList> graph(numNets);
 
-    //make head nodes
-    for(size_t i=0; i<top.size(); i++)
+std::vector<numberList> makeVCG(chan C)
+{
+    std::vector<numberList> graph(C.numNets);
+
+    for(size_t i=0; i<C.width; i++)
     {
-        if(top[i] > 0 && bottom[i] > 0)
+        if(C.top[i] > 0)
         {
-            graph[top[i]].appendNode(bottom[i]);
+            if(0 < i < C.width-1)
+            {
+                if(C.bottom[i-1] > 0) graph[C.top[i]].appendNode(C.bottom[i-1]);
+                if(C.bottom[i] > 0) graph[C.top[i]].appendNode(C.bottom[i]);
+                if(C.bottom[i+1] > 0) graph[C.top[i]].appendNode(C.bottom[i+1]);
+            }
+            else if (i == 0)
+            {
+                if(C.bottom[i] > 0) graph[C.top[i]].appendNode(C.bottom[i]);
+                if(C.bottom[i+1] > 0) graph[C.top[i]].appendNode(C.bottom[i+1]);
+            }
+            else
+            {
+                if(C.bottom[i-1] > 0) graph[C.top[i]].appendNode(C.bottom[i-1]);
+                if(C.bottom[i] > 0) graph[C.top[i]].appendNode(C.bottom[i]);
+            }
         }
     }
 

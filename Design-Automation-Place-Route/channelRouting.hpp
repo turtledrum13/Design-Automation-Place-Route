@@ -17,13 +17,13 @@
 
 void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<net> & netlistPairs, std::vector<std::pair <int,int> > channels, std::vector<int> boundaries);
 
-void updateCellsY(int numRows, int atRow, std::vector<cell> & cellData);
+void updateBelow(int numRows, int atRow, std::vector<cell> & cellData, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels);
 
-void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout);
+void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels);
 
 std::vector<numberList> makeHCG(int length, std::vector<int> top, std::vector<int> bottom);
 
-std::vector<numberList> makeVCG(int numNets, std::vector<int> top, std::vector<int> bottom);
+std::vector<numberList> makeVCG(chan Chan);
 
 
 #endif /* channelRouting_hpp */

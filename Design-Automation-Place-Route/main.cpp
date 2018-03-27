@@ -98,13 +98,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     for(int i=0; i<cellData.size(); i++)
     {
-        cellData[i].r = 1;
-        printf("cellData %i\n",i+1);
-        printf("cellData is cell: %i  <%i,%i>\n",cellData[i].cell,cellData[i].x, cellData[i].y);
-        if(i == 47)
-        {
-            printf("cellData is cell: %i  <%i,%i>\n",cellData[i].cell,cellData[i].x, cellData[i].y);
-        }
+        cellData[i].r = 1;    
         makeCell(cellData[i], layout);
     }
     std::cout<<"\ncells placed\n";
@@ -159,18 +153,18 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     }
 
     //print CSV -- using to paste into spreadsheet for debugging
-    for (int i=0; i<layout.size(); i++)
-    {
-        printf("\n\n");
-        size_t index = layout[i].size();
-
-        for(int j=0; j<index; j++)
-        {
-            printf("%i ",layout[i][j]);
-            outCSV << layout[i][j] << ",";
-        }
-        outCSV << "\n";
-    }
+//    for (int i=0; i<layout.size(); i++)
+//    {
+//        printf("\n\n");
+//        size_t index = layout[i].size();
+//
+//        for(int j=0; j<index; j++)
+//        {
+//            printf("%i ",layout[i][j]);
+//            outCSV << layout[i][j] << ",";
+//        }
+//        outCSV << "\n";
+//    }
 
     //print out the magic file
     outMag << "magic\ntech scmos\ntimestamp\n<< pdiffusion >>\n";
