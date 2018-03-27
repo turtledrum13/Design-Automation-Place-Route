@@ -82,12 +82,11 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 
 
     //For each channel
-    for(size_t i=0; i<channelVec.size(); i++)
+    for(size_t N=0; N<channelVec.size(); N++)
     {
 
-
         //make room for the first track
-        //if (addTrack(2, (bound1+bound2)/2, cellData, layout);
+        //if (addTrack(2, channel.N.second, cellData, layout);
 
         //Loop through boundary vectors to create HCG (undirected graph)
 
@@ -127,8 +126,20 @@ void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<
     //might need to update layout things as well?? - probably not
 }
 
-std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int>)
+std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int> bottom)
     {
+        std::vector<numberList> graph;
+        
+        //make head nodes
+        for(size_t i=0; i<bottom.size(); i++)
+        {
+            if(bottom[i] > 0)
+            {
+                numberList dummy;
+                graph.push_back(dummy);
+                graph[graph.size()-1].appendNode(bottom[i]);
+            }
+        }
 
     //check for horizontal constraints and appending to each other if detected
     //scan through top and bottom simultaneously. If on some index number there is a top and a bottom both greater than 0, then append the bottom to the top's list
@@ -143,7 +154,7 @@ std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int>)
             size_t first = 0, last = 0;
             if(first == 0)
             {
-                if(top[j] == i || bottom[j] == i)
+                if(top[j] == currentNet || bottom[j] == currentNet)
                 {
                     if(top[j] == bottom[j])
                     {
@@ -161,13 +172,14 @@ std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int>)
             {
                 if(top[j] > 0 || bottom[j] > 0)
                 {
-                    if(top[j] == i || bottom[j] == i)
+                    if(top[j] == currentNet || bottom[j] == currentNet)
                     {
-                        last == j+1;
+                        last = j+1;
                     }
                     //add to graph of i and add i to its graph
-
-
+                    
+                    
+                    
                 }
             }
 
