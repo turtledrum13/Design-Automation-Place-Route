@@ -81,12 +81,11 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 
 
     //For each channel
-    for(size_t i=0; i<channelVec.size(); i++)
+    for(size_t N=0; N<channelVec.size(); N++)
     {
 
-
         //make room for the first track
-        //if (addTrack(2, (bound1+bound2)/2, cellData, layout);
+        //if (addTrack(2, channel.N.second, cellData, layout);
 
         //Loop through boundary vectors to create HCG (undirected graph)
 
@@ -153,7 +152,7 @@ std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int> 
             size_t first = 0, last = 0;
             if(first == 0)
             {
-                if(top[j] == i || bottom[j] == i)
+                if(top[j] == currentNet || bottom[j] == currentNet)
                 {
                     if(top[j] == bottom[j])
                     {
@@ -171,11 +170,12 @@ std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int> 
             {
                 if(top[j] > 0 || bottom[j] > 0)
                 {
-                    if(top[j] == i || bottom[j] == i)
+                    if(top[j] == currentNet || bottom[j] == currentNet)
                     {
-                        last == j+1;
+                        last = j+1;
                     }
                     //add to graph of i and add i to its graph
+                    
                     
                     
                 }
