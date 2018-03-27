@@ -125,8 +125,20 @@ void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<
     //might need to update layout things as well?? - probably not
 }
 
-std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int>)
+std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int> bottom)
     {
+        std::vector<numberList> graph;
+        
+        //make head nodes
+        for(size_t i=0; i<bottom.size(); i++)
+        {
+            if(bottom[i] > 0)
+            {
+                numberList dummy;
+                graph.push_back(dummy);
+                graph[graph.size()-1].appendNode(bottom[i]);
+            }
+        }
 
     //check for horizontal constraints and appending to each other if detected
     //scan through top and bottom simultaneously. If on some index number there is a top and a bottom both greater than 0, then append the bottom to the top's list
