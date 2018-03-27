@@ -83,7 +83,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 
 
     //For each channel
-    for(size_t N=0; N<1; N++) //channelVec.size()
+    for(size_t N=5; N<6; N++) //channelVec.size()
     {
         //make room for the first track
         if (netID[N] > 0)
@@ -148,12 +148,18 @@ std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<i
     {
         if(bottom[i] > 0)
         {
-            graph[bottom[i]-1].appendNode(bottom[i]);
+            if(!graph[bottom[i]-1].notEmpty())
+            {
+                graph[bottom[i]-1].appendNode(bottom[i]);
+            }
         }
         
         if(top[i] > 0)
         {
-            graph[top[i]-1].appendNode(top[i]);
+            if(!graph[top[i]-1].notEmpty())
+            {
+                graph[top[i]-1].appendNode(top[i]);
+            }
         }
     }
 
@@ -197,11 +203,13 @@ std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<i
                     if(top[j] > 0 && top[j] != currentNet)
                     {
                         graph[i].appendNode(top[j]);
+                        //graph[top[j]-1].appendNode(i+1);
                     }
                     
                     if(bottom[j] > 0 && bottom[j] != currentNet)
                     {
                         graph[i].appendNode(bottom[j]);
+                        //graph[bottom[j]-1].appendNode(i+1);
                     }
                     
                     //close down the search if the last terminal is found

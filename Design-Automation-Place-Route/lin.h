@@ -44,6 +44,9 @@ public:
     int getWeight(int num);
 
     int findHead();
+    
+    bool notEmpty();
+
 };
 
 #endif

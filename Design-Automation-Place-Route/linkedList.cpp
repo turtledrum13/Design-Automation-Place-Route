@@ -154,3 +154,18 @@ int numberList::findHead()
 
     return newNode->value;
 }
+
+bool numberList::notEmpty()
+{
+    listNode *newNode = new listNode;
+    newNode = head;
+    
+    if (newNode==NULL)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
