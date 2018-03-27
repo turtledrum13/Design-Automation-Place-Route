@@ -154,18 +154,18 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     }
 
     //print CSV -- using to paste into spreadsheet for debugging
-//    for (int i=0; i<layout.size(); i++)
-//    {
-//        printf("\n\n");
-//        size_t index = layout[i].size();
-//
-//        for(int j=0; j<index; j++)
-//        {
-//            printf("%i ",layout[i][j]);
-//            outCSV << layout[i][j] << ",";
-//        }
-//        outCSV << "\n";
-//    }
+    for (int i=0; i<layout.size(); i++)
+    {
+        //printf("\n\n");
+        size_t index = layout[i].size();
+
+        for(int j=0; j<index; j++)
+        {
+            //printf("%i ",layout[i][j]);
+            outCSV << layout[i][j] << ",";
+        }
+        outCSV << "\n";
+    }
 
     //print out the magic file
     outMag << "magic\ntech scmos\ntimestamp\n<< pdiffusion >>\n";

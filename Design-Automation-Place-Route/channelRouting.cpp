@@ -93,7 +93,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         //Loop through boundary vectors to create HCG (undirected graph)
         std::vector<numberList> HCG;
         HCG = makeHCG(netID[N], channelVec[N].top, channelVec[N].bottom);
-        std::cout<<netID[N];
+        
         for(size_t i=0; i<HCG.size(); i++)
         {
             HCG[i].display();
@@ -101,7 +101,8 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         }
 
         //Loop through boundary vectors to create VCG (directed graph)
-        makeVCG(channelVec[N]);
+        std::vector<numberList> VCG;
+        VCG = makeVCG(channelVec[N]);
 
         //Perform left-edge routing (with dogleg later)
         //Loop through HCG --> VCG
@@ -157,25 +158,25 @@ void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<
 }
 
 
-std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<int> bottom)
+std::vector<numberList> makeHCG(chan C)
 {
-    std::vector<std::vector<int> > netGraph(bottom.size());
-    std::vector<numberList> graph(numNets);
+    std::vector<std::vector<int> > netGraph(C.bottom.size());
+    std::vector<numberList> graph(C.numNets);
     int index1, index2;
 
-    for (int i=0; i<numNets; i++)
+    for (int i=0; i<C.numNets; i++)
     {
         graph[i].appendNode(i+1);
     }
 
-    for(int i=0; i<numNets; i++)
+    for(int i=0; i<C.numNets; i++)
     {
         index1 = -1;
         index2 = -1;
 
-        for(size_t j = 0; j<bottom.size(); j++)
+        for(size_t j = 0; j<C.bottom.size(); j++)
         {
-            if (bottom[j]==i+1)
+            if (C.bottom[j]==i+1)
             {
                 if(index1 > -1)
                 {
@@ -188,7 +189,7 @@ std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<i
                 }
             }
 
-            if (top[j]==i+1)
+            if (C.top[j]==i+1)
             {
                 if(index1 > -1)
                 {
@@ -208,7 +209,7 @@ std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<i
         }
     }
 
-    for(int i=0; i<bottom.size(); i++)
+    for(int i=0; i<C.bottom.size(); i++)
     {
         for (int j=0; j<netGraph[i].size(); j++)
         {
@@ -306,25 +307,25 @@ std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<i
 
     //reorder the HCG by left first
     std::vector<numberList> orderedGraph;
-    std::vector<bool> placed (numNets, false);
+    std::vector<bool> placed (C.numNets, false);
 
-    for(size_t k=0; k<bottom.size(); k++)
+    for(size_t k=0; k<C.bottom.size(); k++)
     {
-        if(bottom[k] > 0)
+        if(C.bottom[k] > 0)
         {
-            if(not placed[bottom[k]-1])
+            if(not placed[C.bottom[k]-1])
             {
-                orderedGraph.push_back(graph[bottom[k]-1]);
-                placed[bottom[k]-1] = true;
+                orderedGraph.push_back(graph[C.bottom[k]-1]);
+                placed[C.bottom[k]-1] = true;
             }
         }
 
-        if(top[k] > 0)
+        if(C.top[k] > 0)
         {
-            if(not placed[top[k]-1])
+            if(not placed[C.top[k]-1])
             {
-                orderedGraph.push_back(graph[top[k]-1]);
-                placed[top[k]-1] = true;
+                orderedGraph.push_back(graph[C.top[k]-1]);
+                placed[C.top[k]-1] = true;
             }
         }
     }

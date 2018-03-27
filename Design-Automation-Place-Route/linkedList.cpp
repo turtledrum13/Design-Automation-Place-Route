@@ -10,7 +10,7 @@ numberList::numberList()
 
 void numberList::appendNode(int num)
 {
-    listNode *newNode;		//to point to a new node
+    listNode *newNode;        //to point to a new node
 
     //allocate a new node and store the values there
     newNode = new listNode;
@@ -25,7 +25,7 @@ void numberList::appendNode(int num)
         head=newNode;
         tail=newNode;
     }
-    else	 			//insert newnode at end
+    else                 //insert newnode at end
     {
         tail->next=newNode;     //make the newnode the tail
         tail=newNode;
