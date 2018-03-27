@@ -93,16 +93,19 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         //Loop through boundary vectors to create HCG (undirected graph)
         std::vector<numberList> HCG;
         HCG = makeHCG(channelVec[N]);
-        
-        for(size_t i=0; i<HCG.size(); i++)
-        {
-            HCG[i].display();
-            std::cout << "\n\n";
-        }
+
+
 
         //Loop through boundary vectors to create VCG (directed graph)
         std::vector<numberList> VCG;
         VCG = makeVCG(channelVec[N]);
+
+        for(size_t i=0; i<VCG.size(); i++)
+        {
+            std::cout<<i+1<<"-->";
+            VCG[i].display();
+            std::cout << "\n\n";
+        }
 
         //Perform left-edge routing (with dogleg later)
         //Loop through HCG --> VCG
@@ -128,7 +131,7 @@ void updateBelow(int numRows, int atRow, std::vector<cell> & cellData, std::vect
             cellData[i].y += numRows;
         }
     }
-    
+
     for (size_t j=0; j<boundaries.size(); j++)
     {
         if (boundaries[j] >= atRow)
@@ -136,7 +139,7 @@ void updateBelow(int numRows, int atRow, std::vector<cell> & cellData, std::vect
             boundaries[j] += numRows;
         }
     }
-    
+
     for (size_t k=0; k<channels.size(); k++)
     {
         if (channels[k].second >= atRow)
@@ -223,88 +226,6 @@ std::vector<numberList> makeHCG(chan C)
         }
     }
 
-    /*//initialize HCG
-    std::vector<numberList> graph(numNets);
-
-    //make head nodes in the order in which they occur
-    for(size_t i=0; i<bottom.size(); i++)
-    {
-        if(bottom[i] > 0)
-        {
-            if(!graph[bottom[i]-1].notEmpty())
-            {
-                graph[bottom[i]-1].appendNode(bottom[i]);
-            }
-        }
-
-        if(top[i] > 0)
-        {
-            if(!graph[top[i]-1].notEmpty())
-            {
-                graph[top[i]-1].appendNode(top[i]);
-            }
-        }
-    }
-
-    //check for horizontal constraints and appending to each other if detected
-    //if any other IDs are at position equal to or within the focused one, add it to each other's list
-
-    for(size_t i=0; i<numNets; i++)
-    {
-        //net of focus is the head of the list in this graph position
-        int currentNet = i+1;
-
-        //scan through the whole boundary
-        for(size_t j=0; j<bottom.size(); j++)
-        {
-            size_t first = 0, last = 0; //flag variables initilized to zero
-
-            //so long as the first terminal of the net has not been found...
-            if(first == 0)
-            {
-                //if either the top or bottom boundary block is part of currentNet...
-                if(top[j] == currentNet || bottom[j] == currentNet)
-                {
-                    if(top[j] == bottom[j]) //if both top and bottom are found at once, we're done
-                    {
-                        first = j+1;
-                        last = j+1;
-                    }
-                    else                    //if only one terminal of the net found, set first = index
-                    {
-                        first = j+1;
-                    }
-                }
-            }
-
-            //if the first terminal but not the last has been found
-            if(first != 0 && last == 0)
-            {
-                if(top[j] > 0 || bottom[j] > 0)
-                {
-                    //add to graph of i and add i to its graph
-                    if(top[j] > 0 && top[j] != currentNet)
-                    {
-                        graph[i].appendNode(top[j]);
-                        //graph[top[j]-1].appendNode(i+1);
-                    }
-
-                    if(bottom[j] > 0 && bottom[j] != currentNet)
-                    {
-                        graph[i].appendNode(bottom[j]);
-                        //graph[bottom[j]-1].appendNode(i+1);
-                    }
-
-                    //close down the search if the last terminal is found
-                    if(top[j] == currentNet || bottom[j] == currentNet)
-                    {
-                        last = j+1;
-                    }
-                }
-            }
-        }
-    }*/
-
     //reorder the HCG by left first
     std::vector<numberList> orderedGraph;
     std::vector<bool> placed (C.numNets, false);
@@ -342,21 +263,21 @@ std::vector<numberList> makeVCG(chan C)
     {
         if(C.top[i] > 0)
         {
-            if(0 < i < C.width-1)
+            if(0 < i && i < C.width-1)
             {
-                if(C.bottom[i-1] > 0) graph[C.top[i]].appendNode(C.bottom[i-1]);
-                if(C.bottom[i] > 0) graph[C.top[i]].appendNode(C.bottom[i]);
-                if(C.bottom[i+1] > 0) graph[C.top[i]].appendNode(C.bottom[i+1]);
+                if(C.bottom[i-1] > 0) graph[C.top[i]-1].appendNode(C.bottom[i-1]);
+                if(C.bottom[i] > 0) graph[C.top[i]-1].appendNode(C.bottom[i]);
+                if(C.bottom[i+1] > 0) graph[C.top[i]-1].appendNode(C.bottom[i+1]);
             }
             else if (i == 0)
             {
-                if(C.bottom[i] > 0) graph[C.top[i]].appendNode(C.bottom[i]);
-                if(C.bottom[i+1] > 0) graph[C.top[i]].appendNode(C.bottom[i+1]);
+                if(C.bottom[i] > 0) graph[C.top[i]-1].appendNode(C.bottom[i]);
+                if(C.bottom[i+1] > 0) graph[C.top[i]-1].appendNode(C.bottom[i+1]);
             }
             else
             {
-                if(C.bottom[i-1] > 0) graph[C.top[i]].appendNode(C.bottom[i-1]);
-                if(C.bottom[i] > 0) graph[C.top[i]].appendNode(C.bottom[i]);
+                if(C.bottom[i-1] > 0) graph[C.top[i]-1].appendNode(C.bottom[i-1]);
+                if(C.bottom[i] > 0) graph[C.top[i]-1].appendNode(C.bottom[i]);
             }
         }
     }
