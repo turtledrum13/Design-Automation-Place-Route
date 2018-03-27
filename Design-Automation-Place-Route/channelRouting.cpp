@@ -28,6 +28,13 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 
     std::vector<chan> channelVec (channels.size(), dummy);
 
+    chan dummy;
+    dummy.top.resize(layout[0].size(), 0);
+    dummy.bottom.resize(layout[0].size(), 0);
+
+    std::vector<chan> channelVec(channels.size(), dummy);
+
+    std::cout << channelVec.size() << std::endl;
     std::vector<int> netID (channels.size(),1);
     for(size_t i=0; i<netlistPairs.size(); i++)
     {
