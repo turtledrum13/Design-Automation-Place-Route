@@ -126,44 +126,11 @@ void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<
     //might need to update layout things as well?? - probably not
 }
 
-std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int> bottom)
-{
-    std::vector<numberList> graph;
-
-    //make head nodes
-    for(size_t i=0; i<bottom.size(); i++)
+std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int>)
     {
-        if(bottom[i] > 0)
-        {
-            numberList dummy;
-            graph.push_back(dummy);
-            graph[graph.size()-1].appendNode(bottom[i]);
-        }
-    }
 
     //check for horizontal constraints and appending to each other if detected
     //scan through top and bottom simultaneously. If on some index number there is a top and a bottom both greater than 0, then append the bottom to the top's list
-
-    return graph;
-}
-
-std::vector<numberList> VCG(int numNets, std::vector<int> top, std::vector<int> bottom)
-{
-    std::vector<numberList> graph(numNets);
-
-    //make head nodes
-    for(size_t i=0; i<top.size(); i++)
-    {
-        if(top[i] > 0 && bottom[i] > 0)
-        {
-            graph[top[i]].appendNode(bottom[i]);
-        }
-    }
-    //check for horizontal constraints and appending to each other if detected
-<<<<<<< HEAD
-    //scan through top and bottom simultaneously. If on some index number there is a top and a bottom both greater than 0, then append the bottom to the top's list
-
-=======
     //if any other IDs are at position equal to or within the focused one, add it to each other's list
     for(size_t i=0; i<numNets; i++)
     {
@@ -208,7 +175,24 @@ std::vector<numberList> VCG(int numNets, std::vector<int> top, std::vector<int> 
         }
     }
 
->>>>>>> 582e8d423d2b95b8b9ad2994840c0d377e8d3b11
     return graph;
 }
 
+std::vector<numberList> VCG(int numNets, std::vector<int> top, std::vector<int> bottom)
+{
+    std::vector<numberList> graph(numNets);
+
+    //make head nodes
+    for(size_t i=0; i<top.size(); i++)
+    {
+        if(top[i] > 0 && bottom[i] > 0)
+        {
+            graph[top[i]].appendNode(bottom[i]);
+        }
+    }
+    //check for horizontal constraints and appending to each other if detected
+    //scan through top and bottom simultaneously. If on some index number there is a top and a bottom both greater than 0, then append the bottom to the top's list
+
+
+    return graph;
+}
