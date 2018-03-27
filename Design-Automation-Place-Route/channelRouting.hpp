@@ -21,7 +21,9 @@ void updateCellsY(int numRows, int atRow, std::vector<cell> & cellData);
 
 void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout);
 
-std::vector<numberList> HCG(int length, std::vector<int> top, std::vector<int> bottom);
+std::vector<numberList> makeHCG(int length, std::vector<int> top, std::vector<int> bottom);
+
+std::vector<numberList> makeVCG(int numNets, std::vector<int> top, std::vector<int> bottom);
 
 
 #endif /* channelRouting_hpp */
