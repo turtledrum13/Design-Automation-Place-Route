@@ -37,7 +37,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 
         coord srcBound = terminalCoords(netlistPairs[i].c1, cellData);
         coord destBound = terminalCoords(netlistPairs[i].c2, cellData);
-        
+
         //enter the source terminal into the appropriate boundary vector
         if(srcBound.y == boundTop)
         {
@@ -83,27 +83,27 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         }
         printf("\n\n\n\n");
     }
-    
-    
+
+
     //For each channel
     for(size_t i=0; i<channelVec.size(); i++)
     {
-        
-        
+
+
         //make room for the first track
         //if (addTrack(2, (bound1+bound2)/2, cellData, layout);
-        
+
         //Loop through boundary vectors to create HCG (undirected graph)
-        
+
         //Loop through boundary vectors to create VCG (directed graph)
-        
+
         //Perform left-edge routing with dogleg
         //Loop through HCG --> VCG
             //maintain current track # (initialized to the row between the channel indeces)
             //update net.placed as you go and delete nodes from the graphs
             //addTrack(2, currentTrack, cellData, layout); (only as necessary)
         //when HCG and VCG are through, exit loop
-        
+
         //increment channel
 
     }
