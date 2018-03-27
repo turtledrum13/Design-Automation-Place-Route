@@ -113,7 +113,7 @@ void numberList::display()
 
     while(newNode!=NULL)
     {
-        std::cout<<newNode->value<<"\n";
+        std::cout<<newNode->value<<"\t";
         newNode=newNode->next;
     }
 }
@@ -159,7 +159,7 @@ bool numberList::notEmpty()
 {
     listNode *newNode = new listNode;
     newNode = head;
-    
+
     if (newNode==NULL)
     {
         return false;

@@ -25,13 +25,13 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 
     std::cout << channelVec.size() << std::endl;
     std::vector<int> netID (channels.size(),0);
-    
+
     for(size_t i=0; i<netlistPairs.size(); i++)
     {
         int index = netlistPairs[i].channel;
         int boundTop = channels[index].first;
         int boundBottom = channels[index].second;
-        
+
         netID[index]++;
 
         coord srcBound = terminalCoords(netlistPairs[i].c1, cellData);
@@ -94,21 +94,21 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         //Loop through boundary vectors to create HCG (undirected graph)
         std::vector<numberList> HCG;
         HCG = makeHCG(netID[N], channelVec[N].top, channelVec[N].bottom);
-        
+        std::cout<<netID[N];
         for(size_t i=0; i<HCG.size(); i++)
         {
             HCG[i].display();
             std::cout << "\n\n";
         }
-        
+
         //Loop through boundary vectors to create VCG (directed graph)
         makeVCG(netID[N], channelVec[N].top, channelVec[N].bottom);
 
         //Perform left-edge routing (with dogleg later)
         //Loop through HCG --> VCG
-            //maintain current track # (initialized to the row between the channel indeces)
-            //update net.placed as you go and delete nodes from the graphs
-            //addTrack(2, currentTrack, cellData, layout); (only as necessary)
+        //maintain current track # (initialized to the row between the channel indeces)
+        //update net.placed as you go and delete nodes from the graphs
+        //addTrack(2, currentTrack, cellData, layout); (only as necessary)
         //when HCG and VCG are through, exit loop
 
         //increment channel
@@ -140,9 +140,72 @@ void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<
 
 std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<int> bottom)
 {
-    //initialize HCG
+    std::vector<std::vector<int> > netGraph(bottom.size());
     std::vector<numberList> graph(numNets);
-    
+    int index1, index2;
+
+    for (int i=0; i<numNets; i++)
+    {
+        graph[i].appendNode(i+1);
+    }
+
+    for(int i=0; i<numNets; i++)
+    {
+        index1 = -1;
+        index2 = -1;
+
+        for(size_t j = 0; j<bottom.size(); j++)
+        {
+            if (bottom[j]==i+1)
+            {
+                if(index1 > -1)
+                {
+                    index2 = j;
+                    break;
+                }
+                else
+                {
+                    index1 = j;
+                }
+            }
+
+            if (top[j]==i+1)
+            {
+                if(index1 > -1)
+                {
+                    index2 = j;
+                    break;
+                }
+                else
+                {
+                    index1 = j;
+                }
+            }
+        }
+
+        for (int j=index1; j<index2+1; j++)
+        {
+            netGraph[j].push_back(i+1);
+        }
+    }
+
+    for(int i=0; i<bottom.size(); i++)
+    {
+        for (int j=0; j<netGraph[i].size(); j++)
+        {
+            for(int k=0; k<netGraph[i].size(); k++)
+            {
+                if(k!=j && graph[netGraph[i][j]-1].lookUp(netGraph[i][k])==0)
+                {
+                    graph[netGraph[i][j]-1].appendNode(netGraph[i][k]);
+                }
+            }
+        }
+    }
+
+    /*//initialize HCG
+    std::vector<numberList> graph(numNets);
+
     //make head nodes in the order in which they occur
     for(size_t i=0; i<bottom.size(); i++)
     {
@@ -153,7 +216,7 @@ std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<i
                 graph[bottom[i]-1].appendNode(bottom[i]);
             }
         }
-        
+
         if(top[i] > 0)
         {
             if(!graph[top[i]-1].notEmpty())
@@ -163,8 +226,8 @@ std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<i
         }
     }
 
-//check for horizontal constraints and appending to each other if detected
-//if any other IDs are at position equal to or within the focused one, add it to each other's list
+    //check for horizontal constraints and appending to each other if detected
+    //if any other IDs are at position equal to or within the focused one, add it to each other's list
 
     for(size_t i=0; i<numNets; i++)
     {
@@ -175,7 +238,7 @@ std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<i
         for(size_t j=0; j<bottom.size(); j++)
         {
             size_t first = 0, last = 0; //flag variables initilized to zero
-            
+
             //so long as the first terminal of the net has not been found...
             if(first == 0)
             {
@@ -205,13 +268,13 @@ std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<i
                         graph[i].appendNode(top[j]);
                         //graph[top[j]-1].appendNode(i+1);
                     }
-                    
+
                     if(bottom[j] > 0 && bottom[j] != currentNet)
                     {
                         graph[i].appendNode(bottom[j]);
                         //graph[bottom[j]-1].appendNode(i+1);
                     }
-                    
+
                     //close down the search if the last terminal is found
                     if(top[j] == currentNet || bottom[j] == currentNet)
                     {
@@ -220,12 +283,12 @@ std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<i
                 }
             }
         }
-    }
-    
+    }*/
+
     //reorder the HCG by left first
     std::vector<numberList> orderedGraph;
     std::vector<bool> placed (numNets, false);
-    
+
     for(size_t k=0; k<bottom.size(); k++)
     {
         if(bottom[k] > 0)
@@ -236,7 +299,7 @@ std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<i
                 placed[bottom[k]-1] = true;
             }
         }
-        
+
         if(top[k] > 0)
         {
             if(not placed[top[k]-1])
@@ -246,7 +309,7 @@ std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<i
             }
         }
     }
-    
+
     return orderedGraph;
 }
 
