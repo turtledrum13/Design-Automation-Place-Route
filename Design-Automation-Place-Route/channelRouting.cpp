@@ -92,7 +92,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 
         //Loop through boundary vectors to create HCG (undirected graph)
         std::vector<numberList> HCG;
-        HCG = makeHCG(netID[N], channelVec[N].top, channelVec[N].bottom);
+        HCG = makeHCG(channelVec[N]);
         
         for(size_t i=0; i<HCG.size(); i++)
         {
