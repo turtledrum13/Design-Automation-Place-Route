@@ -11,6 +11,7 @@
 #include "globalRouting.hpp"
 #include "structures.h"
 #include <stdio.h>
+#include "lin.h"
 
 
 void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<net> & netlistPairs, std::vector<std::pair <int,int> > channels, std::vector<int> boundaries)
