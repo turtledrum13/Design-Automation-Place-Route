@@ -11,6 +11,7 @@
 
 #include "structures.h"
 #include "classifyNets.hpp"
+#include "lin.h"
 #include <stdio.h>
 #include <vector>
 
@@ -19,6 +20,8 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 void updateCellsY(int numRows, int atRow, std::vector<cell> & cellData);
 
 void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout);
+
+std::vector<numberList> HCG(int length, std::vector<int> top, std::vector<int> bottom);
 
 
 #endif /* channelRouting_hpp */

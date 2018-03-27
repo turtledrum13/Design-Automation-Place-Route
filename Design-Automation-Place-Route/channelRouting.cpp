@@ -22,19 +22,16 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         std::vector<int> top, bottom;
     };
     
-    chan dummy_chan;
-    dummy_chan.top.resize(layout[0].size(), 0);
-    dummy_chan.bottom.resize(layout[0].size(), 0);
+    chan dummy;
+    dummy.top.resize(layout[0].size(), 0);
+    dummy.bottom.resize(layout[0].size(), 0);
 
-    std::vector<chan> channelVec (channels.size(), dummy_chan);
+    std::vector<chan> channelVec (channels.size(), dummy);
 
-    std::cout << channelVec.size() << std::endl;
     std::vector<int> netID (channels.size(),1);
-    int maxChannel = 0;
     for(size_t i=0; i<netlistPairs.size(); i++)
     {
         int index = netlistPairs[i].channel;
-        if (index > maxChannel) maxChannel = index;
         int boundTop = channels[index].first;
         int boundBottom = channels[index].second;
 
@@ -51,22 +48,21 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             channelVec[index].bottom[srcBound.x] = netID[index];
         }
         
-//        //enter the destination terminal into the appropriate boundary vector
-//        if(destBound.y == boundTop)
-//        {
-//            channelVec[index].top[destBound.x] = netID[index];
-//        }
-//        else if(destBound.y == boundBottom)
-//        {
-//            channelVec[index].bottom[destBound.x] = netID[index];
-//        }
+        //enter the destination terminal into the appropriate boundary vector
+        if(destBound.y == boundTop)
+        {
+            channelVec[index].top[destBound.x] = netID[index];
+        }
+        else if(destBound.y == boundBottom)
+        {
+            channelVec[index].bottom[destBound.x] = netID[index];
+        }
         
         netID[index]++;
     }
     
-    printf("max channel: %i\n",maxChannel);
     
-    printf("netID:\n");
+    printf("\nnetID:\n");
     for(size_t i=0; i<netID.size(); i++)
     {
         printf("%i ",netID[i]);
@@ -74,7 +70,6 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
     printf("\n\n");
 
 
-    
     for(size_t i=0; i<channelVec.size(); i++)
     {
         for(size_t j=0; j<channelVec[i].top.size(); j++)
@@ -82,9 +77,9 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             printf("%i ",channelVec[i].top[j]);
         }
         printf("\n\n");
-        for(size_t j=0; j<channelVec[i].top.size(); j++)
+        for(size_t j=0; j<channelVec[i].bottom.size(); j++)
         {
-            printf("%i ",channelVec[i].top[j]);
+            printf("%i ",channelVec[i].bottom[j]);
         }
         printf("\n\n\n\n");
     }
@@ -134,4 +129,25 @@ void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<
     updateCellsY(numRows, atRow, cellData);
     //need to update boundaries and channel pairs, too
     //might need to update layout things as well?? - probably not
+}
+
+std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int> bottom)
+{
+    std::vector<numberList> graph;
+    
+    //make head nodes
+    for(size_t i=0; i<bottom.size(); i++)
+    {
+        if(bottom[i] > 0)
+        {
+            numberList dummy;
+            graph.push_back(dummy);
+            graph[graph.size()-1].appendNode(bottom[i]);
+        }
+    }
+    
+    //check for horizontal constraints and appending to each other if detected
+    //scan through top and bottom simultaneously. If on some index number there is a top and a bottom both greater than 0, then append the bottom to the top's list
+    
+    return graph;
 }
