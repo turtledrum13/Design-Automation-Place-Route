@@ -223,31 +223,31 @@ std::vector<numberList> makeHCG(int numNets, std::vector<int> top, std::vector<i
     }
     
     //reorder the HCG by left first
-    std::vector<numberList> tempList;
+    std::vector<numberList> orderedGraph;
     std::vector<bool> placed (numNets, false);
     
-    for(size_t i=0; i<bottom.size(); i++)
+    for(size_t k=0; k<bottom.size(); k++)
     {
-        if(bottom[i] > 0)
+        if(bottom[k] > 0)
         {
-            if(!placed[bottom[i]-1])
+            if(not placed[bottom[k]-1])
             {
-                tempList.push_back(graph[bottom[i]-1]);
-                placed[i] = true;
+                orderedGraph.push_back(graph[bottom[k]-1]);
+                placed[bottom[k]-1] = true;
             }
         }
         
-        if(top[i] > 0)
+        if(top[k] > 0)
         {
-            if(!placed[top[i]-1])
+            if(not placed[top[k]-1])
             {
-                tempList.push_back(graph[top[i]-1]);
-                placed[i] = true;
+                orderedGraph.push_back(graph[top[k]-1]);
+                placed[top[k]-1] = true;
             }
         }
     }
     
-    return graph;
+    return orderedGraph;
 }
 
 std::vector<numberList> makeVCG(int numNets, std::vector<int> top, std::vector<int> bottom)
