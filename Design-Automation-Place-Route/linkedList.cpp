@@ -113,7 +113,7 @@ void numberList::display()
 
     while(newNode!=NULL)
     {
-        std::cout<<newNode->value<<"\n";
+        std::cout<<newNode->value<<"--> ";
         newNode=newNode->next;
     }
 }

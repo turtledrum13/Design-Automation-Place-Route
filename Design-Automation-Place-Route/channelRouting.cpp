@@ -17,7 +17,7 @@
 void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<net> & netlistPairs, std::vector<std::pair <int,int> > channels, std::vector<int> boundaries)
 {
     //Construct vector for each boundary in the channel
-    int width = layout[0].size();
+    size_t width = layout[0].size();
     std::vector<chan> channelVec (channels.size(), chan(width, 0));
 
     std::cout << channelVec.size() << std::endl;

@@ -15,12 +15,7 @@
 
 void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries,  std::vector<std::pair<int,int> > & channels, std::ofstream & file)
 {
-//    int size = netlistPairs.size();  //temporary until we fix looping through the newly added nets after the split
-//    for(int i=0; i<size; i++)
-
-//    int i = 0;
-//    bool finished = false;
-//    while(not finished)
+    //for each net in the netlist
     for(size_t i=0; i<netlistPairs.size(); i++)
     {
         if(netlistPairs[i].global)
@@ -32,7 +27,7 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
             //update the layout and cellData vector with new pass through cells
             coord newCoord = findVertical(source, destination, layout, boundaries, topTerminal);
             updateLayout(newCoord, layout, cellData.size()+1);
-            updateCellsX(cellData, newCoord);
+            updateRight(cellData, newCoord);
 
             //adding pass-through cell to end of cellData
             cell newCell;
@@ -70,11 +65,11 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
         }
 
         //printf("\n<%i,%i> <%i,%i> global = %i",netlistPairs[i].c1.first+1,netlistPairs[i].c1.second,netlistPairs[i].c2.first+1,netlistPairs[i].c2.second, netlistPairs[i].global);
-
-//        i++;
-//        if(i == netlistPairs.size()) finished = true;// printOut(file, layout);}
     }
+    printf("\nDid global routing\n\n"); 
 }
+
+
 
 coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
 {
@@ -93,98 +88,60 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data)
     case 1 :
         switch(termNum)
         {
-            case 1 : result.x+=1; result.y-=5; break;
-        case 2 :
-            result.x+=4;
-            result.y-=5;
-            break;
-        case 3 :
-            result.x+=1;
-            result.y-=0;
-            break;
-        case 4 :
-            result.x+=4;
-            result.y-=0;
-            break;
+            case 1 : result.adjust(1,-5); break;
+            case 2 : result.adjust(4, -5); break;
+            case 3 : result.adjust(1,0); break;
+            case 4 : result.adjust(4,0); break;
+            default : break;
         }
         break;
 
     case 2 :
         switch(termNum)
         {
-        case 1 :
-            result.x+=4;
-            result.y-=5;
-            break;
-        case 2 :
-            result.x+=4;
-            result.y-=0;
-            break;
-        case 3 :
-            result.x+=1;
-            result.y-=5;
-            break;
-        case 4 :
-            result.x+=1;
-            result.y-=0;
-            break;
+            case 1 : result.adjust(4,-5); break;
+            case 2 : result.adjust(4, 0); break;
+            case 3 : result.adjust(1,-5); break;
+            case 4 : result.adjust(1,0); break;
+            default : break;
         }
         break;
 
     case 3 :
         switch(termNum)
         {
-        case 1 :
-            result.x+=4;
-            result.y-=0;
-            break;
-        case 2 :
-            result.x+=1;
-            result.y-=0;
-            break;
-        case 3 :
-            result.x+=4;
-            result.y-=5;
-            break;
-        case 4 :
-            result.x+=1;
-            result.y-=5;
-            break;
+            case 1 : result.adjust(4,0); break;
+            case 2 : result.adjust(1, 0); break;
+            case 3 : result.adjust(4,-5); break;
+            case 4 : result.adjust(1,-5); break;
+            default : break;
         }
         break;
     case 4 :
         switch(termNum)
         {
-        case 1 :
-            result.x+=1;
-            result.y-=0;
-            break;
-        case 2 :
-            result.x+=1;
-            result.y-=5;
-            break;
-        case 3 :
-            result.x+=4;
-            result.y-=0;
-            break;
-        case 4 :
-            result.x+=4;
-            result.y-=5;
-            break;
+            case 1 : result.adjust(1,0); break;
+            case 2 : result.adjust(1, -5); break;
+            case 3 : result.adjust(4,0); break;
+            case 4 : result.adjust(4,-5); break;
+            default : break;
         }
         break;
     case 5 :
         switch(termNum)
         {
-        case 1 :
-            result.x+=1;
-            result.y-=5;
-            break;
-        case 2 :
-            result.x+=1;
-            result.y-=0;
-            break;
+            case 1 : result.adjust(1,-5); break;
+            case 2 : result.adjust(1, 0); break;
+            default : break;
         }
+        break;
+    case 6 :
+        switch(termNum)
+    {
+        case 1 : result.adjust(1,0); break;
+        case 2 : result.adjust(1, -5); break;
+        default : break;
+    }
         break;
     default : break;
     }
@@ -277,7 +234,7 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
 }
 
 
-void updateCellsX(std::vector<cell> &cellData, coord XY)
+void updateRight(std::vector<cell> &cellData, coord XY)
 {
     for (size_t i=0; i<cellData.size(); i++)
     {

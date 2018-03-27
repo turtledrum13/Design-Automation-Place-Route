@@ -85,6 +85,7 @@ int terminalOffset(int terminal, int rotation)
                 case 2 : offset = -5; break;
                 case 3 : offset = 0; break;
                 case 4 : offset = 0; break;
+                default : break;
             }
             break;
             
@@ -95,6 +96,7 @@ int terminalOffset(int terminal, int rotation)
                 case 2 : offset = 0; break;
                 case 3 : offset = -5; break;
                 case 4 : offset = 0; break;
+                default : break;
             }
             break;
             
@@ -105,6 +107,7 @@ int terminalOffset(int terminal, int rotation)
                 case 2 : offset = 0; break;
                 case 3 : offset = -5; break;
                 case 4 : offset = -5; break;
+                default : break;
             }
             break;
             
@@ -115,13 +118,28 @@ int terminalOffset(int terminal, int rotation)
                 case 2 : offset = -5; break;
                 case 3 : offset = 0; break;
                 case 4 : offset = -5; break;
+                default : break;
             }
+            break;
+            
         case 5 :
             switch(terminal)
-        {
-            case 1 : offset = -5; break;
-            case 2 : offset = 0; break;
-        }
+            {
+                case 1 : offset = -5; break;
+                case 2 : offset = 0; break;
+                default : break;
+            }
+            break;
+            
+        case 6 :
+            switch(terminal)
+            {
+                case 1 : offset = 0; break;
+                case 2 : offset = -5; break;
+                default : break;
+            }
+            break;
+            
         default : break;
     }
 
@@ -137,8 +155,6 @@ void isGlobal(std::vector<std::pair<int,int> > channels, net & netPair, std::vec
     cell cellB = cellData[netPair.c2.first];
     int termB = netPair.c2.second;
     
-    //printf("<%i,%i> <%i,%i>  ",cellA.cell, termA, cellB.cell, termB);
-
     //find boundary lines each terminal falls on
     int boundaryA = cellA.y + terminalOffset(termA, cellA.r);
     int boundaryB = cellB.y + terminalOffset(termB, cellB.r);
@@ -147,7 +163,6 @@ void isGlobal(std::vector<std::pair<int,int> > channels, net & netPair, std::vec
     if (abs(boundaryA-boundaryB) < 3)
     {
         netPair.global = false;
-        //printf("channel\n");
         
         for (int j=0; j<channels.size(); j++)
         {
@@ -162,7 +177,7 @@ void isGlobal(std::vector<std::pair<int,int> > channels, net & netPair, std::vec
     else
     {
         netPair.global = true;
-        //printf("global\n");
+        
     }
 }
 

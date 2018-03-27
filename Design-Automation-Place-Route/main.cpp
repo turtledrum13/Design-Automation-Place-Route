@@ -118,8 +118,9 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     //First: Global Routing
     classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs, boundaries, channels);
-
+    
     std::cout<<"\nnets classified\n";
+    
     global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
 
 
