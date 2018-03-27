@@ -42,6 +42,8 @@ public:
     void unlockD(std::vector<dValues> &D);
 
     int getWeight(int num);
+
+    int findHead();
 };
 
 #endif

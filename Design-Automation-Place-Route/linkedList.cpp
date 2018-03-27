@@ -79,7 +79,7 @@ void numberList::updateSame(int a, bool var)
     {
         if (newNode->value == a)
         {
-        newNode->same = var;
+            newNode->same = var;
         }
         newNode=newNode->next;
     }
@@ -145,4 +145,12 @@ int numberList::getWeight(int num)
         newNode=newNode->next;
     }
     return 0;
+}
+
+int numberList::findHead()
+{
+    listNode *newNode = new listNode;
+    newNode = head;
+
+    return newNode->value;
 }
