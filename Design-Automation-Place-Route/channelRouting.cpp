@@ -17,16 +17,13 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 {
     //Construct vector for each boundary in the channel
 
-    struct chan
-    {
-        std::vector<int> top, bottom;
-    };
-    
-    chan dummy_chan;
-    dummy_chan.top.resize(layout[0].size(), 0);
-    dummy_chan.bottom.resize(layout[0].size(), 0);
 
-    std::vector<chan> channelVec (channels.size(), dummy_chan);
+
+    chan dummy;
+    dummy.top.resize(layout[0].size(), 0);
+    dummy.bottom.resize(layout[0].size(), 0);
+
+    std::vector<chan> channelVec(channels.size(), dummy);
 
     std::cout << channelVec.size() << std::endl;
     std::vector<int> netID (channels.size(),1);
@@ -40,7 +37,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 
         coord srcBound = terminalCoords(netlistPairs[i].c1, cellData);
         coord destBound = terminalCoords(netlistPairs[i].c2, cellData);
-        
+
         //enter the source terminal into the appropriate boundary vector
         if(srcBound.y == boundTop)
         {
@@ -50,7 +47,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         {
             channelVec[index].bottom[srcBound.x] = netID[index];
         }
-        
+
 //        //enter the destination terminal into the appropriate boundary vector
 //        if(destBound.y == boundTop)
 //        {
@@ -60,12 +57,12 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 //        {
 //            channelVec[index].bottom[destBound.x] = netID[index];
 //        }
-        
+
         netID[index]++;
     }
-    
+
     printf("max channel: %i\n",maxChannel);
-    
+
     printf("netID:\n");
     for(size_t i=0; i<netID.size(); i++)
     {
@@ -74,7 +71,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
     printf("\n\n");
 
 
-    
+
     for(size_t i=0; i<channelVec.size(); i++)
     {
         for(size_t j=0; j<channelVec[i].top.size(); j++)
@@ -88,27 +85,27 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         }
         printf("\n\n\n\n");
     }
-    
-    
+
+
     //For each channel
     for(size_t i=0; i<channelVec.size(); i++)
     {
-        
-        
+
+
         //make room for the first track
         //if (addTrack(2, (bound1+bound2)/2, cellData, layout);
-        
+
         //Loop through boundary vectors to create HCG (undirected graph)
-        
+
         //Loop through boundary vectors to create VCG (directed graph)
-        
+
         //Perform left-edge routing with dogleg
         //Loop through HCG --> VCG
             //maintain current track # (initialized to the row between the channel indeces)
             //update net.placed as you go and delete nodes from the graphs
             //addTrack(2, currentTrack, cellData, layout); (only as necessary)
         //when HCG and VCG are through, exit loop
-        
+
         //increment channel
 
     }

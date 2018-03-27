@@ -37,4 +37,9 @@ struct coord
     int x, y;
 };
 
+    struct chan
+    {
+        std::vector<int> top, bottom;
+    };
+
 #endif /* structures_h */
