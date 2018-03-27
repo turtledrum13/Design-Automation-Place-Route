@@ -20,7 +20,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
     dummy.top.resize(layout[0].size(), 0);
     dummy.bottom.resize(layout[0].size(), 0);
 
-    std::vector<chan> channelVec(channels.size(), dummy);
+    std::vector<chan> channelVec (channels.size(), dummy);
 
     std::cout << channelVec.size() << std::endl;
     std::vector<int> netID (channels.size(),1);
@@ -42,7 +42,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         {
             channelVec[index].bottom[srcBound.x] = netID[index];
         }
-        
+
         //enter the destination terminal into the appropriate boundary vector
         if(destBound.y == boundTop)
         {
@@ -52,11 +52,11 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         {
             channelVec[index].bottom[destBound.x] = netID[index];
         }
-        
+
         netID[index]++;
     }
-    
-    
+
+
     printf("\nnetID:\n");
     for(size_t i=0; i<netID.size(); i++)
     {
@@ -125,30 +125,19 @@ void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<
     //might need to update layout things as well?? - probably not
 }
 
-std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int> bottom)
-{
-    std::vector<numberList> graph;
-    
-    //make head nodes
-    for(size_t i=0; i<bottom.size(); i++)
+std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int>)
     {
-        if(bottom[i] > 0)
-        {
-            numberList dummy;
-            graph.push_back(dummy);
-            graph[graph.size()-1].appendNode(bottom[i]);
-        }
-    }
-    
+
     //check for horizontal constraints and appending to each other if detected
+    //scan through top and bottom simultaneously. If on some index number there is a top and a bottom both greater than 0, then append the bottom to the top's list
     //if any other IDs are at position equal to or within the focused one, add it to each other's list
     for(size_t i=0; i<numNets; i++)
     {
         int currentNet = graph[i].findHead(); //graph[i].getHead() //net of focus is the head of the
-        
+
         for(size_t j=0; j<bottom.size(); j++)
         {
-            
+
             size_t first = 0, last = 0;
             if(first == 0)
             {
@@ -165,7 +154,7 @@ std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int> 
                     }
                 }
             }
-            
+
             if(first != 0 && last == 0)
             {
                 if(top[j] > 0 || bottom[j] > 0)
@@ -180,11 +169,30 @@ std::vector<numberList> HCG(int numNets, std::vector<int> top, std::vector<int> 
                     
                 }
             }
-            
-            
-            
+
+
+
         }
     }
-    
+
+    return graph;
+}
+
+std::vector<numberList> VCG(int numNets, std::vector<int> top, std::vector<int> bottom)
+{
+    std::vector<numberList> graph(numNets);
+
+    //make head nodes
+    for(size_t i=0; i<top.size(); i++)
+    {
+        if(top[i] > 0 && bottom[i] > 0)
+        {
+            graph[top[i]].appendNode(bottom[i]);
+        }
+    }
+    //check for horizontal constraints and appending to each other if detected
+    //scan through top and bottom simultaneously. If on some index number there is a top and a bottom both greater than 0, then append the bottom to the top's list
+
+
     return graph;
 }
