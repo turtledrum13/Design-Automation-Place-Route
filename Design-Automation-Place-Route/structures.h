@@ -30,6 +30,21 @@ struct net
     bool placed;                //whether the net has been placed yet or not
     bool global;                //true if net needs to be routed globally
     int channel;                //channel number if channel routing is possible
+    std::pair<int,int> span;    //beginning column and end column of the net's trunk
+    
+    void setSpan(int srcX, int destX)
+    {
+        if(srcX <= destX)
+        {
+            span.first = srcX;
+            span.second = destX;
+        }
+        else
+        {
+            span.first = destX;
+            span.second = srcX;
+        }
+    }
 };
 
 struct coord
@@ -50,7 +65,7 @@ struct coord
 
 struct chan
 {
-    std::vector<int> top, bottom;
+    std::vector<int> top, bottom, netPointer;
     size_t width;
     int numNets;
     
