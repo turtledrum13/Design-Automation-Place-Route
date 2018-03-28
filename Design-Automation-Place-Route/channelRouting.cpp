@@ -11,6 +11,7 @@
 #include "globalRouting.hpp"
 #include "structures.h"
 #include <stdio.h>
+#include <algorithm>
 #include "lin.h"
 
 
@@ -149,7 +150,7 @@ void updateBelow(int numRows, int atRow, std::vector<cell> & cellData, std::vect
             cellData[i].y += numRows;
         }
     }
-    
+
     for (size_t j=0; j<boundaries.size(); j++)
     {
         if (boundaries[j] >= atRow)
@@ -157,7 +158,7 @@ void updateBelow(int numRows, int atRow, std::vector<cell> & cellData, std::vect
             boundaries[j] += numRows;
         }
     }
-    
+
     for (size_t k=0; k<channels.size(); k++)
     {
         if (channels[k].second >= atRow)
@@ -191,6 +192,10 @@ std::vector<numberList> makeHCG(chan C, std::vector<net> & netlistPairs)
         
         index1 = netlistPairs[C.netPointer[i]].span.first;
         index2 = netlistPairs[C.netPointer[i]].span.second;
+
+        indexPairs[i].x = index1;
+        indexPairs[i].y = index2;
+        indexPairs[i].net = i+1;
 
         for (int j=index1; j<index2+1; j++)
         {
@@ -251,22 +256,27 @@ std::vector<numberList> makeVCG(chan C)
         {
             if(0 < i &&< C.width-1)
             {
-                if(C.bottom[i-1] > 0) graph[C.top[i]].appendNode(C.bottom[i-1]);
-                if(C.bottom[i] > 0) graph[C.top[i]].appendNode(C.bottom[i]);
-                if(C.bottom[i+1] > 0) graph[C.top[i]].appendNode(C.bottom[i+1]);
+                if(C.bottom[i-1] > 0) graph[C.top[i]-1].appendNode(C.bottom[i-1]);
+                if(C.bottom[i] > 0) graph[C.top[i]-1].appendNode(C.bottom[i]);
+                if(C.bottom[i+1] > 0) graph[C.top[i]-1].appendNode(C.bottom[i+1]);
             }
             else if (i == 0)
             {
-                if(C.bottom[i] > 0) graph[C.top[i]].appendNode(C.bottom[i]);
-                if(C.bottom[i+1] > 0) graph[C.top[i]].appendNode(C.bottom[i+1]);
+                if(C.bottom[i] > 0) graph[C.top[i]-1].appendNode(C.bottom[i]);
+                if(C.bottom[i+1] > 0) graph[C.top[i]-1].appendNode(C.bottom[i+1]);
             }
             else
             {
-                if(C.bottom[i-1] > 0) graph[C.top[i]].appendNode(C.bottom[i-1]);
-                if(C.bottom[i] > 0) graph[C.top[i]].appendNode(C.bottom[i]);
+                if(C.bottom[i-1] > 0) graph[C.top[i]-1].appendNode(C.bottom[i-1]);
+                if(C.bottom[i] > 0) graph[C.top[i]-1].appendNode(C.bottom[i]);
             }
         }
     }
 
     return graph;
+}
+
+bool netCompare(netPos a, netPos b)
+{
+    return a.x < b.x;
 }

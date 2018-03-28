@@ -50,7 +50,7 @@ struct net
 struct coord
 {
     int x, y;
-    
+
     coord(int X, int Y)
     {
         x = X;
@@ -68,13 +68,19 @@ struct chan
     std::vector<int> top, bottom, netPointer;
     size_t width;
     int numNets;
-    
+
     chan(size_t chanWidth, int initVal)
     {
         top.resize(chanWidth, initVal);
         bottom.resize(chanWidth, initVal);
         width = chanWidth;
     }
+};
+
+struct netPos
+{
+  int x, y, net, track;
+  bool placed;
 };
 
 #endif /* structures_h */
