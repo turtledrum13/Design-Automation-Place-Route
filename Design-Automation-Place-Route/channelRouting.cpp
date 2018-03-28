@@ -249,7 +249,7 @@ std::vector<numberList> makeVCG(chan C)
     {
         if(C.top[i] > 0)
         {
-            if(0 < i && i < C.width-1)
+            if(0 < i &&< C.width-1)
             {
                 if(C.bottom[i-1] > 0) graph[C.top[i]].appendNode(C.bottom[i-1]);
                 if(C.bottom[i] > 0) graph[C.top[i]].appendNode(C.bottom[i]);
