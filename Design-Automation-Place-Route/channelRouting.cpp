@@ -31,23 +31,23 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         int boundBottom = channels[chanIndex].second;
 
         netID[chanIndex]++;
-        
+
         coord srcTerm = terminalCoords(netlistPairs[i].src, cellData);
         coord destTerm = terminalCoords(netlistPairs[i].dest, cellData);
-        
+
         netlistPairs[i].setSpan(srcTerm.x, destTerm.x);
         channelVec[chanIndex].netPointer.push_back(i);
 
         //enter the source terminal into the appropriate boundary vector
         if(srcTerm.y == boundTop)  channelVec[chanIndex].top[srcTerm.x] = netID[chanIndex];
         else if(srcTerm.y == boundBottom)  channelVec[chanIndex].bottom[srcTerm.x] = netID[chanIndex];
-        
+
         //enter the destination terminal into the appropriate boundary vector
         if(destTerm.y == boundTop)  channelVec[chanIndex].top[destTerm.x] = netID[chanIndex];
         else if(destTerm.y == boundBottom)  channelVec[chanIndex].bottom[destTerm.x] = netID[chanIndex];
     }
-    
-    
+
+
     printf("number of nets by channel:\n");
     for(size_t i=0; i<netID.size(); i++)
     {
@@ -61,7 +61,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
     ///////////////////////////////////////////////
     //For each of the channels in layout....///////
     ///////////////////////////////////////////////
-    
+
     for(size_t N=0; N<channelVec.size(); N++)
     {
         printf("\n\nCHANNEL %i\n\n",N+1);
@@ -161,21 +161,21 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         }
 
         ////////////////BLAKES NEW CODE///////////////////
-        
+
         ////////////////AARONS NEW CODE///////////////////
         int atRow = channels[N].first;
         int netsRemaining = channelVec[N].numNets;
         int previousPlacement;
-        
+
         while(netsRemaining > 0)
         {
             addTrack(2, atRow, cellData, layout, boundaries, channels);
             previousPlacement = 0;
-            
+
             for(size_t i=0; i<HCG.size(); i++)
             {
                 net& currentNet = netlistPairs[channelVec[N].netPointer[i]];
-                
+
                 if(!currentNet.placed)
                 {
                     if(!HCG[i].findVal(previousPlacement)) //&& VCG[i].isEmpty())//not connected to previousPlacement in HCG and no VCG constraint
@@ -257,18 +257,18 @@ std::vector<numberList> makeHCG(chan C, std::vector<net> & netlistPairs, std::ve
     for(int i=0; i<C.numNets; i++)
     {
         graph[i].appendNode(i+1); //create a vector of list heads in number order
-        
+
         x1 = netlistPairs[C.netPointer[i]].x1;
         x2 = netlistPairs[C.netPointer[i]].x2;
-        
-        
+
+
         ////////////////BLAKES NEW CODE///////////////////
         indexPairs[i].x = x1;
         indexPairs[i].y = x2;
         indexPairs[i].net = i+1;
         ////////////////BLAKES NEW CODE///////////////////
 
-        
+
         for(size_t j = x1; j<x2+1; j++)
         {
             netGraph[j].push_back(i+1);
@@ -342,7 +342,7 @@ std::vector<numberList> makeVCG(chan C)
                 if(C.bottom[i-1] > 0) graph[C.top[i]-1].appendNode(C.bottom[i-1]);
                 if(C.bottom[i] > 0) graph[C.top[i]-1].appendNode(C.bottom[i]);
             }*/
-            graph[C.top[i]-1].appendNode(C.bottom[i]);
+            if(C.bottom[i] > 0) graph[C.top[i]-1].appendNode(C.bottom[i]);
         }
     }
 
