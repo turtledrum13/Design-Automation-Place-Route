@@ -71,8 +71,9 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         std::vector<netPos> indexPairs(channelVec[N].numNets);
 
         HCG = makeHCG(channelVec[N], netlistPairs, indexPairs);
-        
-        
+
+
+
         std::cout << "\nHorizontal Constraint Graph:\n\n";
 
         for(size_t i=0; i<HCG.size(); i++)
@@ -110,9 +111,8 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         }
 
         std::cout << "\n\n\n\n";
-        
-        
-        
+
+
         ////////////////BLAKES NEW CODE///////////////////
         for (int i=0; i< indexPairs.size(); i++)
         {
@@ -159,6 +159,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         {
             std::cout<<indexPairs[i].track<<"\n";
         }
+
         ////////////////BLAKES NEW CODE///////////////////
         
         ////////////////AARONS NEW CODE///////////////////
@@ -189,8 +190,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         }
         ////////////////AARONS NEW CODE///////////////////
 
-        
-        
+
         //Perform left-edge routing (with dogleg later)
         //Loop through HCG --> VCG
         //maintain current track # (initialized to the row between the channel indeces)
@@ -376,6 +376,7 @@ bool noConstraints(std::vector<numberList> &VCG, int num, std::vector<netPos> & 
     }
     return true;
 }
+
 
 
 

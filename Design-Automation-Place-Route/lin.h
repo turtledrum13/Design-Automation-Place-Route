@@ -10,12 +10,12 @@ private:
     //creating a structure for the list
     struct listNode
     {
-        int value;		//the value in this node
+        int value;        //the value in this node
         int weight;     //the edge weight of the node
         bool same;      //whether the cells in this node are in the same partition or not
-        listNode *next;	//to point to the next node
+        listNode *next;    //to point to the next node
     };
-    listNode *head, *tail;	//list head and tail pointer
+    listNode *head, *tail;    //list head and tail pointer
 
 public:
     //constructor
@@ -50,7 +50,6 @@ public:
     bool isEmpty();
     
     bool findVal(int val);
-
 
     bool isFree(int num);
 
