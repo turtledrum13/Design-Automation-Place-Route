@@ -30,10 +30,13 @@ struct net
     bool placed;                    //whether the net has been placed yet or not
     bool global;                    //true if net needs to be routed globally
     int channel;                    //channel number if channel routing is possible
-    int x1, x2;                     //beginning column and end column of the net's trunk
+    int x1, x2, xSrc, xDest, y;     //beginning column and end column of the net's trunk, row of trunk
     
     void setSpan(int srcX, int destX)
     {
+        xSrc = srcX;
+        xDest = destX;
+        
         if(srcX <= destX)
         {
             x1 = srcX;

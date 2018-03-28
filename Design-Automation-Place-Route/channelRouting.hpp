@@ -17,15 +17,15 @@
 
 void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<net> & netlistPairs, std::vector<std::pair <int,int> > channels, std::vector<int> boundaries);
 
-void updateBelow(int numRows, int atRow, std::vector<cell> & cellData, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels);
+void updateBelow(int numRows, int atRow, std::vector<cell> & cellData, std::vector<net> & netlistPairs, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels);
 
-void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels);
+void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<net> & netlistPairs, std::vector<std::vector<int> > & layout, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels);
 
 std::vector<numberList> makeHCG(chan C, std::vector<net> & netlistPairs, std::vector<netPos> & indexPairs);
 
 std::vector<numberList> makeVCG(chan C);
 
-void removeChild(int netNum, numberList HCG, numberList& VCG);
+void removeChild(int netNum, std::vector<numberList>& HCG, std::vector<numberList>& VCG);
 
 bool netCompare(netPos a, netPos b);
 

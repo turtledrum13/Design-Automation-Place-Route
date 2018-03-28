@@ -14,13 +14,18 @@
 #include "structures.h"
 
 
-void makeCell(cell C, std::vector<std::vector<int> > & layout);
+void makeCell(cell C, std::vector<std::vector<int> >& layout);
 
-void makeTrunk(net & N, int atRow, std::vector<std::vector<int> > & layout);
+void makeTrunk(net& N, int atRow, std::vector<std::vector<int> >& layout);
+
+void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, std::vector<std::vector<int> >& layout);
 
 void addRows(int numRows, int atRow, std::vector<std::vector<int> > & layout);
 
-void addCols(int numCols, std::vector<std::vector<int> > & layout);
+void appendCols(int numCols, std::vector<std::vector<int> >& layout);
+
+void appendRows(int numRows, std::vector<std::vector<int> >& layout);
+
 
 void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells);
 void funct4(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells);

@@ -47,9 +47,13 @@ public:
 
     bool notEmpty();
     
-    bool isEmpty();
+    bool isEmpty(int self);
     
     bool findVal(int val);
+    
+    std::vector<int> returnList();
+    
+    void removeAll(int num);
 
     bool isFree(int num);
 

@@ -7,6 +7,7 @@
 //
 
 #include "layoutOperations.hpp"
+#include "classifyNets.hpp"
 #include <vector>
 #include <iostream>
 #include <cmath>
@@ -49,8 +50,51 @@ void makeTrunk(net & N, int atRow, std::vector<std::vector<int> > & layout)
     {
         layout[atRow][i] = 7;
     }
+    N.y = atRow;
     N.placed = true;
 }
+
+void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, std::vector<std::vector<int> >& layout)
+{
+    int yTrunk, ySrc, yDest, xSrc, xDest, iSrc, iDest;
+    
+    for(size_t i=0; i<netlistPairs.size(); i++)
+    {
+        net& currentNet = netlistPairs[i];
+        cell&  cellSrc = cellData[currentNet.src.first];
+        cell&  cellDest = cellData[currentNet.dest.first];
+        
+        yTrunk = currentNet.y;
+        ySrc = cellSrc.y + terminalOffset(currentNet.src.second, cellSrc.r);
+        yDest = cellDest.y + terminalOffset(currentNet.dest.second, cellDest.r);
+        xSrc = currentNet.xSrc;
+        xDest = currentNet.xDest;
+        iSrc=0;
+        iDest=0;
+        
+        while(yTrunk+iSrc != ySrc)
+        {
+            layout[yTrunk+iSrc][xSrc] = 8; //draw metal 2 onto layout;
+            
+            if(yTrunk<ySrc) iSrc++;
+            else iSrc--;
+        }
+        
+        while(yTrunk+iDest != yDest)
+        {
+            layout[yTrunk+iDest][xDest] = 8; //draw metal 2 onto layout;
+            
+            if(yTrunk<yDest) iDest++;
+            else iDest--;
+        }
+        
+        //draw via at intersections of metal 1 and metal 2
+        layout[yTrunk][xSrc] = 9;
+        layout[yTrunk][xDest] = 9;
+    }
+}
+
+
 
 void addRows(int numRows, int atRow, std::vector<std::vector<int> > & layout)
 {
@@ -63,7 +107,7 @@ void addRows(int numRows, int atRow, std::vector<std::vector<int> > & layout)
     }
 }
 
-void addCols(int numCols, std::vector<std::vector<int> > & layout)
+void appendCols(int numCols, std::vector<std::vector<int> > & layout)
 {
     for (int i=0; i<numCols; i++)
     {
@@ -73,6 +117,17 @@ void addCols(int numCols, std::vector<std::vector<int> > & layout)
         }
     }
 }
+
+void appendRows(int numCols, std::vector<std::vector<int> > & layout)
+{
+    std::vector<int> dummyRow (layout[0].size(), 0);
+    
+    for (int i=0; i<numCols; i++)
+    {
+        layout.push_back(dummyRow);
+    }
+}
+
 
 void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {

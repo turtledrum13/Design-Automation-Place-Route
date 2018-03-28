@@ -266,7 +266,7 @@ void updateLayout(coord XY, std::vector<std::vector<int> > &layout, int cellNum)
     }
 
     //expand columns as much as necessary
-    addCols(expansion, layout);
+    appendCols(expansion, layout);
     
     //chop the nub
     for(int i=0; i<6; i++)

@@ -171,19 +171,32 @@ bool numberList::notEmpty()
     }
 }
 
-bool numberList::isEmpty()
+bool numberList::isEmpty(int self)
 {
     listNode *newNode = new listNode;
     newNode = head;
     
-    if (newNode==NULL)
+    while(newNode != NULL)
     {
-        return true;
+        if(newNode->value != self)
+        {
+            printf("\n\nfound something!!! %i - %i", self, newNode->value);
+            return false;
+        }
+        else
+        {
+            newNode = newNode->next;
+        }
     }
-    else
-    {
-        return false;
-    }
+    return true;
+//    if (newNode==NULL)
+//    {
+//        return true;
+//    }
+//    else
+//    {
+//        return false; //change back to false after implementing dogleg
+//    }
 }
 
 bool numberList::findVal(int val)
@@ -205,6 +218,51 @@ bool numberList::findVal(int val)
     return false;
 }
 
+std::vector<int> numberList::returnList()
+{
+    listNode *newNode = new listNode;
+    newNode = head;
+    std::vector<int> list;
+    
+    while(newNode!=NULL)
+    {
+        list.push_back(newNode->value);
+        newNode = newNode->next;
+    }
+        
+    return list;
+}
+
+void numberList::removeAll(int num)
+{
+    listNode *currentNode = head;
+    listNode *previousNode = NULL;
+
+    while(currentNode!=NULL)
+    {
+        if(currentNode->value == num)
+        {
+            if(currentNode == head)
+            {
+                head = head->next;
+                free(currentNode);
+                currentNode = head;
+            }
+            else
+            {
+                previousNode->next = currentNode->next;
+                free(currentNode);
+                currentNode = previousNode->next;
+            }
+        }
+        else
+        {
+            previousNode = currentNode;
+            currentNode = currentNode->next;
+        }
+    }
+}
+
 
 bool numberList::isFree(int num)
 {
@@ -223,6 +281,5 @@ bool numberList::isFree(int num)
         }
     }
     return true;
-    
 }
 
