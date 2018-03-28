@@ -21,9 +21,10 @@ void updateBelow(int numRows, int atRow, std::vector<cell> & cellData, std::vect
 
 void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels);
 
-std::vector<numberList> makeHCG(chan C);
+std::vector<numberList> makeHCG(chan C, std::vector<netPos> &indexPairs);
 
 std::vector<numberList> makeVCG(chan C);
 
+bool netCompare(netPos a, netPos b);
 
 #endif /* channelRouting_hpp */

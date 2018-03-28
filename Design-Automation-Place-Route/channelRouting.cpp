@@ -11,6 +11,7 @@
 #include "globalRouting.hpp"
 #include "structures.h"
 #include <stdio.h>
+#include <algorithm>
 #include "lin.h"
 
 
@@ -92,7 +93,8 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 
         //Loop through boundary vectors to create HCG (undirected graph)
         std::vector<numberList> HCG;
-        HCG = makeHCG(channelVec[N]);
+        std::vector<netPos> indexPairs(channelVec[N].numNets);
+        HCG = makeHCG(channelVec[N], indexPairs);
 
 
 
@@ -102,10 +104,49 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 
         for(size_t i=0; i<VCG.size(); i++)
         {
-            std::cout<<i+1<<"-->";
-            VCG[i].display();
+            HCG[i].display();
             std::cout << "\n\n";
         }
+
+        for (int i=0; i< indexPairs.size(); i++)
+        {
+            indexPairs[i].placed = false;
+        }
+
+        int watermark = 0, track = 0;
+        std::sort(indexPairs.begin(), indexPairs.end(), netCompare);
+
+        while (true)
+        {
+            track += 1;
+            watermark = 0;
+
+            for (int i=0; i<indexPairs.size();i++)
+            {
+                if (indexPairs[i].x > watermark && indexPairs[i].placed == false)
+                {
+                    indexPairs[i].track = track;
+                    indexPairs[i].placed = true;
+                    watermark = indexPairs[i].y;
+                }
+            }
+
+            if (watermark==0)
+            {
+                break;
+            }
+        }
+
+        for (int i=0;i<indexPairs.size();i++)
+        {
+            std::cout<<indexPairs[i].track<<"\n";
+        }
+
+
+
+
+
+
 
         //Perform left-edge routing (with dogleg later)
         //Loop through HCG --> VCG
@@ -161,7 +202,7 @@ void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<
 }
 
 
-std::vector<numberList> makeHCG(chan C)
+std::vector<numberList> makeHCG(chan C, std::vector<netPos> &indexPairs)
 {
     std::vector<std::vector<int> > netGraph(C.bottom.size());
     std::vector<numberList> graph(C.numNets);
@@ -205,6 +246,10 @@ std::vector<numberList> makeHCG(chan C)
                 }
             }
         }
+
+        indexPairs[i].x = index1;
+        indexPairs[i].y = index2;
+        indexPairs[i].net = i+1;
 
         for (int j=index1; j<index2+1; j++)
         {
@@ -283,4 +328,9 @@ std::vector<numberList> makeVCG(chan C)
     }
 
     return graph;
+}
+
+bool netCompare(netPos a, netPos b)
+{
+    return a.x < b.x;
 }
