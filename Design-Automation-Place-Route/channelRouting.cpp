@@ -31,17 +31,17 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         int boundBottom = channels[chanIndex].second;
 
         netID[chanIndex]++;
-        
+
         coord srcTerm = terminalCoords(netlistPairs[i].src, cellData);
         coord destTerm = terminalCoords(netlistPairs[i].dest, cellData);
-        
+
         netlistPairs[i].setSpan(srcTerm.x, destTerm.x);
         channelVec[chanIndex].netPointer.push_back(i);
 
         //enter the source terminal into the appropriate boundary vector
         if(srcTerm.y == boundTop)  channelVec[chanIndex].top[srcTerm.x] = netID[chanIndex];
         else if(srcTerm.y == boundBottom)  channelVec[chanIndex].bottom[srcTerm.x] = netID[chanIndex];
-        
+
         //enter the destination terminal into the appropriate boundary vector
         if(destTerm.y == boundTop)  channelVec[chanIndex].top[destTerm.x] = netID[chanIndex];
         else if(destTerm.y == boundBottom)  channelVec[chanIndex].bottom[destTerm.x] = netID[chanIndex];
@@ -55,7 +55,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
     ///////////////////////////////////////////////
     //For each of the channels in layout....///////
     ///////////////////////////////////////////////
-    
+
     for(size_t N=0; N<channelVec.size(); N++)
     {
         printf("\n\n\n");
@@ -135,7 +135,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         {
             addTrack(2, atRow, cellData, netlistPairs, layout, boundaries, channels);
             previousPlacement = 0;
-            
+
             for(size_t i=0; i<HCG.size(); i++)
             {
                 net& currentNet = netlistPairs[channelVec[N].netPointer[i]];
@@ -256,7 +256,7 @@ std::vector<numberList> makeHCG(chan C, std::vector<net> & netlistPairs, std::ve
     for(int i=0; i<C.numNets; i++)
     {
         graph[i].appendNode(i+1); //create a vector of list heads in number order
-        
+
         x1 = netlistPairs[C.netPointer[i]].x1;
         x2 = netlistPairs[C.netPointer[i]].x2;
         
@@ -269,7 +269,7 @@ std::vector<numberList> makeHCG(chan C, std::vector<net> & netlistPairs, std::ve
         indexPairs[i].net = i+1;
         ////////////////BLAKES NEW CODE///////////////////
 
-        
+
         for(size_t j = x1; j<x2+1; j++)
         {
             netGraph[j].push_back(i+1);
