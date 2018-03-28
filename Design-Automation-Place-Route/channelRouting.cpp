@@ -29,6 +29,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         int chanIndex = netlistPairs[i].channel;
         int boundTop = channels[chanIndex].first;
         int boundBottom = channels[chanIndex].second;
+        bool cycle = false;
 
         netID[chanIndex]++;
 
@@ -65,6 +66,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         int atRow = channels[N].first;
         int netsRemaining = channelVec[N].numNets;
         int previousPlacement;
+        bool cycle = false;
         
         //if the bottom channel has nets in it, create space to insert tracks via normal method
         if(N==0)
@@ -133,8 +135,25 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         ////////////////AARONS NEW CODE///////////////////
         while(netsRemaining > 0)
         {
-            addTrack(2, atRow, cellData, netlistPairs, layout, boundaries, channels);
-            previousPlacement = 0;
+            if(!cycle)
+            {
+                addTrack(2, atRow, cellData, netlistPairs, layout, boundaries, channels);
+                previousPlacement = 0;
+            }
+            else
+            {
+                for(size_t i=0; i<HCG.size(); i++)
+                {
+                    net& currentNet = netlistPairs[channelVec[N].netPointer[i]];
+                    if(!currentNet.placed)
+                    {
+                        currentNet.placed = true; //split the first unrouted net in HCG
+                        netsRemaining --;
+                    }
+                }
+            }
+            
+            cycle = true; //assume cycle is true before scanning HCG (which could prove this assumption false)
 
             for(size_t i=0; i<HCG.size(); i++)
             {
@@ -149,6 +168,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
                     removeChild(i, HCG, VCG);
                     previousPlacement = ID;
                     netsRemaining--;
+                    cycle = false;
                 }
             }
         }
