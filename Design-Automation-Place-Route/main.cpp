@@ -48,8 +48,8 @@ int main()        //use argc and argv to pass command prompt arguments to main()
             netlist.push_back(netPair2);
 
             net newNet;             //net structure which contains two pairs (cell, terminal) and (cell, terminal), net number, placed/not
-            newNet.c1 = netPair1;
-            newNet.c2 = netPair2;
+            newNet.src = netPair1;
+            newNet.dest = netPair2;
             newNet.num = n1;
             newNet.placed = false;
 

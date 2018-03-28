@@ -20,8 +20,8 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
     {
         if(netlistPairs[i].global)
         {
-            coord source = terminalCoords(netlistPairs[i].c1, cellData);
-            coord destination = terminalCoords(netlistPairs[i].c2, cellData);
+            coord source = terminalCoords(netlistPairs[i].src, cellData);
+            coord destination = terminalCoords(netlistPairs[i].dest, cellData);
             bool topTerminal;    //true if the pin of the pass-through cell that source is connecting to is on top
 
             //update the layout and cellData vector with new pass through cells
@@ -56,10 +56,10 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
 
             netlistPairs.push_back(netlistPairs[i]);    //copy the current netlist of focus to the end of the list
 
-            netlistPairs[i].c2 = srcNet;                //replace second cell with new pass through cell
+            netlistPairs[i].dest = srcNet;                //replace second cell with new pass through cell
             isGlobal(channels, netlistPairs[i], cellData);
 
-            netlistPairs.back().c1 = destNet;           //replace first cell with new pass through cell
+            netlistPairs.back().src = destNet;           //replace first cell with new pass through cell
             isGlobal(channels, netlistPairs.back(), cellData);
 
         }
@@ -254,7 +254,7 @@ void updateLayout(coord XY, std::vector<std::vector<int> > &layout, int cellNum)
     //insert pass through
     for(int i=0; i<6; i++)
     {
-        layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,3, cellNum);
+        layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,3, 5);
     }
     
     //check end of rows

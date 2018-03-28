@@ -33,7 +33,7 @@ void makeCell(cell C, std::vector<std::vector<int> > & layout)
         {
             for (int col=C.x; col<C.x+size; col++)
             {
-                layout[row][col] = C.cell;
+                layout[row][col] = C.r;
             }
         }
     }
@@ -43,7 +43,15 @@ void makeCell(cell C, std::vector<std::vector<int> > & layout)
     }
 }
 
-//layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,3, cellNum);
+void makeTrunk(net & N, int atRow, std::vector<std::vector<int> > & layout)
+{
+    for(int i=N.x1; i < N.x2+1; i++)
+    {
+        layout[atRow][i] = 7;
+    }
+    N.placed = true;
+}
+
 void addRows(int numRows, int atRow, std::vector<std::vector<int> > & layout)
 {
     for (int i=0; i<numRows; i++)

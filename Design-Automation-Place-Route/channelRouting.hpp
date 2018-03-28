@@ -25,6 +25,8 @@ std::vector<numberList> makeHCG(chan C, std::vector<net> & netlistPairs, std::ve
 
 std::vector<numberList> makeVCG(chan C);
 
+void removeChild(int netNum, numberList HCG, numberList& VCG);
+
 bool netCompare(netPos a, netPos b);
 
 #endif /* channelRouting_hpp */

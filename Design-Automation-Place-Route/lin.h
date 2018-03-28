@@ -46,6 +46,11 @@ public:
     int findHead();
     
     bool notEmpty();
+    
+    bool isEmpty();
+    
+    bool findVal(int val);
+
 
 };
 

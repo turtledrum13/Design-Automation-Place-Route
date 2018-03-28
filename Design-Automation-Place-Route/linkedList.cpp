@@ -108,7 +108,7 @@ int numberList::lookUp(int num) const
 
 void numberList::display()
 {
-    listNode *newNode=new listNode;
+    listNode *newNode= new listNode;
     newNode=head;
 
     while(newNode!=NULL)
@@ -168,4 +168,38 @@ bool numberList::notEmpty()
     {
         return true;
     }
+}
+
+bool numberList::isEmpty()
+{
+    listNode *newNode = new listNode;
+    newNode = head;
+    
+    if (newNode==NULL)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool numberList::findVal(int val)
+{
+    listNode *newNode = new listNode;
+    newNode = head;
+    
+    while(newNode!=NULL)
+    {
+        if (newNode->value==val)
+        {
+            return true;
+        }
+        else
+        {
+            newNode=newNode->next;
+        }
+    }
+    return false;
 }

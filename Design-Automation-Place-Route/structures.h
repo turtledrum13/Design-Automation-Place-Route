@@ -25,24 +25,24 @@ struct cell
 
 struct net
 {
-    std::pair<int,int> c1, c2;  //first and second cells connected by the net
-    int num;                    //net number
-    bool placed;                //whether the net has been placed yet or not
-    bool global;                //true if net needs to be routed globally
-    int channel;                //channel number if channel routing is possible
-    std::pair<int,int> span;    //beginning column and end column of the net's trunk
+    std::pair<int,int> src, dest;   //first and second cells connected by the net <cell,term>
+    int num;                        //net number
+    bool placed;                    //whether the net has been placed yet or not
+    bool global;                    //true if net needs to be routed globally
+    int channel;                    //channel number if channel routing is possible
+    int x1, x2;                     //beginning column and end column of the net's trunk
     
     void setSpan(int srcX, int destX)
     {
         if(srcX <= destX)
         {
-            span.first = srcX;
-            span.second = destX;
+            x1 = srcX;
+            x2 = destX;
         }
         else
         {
-            span.first = destX;
-            span.second = srcX;
+            x1 = destX;
+            x2 = srcX;
         }
     }
 };

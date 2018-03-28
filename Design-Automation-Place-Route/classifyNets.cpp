@@ -149,11 +149,11 @@ int terminalOffset(int terminal, int rotation)
 
 void isGlobal(std::vector<std::pair<int,int> > channels, net & netPair, std::vector<cell> cellData)
 {
-    cell cellA = cellData[netPair.c1.first];
-    int termA = netPair.c1.second;
+    cell cellA = cellData[netPair.src.first];
+    int termA = netPair.src.second;
     
-    cell cellB = cellData[netPair.c2.first];
-    int termB = netPair.c2.second;
+    cell cellB = cellData[netPair.dest.first];
+    int termB = netPair.dest.second;
     
     //find boundary lines each terminal falls on
     int boundaryA = cellA.y + terminalOffset(termA, cellA.r);

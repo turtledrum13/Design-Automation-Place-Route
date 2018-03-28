@@ -16,6 +16,8 @@
 
 void makeCell(cell C, std::vector<std::vector<int> > & layout);
 
+void makeTrunk(net & N, int atRow, std::vector<std::vector<int> > & layout);
+
 void addRows(int numRows, int atRow, std::vector<std::vector<int> > & layout);
 
 void addCols(int numCols, std::vector<std::vector<int> > & layout);
