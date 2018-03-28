@@ -112,6 +112,11 @@ void numberList::display()
     listNode *newNode= new listNode;
     newNode=head;
 
+    if(newNode == NULL)
+    {
+        std::cout<<"[empty]";
+    }
+    
     while(newNode!=NULL)
     {
         std::cout<<newNode->value<<"--> ";
@@ -180,7 +185,7 @@ bool numberList::isEmpty(int self)
     {
         if(newNode->value != self)
         {
-            printf("\n\nfound something!!! %i - %i", self, newNode->value);
+            printf("\n\nfound something!!! %i - %i\n", self, newNode->value);
             return false;
         }
         else

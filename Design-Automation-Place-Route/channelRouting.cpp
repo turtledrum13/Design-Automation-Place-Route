@@ -342,10 +342,6 @@ std::vector<numberList> makeHCG(chan C, std::vector<net> & netlistPairs, std::ve
 std::vector<numberList> makeVCG(chan C)
 {
     std::vector<numberList> graph(C.numNets);
-//    for(int i=0; i<C.numNets; i++)
-//    {
-//        graph[i].appendNode(i+1);
-//    }
 
     for(size_t i=0; i<C.width; i++)
     {
@@ -396,16 +392,19 @@ void removeChild(int netNum, std::vector<numberList>& HCG, std::vector<numberLis
 {
     std::vector<int> connections = HCG[netNum].returnList();
     
+    printf("Removed  ");
     for(size_t i=0; i<connections.size(); i++)
     {
-        printf("%i->%i   ",connections[i], HCG[netNum].findHead());
+        printf("%i from VCG[%i],  ",HCG[netNum].findHead(), connections[i]);
         VCG[connections[i]-1].removeAll(HCG[netNum].findHead());
-        printf("\n");
-        VCG[connections[i]-1].display();
+//        printf("\n");
+//        VCG[connections[i]-1].display();
+//        printf("\n\n");
     }
     
     printf("\n");
 }
+
 
 bool netCompare(netPos a, netPos b)
 {
