@@ -50,6 +50,7 @@ bool numberList::weightChange(int num)
 }
 
 
+
 void numberList::updateDValue(std::vector<dValues> &D, const numberList &cellList, int bValue)
 {
     listNode *newNode=new listNode;

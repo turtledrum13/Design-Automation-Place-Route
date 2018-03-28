@@ -21,15 +21,15 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
     //Construct vector for each boundary in the channel
     size_t width = layout[0].size();
     std::vector<chan> channelVec (channels.size(), chan(width, 0));
-    
+
     std::vector<int> netID (channels.size(),0);
-    
+
     for(size_t i=0; i<netlistPairs.size(); i++)
     {
         int chanIndex = netlistPairs[i].channel;
         int boundTop = channels[chanIndex].first;
         int boundBottom = channels[chanIndex].second;
-        
+
         netID[chanIndex]++;
         
         coord srcTerm = terminalCoords(netlistPairs[i].src, cellData);
@@ -37,7 +37,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         
         netlistPairs[i].setSpan(srcTerm.x, destTerm.x);
         channelVec[chanIndex].netPointer.push_back(i);
-        
+
         //enter the source terminal into the appropriate boundary vector
         if(srcTerm.y == boundTop)  channelVec[chanIndex].top[srcTerm.x] = netID[chanIndex];
         else if(srcTerm.y == boundBottom)  channelVec[chanIndex].bottom[srcTerm.x] = netID[chanIndex];
@@ -53,11 +53,11 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
     {
         channelVec[i].numNets = netID[i];
         printf("%i ",netID[i]);
-        
+
     }
     printf("\n\n\n\n");
-    
-    
+
+
     ///////////////////////////////////////////////
     //For each of the channels in layout....///////
     ///////////////////////////////////////////////
@@ -65,23 +65,23 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
     for(size_t N=0; N<channelVec.size(); N++)
     {
         printf("\n\nCHANNEL %i\n\n",N+1);
-        
+
         //Loop through boundary vectors to create HCG (undirected graph)
         std::vector<numberList> HCG;
         std::vector<netPos> indexPairs(channelVec[N].numNets);
-        
+
         HCG = makeHCG(channelVec[N], netlistPairs, indexPairs);
         
         
         std::cout << "\nHorizontal Constraint Graph:\n\n";
-        
+
         for(size_t i=0; i<HCG.size(); i++)
         {
             HCG[i].display();
             std::cout << "\n\n";
         }
-        
-        
+
+
         //printing out channel boundaries for debugging
         printf("\n\n");
         for(size_t j=0; j<channelVec[N].width; j++)
@@ -94,21 +94,21 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             printf("%i ",channelVec[N].bottom[j]);
         }
         printf("\n\n\n");
-        
-        
+
+
         //Loop through boundary vectors to create VCG (directed graph)
         std::vector<numberList> VCG;
         VCG = makeVCG(channelVec[N]);
-        
+
         std::cout << "\n\nVertical Constraint Graph:\n\n";
-        
+
         for(size_t i=0; i<VCG.size(); i++)
         {
             std::cout << i+1 <<":\t";
             VCG[i].display();
             std::cout << "\n\n";
         }
-        
+
         std::cout << "\n\n\n\n";
         
         
@@ -118,31 +118,43 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         {
             indexPairs[i].placed = false;
         }
-        
+
         int watermark = 0, track = 0;
         std::sort(indexPairs.begin(), indexPairs.end(), netCompare);
-        
+
         while (true)
         {
             track += 1;
             watermark = 0;
-            
+
+
+
             for (int i=0; i<indexPairs.size();i++)
             {
-                if (indexPairs[i].x > watermark && indexPairs[i].placed == false)
+                bool free = noConstraints(VCG, indexPairs[i].net, indexPairs);
+
+                if (indexPairs[i].x > watermark && !indexPairs[i].placed && free)
                 {
                     indexPairs[i].track = track;
                     indexPairs[i].placed = true;
                     watermark = indexPairs[i].y;
                 }
             }
-            
+
             if (watermark==0)
             {
                 break;
             }
         }
-        
+
+
+
+
+
+
+
+
+
         for (int i=0;i<indexPairs.size();i++)
         {
             std::cout<<indexPairs[i].track<<"\n";
@@ -185,13 +197,13 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         //update net.placed as you go and delete nodes from the graphs
         //addTrack(2, currentTrack, cellData, layout); (only as necessary)
         //when HCG and VCG are through, exit loop
-        
+
         //increment channel
-        
+
     }
-    
+
     printf("\nDid channel routing\n\n");
-    
+
 }
 
 
@@ -206,7 +218,7 @@ void updateBelow(int numRows, int atRow, std::vector<cell> & cellData, std::vect
             cellData[i].y += numRows;
         }
     }
-    
+
     for (size_t j=0; j<boundaries.size(); j++)
     {
         if (boundaries[j] >= atRow)
@@ -214,7 +226,7 @@ void updateBelow(int numRows, int atRow, std::vector<cell> & cellData, std::vect
             boundaries[j] += numRows;
         }
     }
-    
+
     for (size_t k=0; k<channels.size(); k++)
     {
         if (channels[k].second >= atRow)
@@ -291,7 +303,7 @@ std::vector<numberList> makeHCG(chan C, std::vector<net> & netlistPairs, std::ve
                 placed[C.bottom[k]-1] = true;
             }
         }
-        
+
         if(C.top[k] > 0)
         {
             if(not placed[C.top[k]-1])
@@ -309,12 +321,12 @@ std::vector<numberList> makeHCG(chan C, std::vector<net> & netlistPairs, std::ve
 std::vector<numberList> makeVCG(chan C)
 {
     std::vector<numberList> graph(C.numNets);
-    
+
     for(size_t i=0; i<C.width; i++)
     {
         if(C.top[i] > 0)
         {
-            if(0 < i && i < C.width-1)
+            /*if(0 < i && i < C.width-1)
             {
                 if(C.bottom[i-1] > 0) graph[C.top[i]-1].appendNode(C.bottom[i-1]);
                 if(C.bottom[i] > 0) graph[C.top[i]-1].appendNode(C.bottom[i]);
@@ -329,10 +341,11 @@ std::vector<numberList> makeVCG(chan C)
             {
                 if(C.bottom[i-1] > 0) graph[C.top[i]-1].appendNode(C.bottom[i-1]);
                 if(C.bottom[i] > 0) graph[C.top[i]-1].appendNode(C.bottom[i]);
-            }
+            }*/
+            graph[C.top[i]-1].appendNode(C.bottom[i]);
         }
     }
-    
+
     return graph;
 }
 
@@ -345,3 +358,34 @@ bool netCompare(netPos a, netPos b)
 {
     return a.x < b.x;
 }
+
+bool noConstraints(std::vector<numberList> &VCG, int num, std::vector<netPos> & indexPairs)
+{
+    bool free = true;
+    for (int i=0;i<VCG.size();i++)
+    {
+        if(!indexPairs[i].placed && num != i+1)
+        {
+            free = VCG[i].isFree(num);
+
+            if(!free)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

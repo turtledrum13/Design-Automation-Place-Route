@@ -29,4 +29,6 @@ void removeChild(int netNum, numberList HCG, numberList& VCG);
 
 bool netCompare(netPos a, netPos b);
 
+bool noConstraints(std::vector<numberList> &VCG, int num, std::vector<netPos> & indexPairs);
+
 #endif /* channelRouting_hpp */
