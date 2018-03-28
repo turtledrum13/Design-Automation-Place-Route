@@ -44,8 +44,10 @@ public:
     int getWeight(int num);
 
     int findHead();
-    
+
     bool notEmpty();
+
+    bool isFree(int num);
 
 };
 

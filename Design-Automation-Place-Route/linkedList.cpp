@@ -169,3 +169,24 @@ bool numberList::notEmpty()
         return true;
     }
 }
+
+bool numberList::isFree(int num)
+{
+    listNode *newNode = new listNode;
+    newNode = head;
+
+    while(newNode!=NULL)
+    {
+        if(newNode->value==num)
+        {
+            return false;
+        }
+        else
+        {
+                newNode=newNode->next;
+        }
+
+        return true;
+    }
+
+}
