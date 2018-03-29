@@ -47,7 +47,8 @@ int main()        //use argc and argv to pass command prompt arguments to main()
             netlist.push_back(netPair1);
             netlist.push_back(netPair2);
 
-            net newNet;             //net structure which contains two pairs (cell, terminal) and (cell, terminal), net number, placed/not
+            //net structure which contains two pairs (cell, terminal) and (cell, terminal), net number, placed/not
+            net newNet;
             newNet.src = netPair1;
             newNet.dest = netPair2;
             newNet.num = n1;
@@ -71,39 +72,47 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     createCellList(numOfNets, netArray, cellList, netlist, numOfCells);
     std::cout<<"\npropagated input\n";
 
-    //calculate the cutset
-    calculateCutset(fullPartition, numOfCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
+    //perform the bisection placement partitioning in to columns
+    calculateCutset(fullPartition, numOfCells+1, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
     std::cout<<"\ncutset\n";
 
     //Create the 2d array for the placement layout
     createArray(cellData, mainPartition, numOfCells);
     std::cout<<"\narray created\n";
 
-    //calculate the sqrt of mainpartition
-    isSquare = sqrt(mainPartition.size());
+    double n = std::sqrt(numOfCells);
 
-    //if the sqrt is not an integer, create a rectangular layout
-    if (isSquare==(int) isSquare)
+    //calculate the closest sqrt equal or greater than the current number of cells
+    if(n != (int) n)
     {
-        layout.resize(isSquare*7-1, std::vector<int>(isSquare*7-1, 0));
+        n += 1;
     }
-    else
-    {
-        isSquare = sqrt(mainPartition.size()*2);
-        layout.resize(isSquare*7-1, std::vector<int>((isSquare/2)*7-1, 0));
 
-    }
+    n = int(n);
+
+    layout.resize(n*7-1, std::vector<int>(n*7-1, 0));
 
     std::cout<<"\nlayout resized\n";
 
+    //create the cell layout using the x and y coordinates from the previous function
     for(int i=0; i<cellData.size(); i++)
     {
-        cellData[i].r = 1;    
+        cellData[i].r = 1;
         makeCell(cellData[i], layout);
     }
-    std::cout<<"\ncells placed\n";
 
+    for (int i=0; i<layout.size(); i++)
+    {
+        //printf("\n\n");
+        size_t index = layout[i].size();
 
+        for(int j=0; j<index; j++)
+        {
+            //printf("%i ",layout[i][j]);
+            outCSV << layout[i][j] << ",";
+        }
+        outCSV << "\n";
+    }
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //Routing///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,15 +127,15 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     //First: Global Routing
     classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs, boundaries, channels);
-    
+
     std::cout<<"\nnets classified\n";
-    
+
     global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
 
 
     //Second: Channel Routing
     channel(cellData, layout, netlistPairs, channels, boundaries);
-    
+
     //makeBranches(cellData, netlistPairs, layout);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,7 +165,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     }
 
     //print CSV -- using to paste into spreadsheet for debugging
-    for (int i=0; i<layout.size(); i++)
+    /*for (int i=0; i<layout.size(); i++)
     {
         //printf("\n\n");
         size_t index = layout[i].size();
@@ -167,7 +176,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
             outCSV << layout[i][j] << ",";
         }
         outCSV << "\n";
-    }
+    }*/
 
     //print out the magic file
     outMag << "magic\ntech scmos\ntimestamp\n<< pdiffusion >>\n";
@@ -185,17 +194,3 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

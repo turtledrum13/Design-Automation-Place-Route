@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include "lin.h"
+#include <stdio.h>
 
 numberList::numberList()
 {
@@ -116,7 +117,7 @@ void numberList::display()
     {
         std::cout<<"[empty]";
     }
-    
+
     while(newNode!=NULL)
     {
         std::cout<<newNode->value<<"--> ";
@@ -180,7 +181,7 @@ bool numberList::isEmpty(int self)
 {
     listNode *newNode = new listNode;
     newNode = head;
-    
+
     while(newNode != NULL)
     {
         if(newNode->value != self)
@@ -208,7 +209,7 @@ bool numberList::findVal(int val)
 {
     listNode *newNode = new listNode;
     newNode = head;
-    
+
     while(newNode!=NULL)
     {
         if (newNode->value==val)
@@ -228,13 +229,13 @@ std::vector<int> numberList::returnList()
     listNode *newNode = new listNode;
     newNode = head;
     std::vector<int> list;
-    
+
     while(newNode!=NULL)
     {
         list.push_back(newNode->value);
         newNode = newNode->next;
     }
-        
+
     return list;
 }
 
@@ -273,7 +274,7 @@ bool numberList::isFree(int num)
 {
     listNode *newNode = new listNode;
     newNode = head;
-    
+
     while(newNode!=NULL)
     {
         if(newNode->value==num)

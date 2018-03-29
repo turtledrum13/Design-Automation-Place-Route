@@ -57,13 +57,13 @@ void makeTrunk(net & N, int atRow, std::vector<std::vector<int> > & layout)
 void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, std::vector<std::vector<int> >& layout)
 {
     int yTrunk, ySrc, yDest, xSrc, xDest, iSrc, iDest;
-    
+
     for(size_t i=0; i<netlistPairs.size(); i++)
     {
         net& currentNet = netlistPairs[i];
         cell&  cellSrc = cellData[currentNet.src.first];
         cell&  cellDest = cellData[currentNet.dest.first];
-        
+
         yTrunk = currentNet.y;
         ySrc = cellSrc.y + terminalOffset(currentNet.src.second, cellSrc.r);
         yDest = cellDest.y + terminalOffset(currentNet.dest.second, cellDest.r);
@@ -71,30 +71,28 @@ void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, s
         xDest = currentNet.xDest;
         iSrc=0;
         iDest=0;
-        
+
         while(yTrunk+iSrc != ySrc)
         {
             layout[yTrunk+iSrc][xSrc] = 8; //draw metal 2 onto layout;
-            
+
             if(yTrunk<ySrc) iSrc++;
             else iSrc--;
         }
-        
+
         while(yTrunk+iDest != yDest)
         {
             layout[yTrunk+iDest][xDest] = 8; //draw metal 2 onto layout;
-            
+
             if(yTrunk<yDest) iDest++;
             else iDest--;
         }
-        
+
         //draw via at intersections of metal 1 and metal 2
         layout[yTrunk][xSrc] = 9;
         layout[yTrunk][xDest] = 9;
     }
 }
-
-
 
 void addRows(int numRows, int atRow, std::vector<std::vector<int> > & layout)
 {
@@ -102,7 +100,7 @@ void addRows(int numRows, int atRow, std::vector<std::vector<int> > & layout)
     {
         size_t size = (layout[atRow].size());
         std::vector<int> insertVec (size, 0);
-        
+
         layout.insert(layout.begin()+atRow,1,insertVec);
     }
 }
@@ -121,85 +119,38 @@ void appendCols(int numCols, std::vector<std::vector<int> > & layout)
 void appendRows(int numCols, std::vector<std::vector<int> > & layout)
 {
     std::vector<int> dummyRow (layout[0].size(), 0);
-    
+
     for (int i=0; i<numCols; i++)
     {
         layout.push_back(dummyRow);
     }
 }
 
-
 void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
     int z = 0;
-    if (mainPartition.size()==4) funct4(0, 0, z, cellData, mainPartition, numOfCells);
-    else if (mainPartition.size()==8) funct8(0, 0, z, cellData, mainPartition, numOfCells);
-    else if (mainPartition.size()==16) funct16(0, 0, z, cellData, mainPartition, numOfCells);
-    else if (mainPartition.size()==32) funct32(0, 0, z, cellData, mainPartition, numOfCells);
-    else if (mainPartition.size()==64) funct64(0, 0, z, cellData, mainPartition, numOfCells);
-    else if (mainPartition.size()==128) funct128(0, 0, z, cellData, mainPartition, numOfCells);
-    else if (mainPartition.size()==256) funct256(0, 0, z, cellData, mainPartition, numOfCells);
-    else if (mainPartition.size()==512) funct512(0, 0, z, cellData, mainPartition, numOfCells);
-    else if (mainPartition.size()==1024) funct1024(0, 0, z, cellData, mainPartition, numOfCells);
-}
+    double n = std::sqrt(numOfCells);
 
-void funct4(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
-{
-    for (int i=xNum; i<xNum+2; i++)
+    //get the closest sqrt that is equal or greater than the number of cells
+    if(n != (int) n)
     {
-        for(int j=yNum; j<yNum+2; j++)
+        n += 1;
+    }
+
+    n = int(n);
+
+    //add the x and y coordinates to the cells in an nxn manner
+    for (int i=0; i<n; i++)
+    {
+        for(int j=0; j<n; j++)
         {
             if (mainPartition[z]!=numOfCells)
             {
                 cellData[mainPartition[z]].x = i*7;
                 cellData[mainPartition[z]].y = j*7+5;
                 cellData[mainPartition[z]].cell = mainPartition[z]+1;
-
             }
             z++;
         }
     }
-}
-
-void funct8(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
-{
-    funct4(xNum, yNum, z, cellData, mainPartition, numOfCells);
-    funct4(xNum, yNum+2, z, cellData, mainPartition, numOfCells);
-}
-void funct16(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
-{
-    funct8(xNum, yNum, z, cellData, mainPartition, numOfCells);
-    funct8(xNum+2, yNum, z, cellData, mainPartition, numOfCells);
-}
-void funct32(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
-{
-    funct16(xNum, yNum, z, cellData, mainPartition, numOfCells);
-    funct16(xNum, yNum+4, z, cellData, mainPartition, numOfCells);
-
-}
-void funct64(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
-{
-    funct32(xNum, yNum, z, cellData, mainPartition, numOfCells);
-    funct32(xNum+4, yNum, z, cellData, mainPartition, numOfCells);
-}
-void funct128(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
-{
-    funct64(xNum, yNum, z, cellData, mainPartition, numOfCells);
-
-    funct64(xNum, yNum+8, z, cellData, mainPartition, numOfCells);
-}
-void funct256(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
-{
-    funct128(xNum, yNum, z, cellData, mainPartition, numOfCells);
-    funct128(xNum+8, yNum, z, cellData, mainPartition, numOfCells);
-}
-void funct512(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
-{
-    funct256(xNum, yNum, z, cellData, mainPartition, numOfCells);
-    funct256(xNum, yNum+16, z, cellData, mainPartition, numOfCells);
-}
-void funct1024(int xNum, int yNum, int &z, std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
-{
-    funct512(xNum, yNum, z, cellData, mainPartition, numOfCells);
-    funct512(xNum+16, yNum, z, cellData, mainPartition, numOfCells);
 }

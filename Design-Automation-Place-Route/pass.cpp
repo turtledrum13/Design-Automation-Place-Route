@@ -80,7 +80,6 @@ void passRun(std::vector<int> &A, int &numOfNets, std::vector<std::vector<int> >
             if(i==0)
             {
                 val1 = D[partitionAPrime[0]].getValue();
-
                 aValue = partitionAPrime[0];
                 val2 = D[partitionBPrime[0]].getValue();
                 bValue = partitionBPrime[0];
