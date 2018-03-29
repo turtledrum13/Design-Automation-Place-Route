@@ -6,6 +6,9 @@
 
 void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vector<std::vector<int> > &netArray,
                      std::vector<numberList> &cellList, int numOfCells, int numOfNets, int &cutset,
-                     std::vector<int> &mainPartition);
+                     std::vector<int> &mainPartition, bool isRowPlacement);
+
+void rowPlacement(std::vector<std::vector<int> > &netArray, std::vector<numberList> &cellList, int numOfCells,
+                  int numOfNets, std::vector<int> &mainPartition, int n);
 
 #endif

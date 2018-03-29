@@ -75,6 +75,7 @@ void passRun(std::vector<int> &A, int &numOfNets, std::vector<std::vector<int> >
             }
         }
 
+        //go through the
         for(int i = 0; i < numCells/2; i++)
         {
             if(i==0)
@@ -98,6 +99,7 @@ void passRun(std::vector<int> &A, int &numOfNets, std::vector<std::vector<int> >
             }
         }
 
+        //use the net weights from the list to calculate the maximum gain
         maxGain = val1+val2-2*cellList[aValue].getWeight(bValue);
 
         X.push_back(aValue);        //add the value from the A partition to X

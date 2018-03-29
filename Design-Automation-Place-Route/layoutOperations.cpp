@@ -136,7 +136,6 @@ void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, i
     {
         n += 1;
     }
-
     n = int(n);
 
     //add the x and y coordinates to the cells in an nxn manner

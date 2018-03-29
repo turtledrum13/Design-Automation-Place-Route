@@ -11,24 +11,35 @@
 
 void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vector<std::vector<int> > &netArray,
                      std::vector<numberList> &cellList, int numOfCells, int numOfNets, int &cutset,
-                     std::vector<int> &mainPartition)
+                     std::vector<int> &mainPartition, bool isRowPlacement)
 {
-    int sum, Gmax, k, maxGain, pass=0, cutset2=0, newCells;
+    int sum, Gmax, k, maxGain, pass=0, cutset2=0, newCells, numOfPartitions, addNum;
     std::vector<int> partitionAPrime, partitionBPrime, A, B, X, Y, gains, partitionA, partitionB, dummyPartition;
     std::vector<bool> truth(numOfNets, false);
     bool buffer=true;
+    double n;
 
-    //used to find the row size of for the layout
-    double n = std::sqrt(totalCells-1);
-    if(n != (int) n)
+    //used to find the row size of the layout. If doing rowplacement, make the size equal to 2.
+    if(!isRowPlacement)
     {
-        n += 1;
+        n = std::sqrt(totalCells-1);
+        if(n != (int) n)
+        {
+            n += 1;
+        }
+
+        n = int(n);
+        numOfPartitions = n;
+    }
+    else
+    {
+        n = numOfCells;
+        numOfPartitions = 2;
     }
 
-    n = int(n);
 
-    //if this is the first run of the partitioning for placement
-    if(totalCells==(numOfCells+1))
+    //if this is the first run of the partitioning for placement and it is not doing row placement
+    if(totalCells==(numOfCells+1) && !isRowPlacement)
     {
         //m used to determine how many dummy rows to add for partitioning
         double m = log(n)/log(2);
@@ -46,9 +57,8 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vecto
             fullPartition.push_back(i);
             fullPartition.push_back(i+totalCells/2);
         }
-
         //calculate the total number of dummy cells needed to be added for partitioning
-        int addNum = ((m-n)*n) + std::pow(n, 2);
+        addNum = ((m-n)*n) + std::pow(n, 2);
 
         //add the dummy cells to the partition
         for(int i=numOfCells; i<addNum; i++)
@@ -142,21 +152,18 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vecto
         }
 
         //swap the values in the partitions up to the k value
-        /*if (Gmax > 0)
+        for (unsigned int i = 0; i<k+1; i++)
         {
-            for (unsigned int i = 0; i<k+1; i++)
-            {
-                partitionA.erase(std::remove(partitionA.begin(), partitionA.end(), X[i]), partitionA.end());
-                partitionB.erase(std::remove(partitionB.begin(), partitionB.end(), Y[i]), partitionB.end());
-                partitionA.push_back(Y[i]);
-                partitionB.push_back(X[i]);
-            }
-            cutset = cutset - Gmax;                       //recalculate cutset
+            partitionA.erase(std::remove(partitionA.begin(), partitionA.end(), X[i]), partitionA.end());
+            partitionB.erase(std::remove(partitionB.begin(), partitionB.end(), Y[i]), partitionB.end());
+            partitionA.push_back(Y[i]);
+            partitionB.push_back(X[i]);
         }
-        else
-        {*/
-        buffer=false;                                 //finish the algorithm
-        //}
+        //recalculate cutset
+        cutset = cutset - Gmax;
+
+        //finish the algorithm
+        buffer=false;
 
         X.clear();
         Y.clear();
@@ -165,19 +172,19 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vecto
     //create a dummy partition to combine partition A and B
     dummyPartition = partitionA;
 
-    for(size_t i=0; i<partitionA.size(); i++)
+    for(size_t i=0; i<partitionB.size(); i++)
     {
         dummyPartition.push_back(partitionB[i]);
     }
 
-    //erase any of the dummy cells from the full partition
+    //erase any of the dummy cells from the dummy partition
     dummyPartition.erase(std::remove(dummyPartition.begin(), dummyPartition.end(), totalCells-1), dummyPartition.end());
 
     partitionA.resize(0);
     partitionB.resize(0);
     int difference = numOfCells - dummyPartition.size();
 
-    //readd the dummy cells to the end of the partition so that all the dummy cells are at the end of the layout
+    //re-add the dummy cells to the end of the partition so that all the dummy cells are at the end of the layout
     for(int i=0; i<difference; i++)
     {
         dummyPartition.push_back(totalCells-1);
@@ -192,14 +199,14 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vecto
     newCells = numOfCells/2;
 
     //if the current partition size is larger than the calculated row size, then recursively call the partition
-    //algorithm until the bisection partitioning is finished
-    if(partitionA.size() > n)
+    //algorithm until the bisection partitioning is finished for partition A
+    if(partitionA.size() > numOfPartitions)
     {
-        calculateCutset(partitionA, totalCells, netArray, cellList, newCells, numOfNets, cutset2, mainPartition);
+        calculateCutset(partitionA, totalCells, netArray, cellList, newCells, numOfNets, cutset2, mainPartition, isRowPlacement);
     }
     else
     {
-        for(int i=0; i<n; i++)
+        for(int i=0; i<numOfPartitions; i++)
         {
             mainPartition.push_back(partitionA[i]);
         }
@@ -207,16 +214,78 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vecto
 
     newCells = numOfCells/2;
 
-    if(partitionB.size() > n)
+    //perform the same recursive bisection fuction for partition B
+    if(partitionB.size() > numOfPartitions)
     {
-        calculateCutset(partitionB, totalCells, netArray, cellList, newCells, numOfNets, cutset2, mainPartition);
+        calculateCutset(partitionB, totalCells, netArray, cellList, newCells, numOfNets, cutset2, mainPartition, isRowPlacement);
     }
     else
     {
-        for(int i=0; i<n; i++)
+        for(int i=0; i<numOfPartitions; i++)
         {
             mainPartition.push_back(partitionB[i]);
         }
     }
 
+}
+
+//do partitioning algorithm for each row in the layout.
+void rowPlacement(std::vector<std::vector<int> > &netArray, std::vector<numberList> &cellList, int numOfCells,
+                  int numOfNets, std::vector<int> &mainPartition, int n)
+{
+
+    int cutset=0, z=0;
+    std::vector<int> fullPartition, partition;
+    std::vector<std::vector<int> > rowPartition;
+
+    rowPartition.resize(n, std::vector<int>(n, 0));
+
+    //m used to determine how many dummy cells to add for partitioning
+    double m = log(n)/log(2);
+
+    if (m!=(int) m)
+    {
+        m+=1;
+    }
+    m = int(m);
+    m = std::pow(2, m);
+
+    //add dummy cells to each row
+    for (int i=0; i<n; i++)
+    {
+        for(int j=0; j<n; j++)
+        {
+            rowPartition[i][j] = mainPartition[z];
+            z++;
+        }
+    }
+
+    //add the dummy cells to the partition
+    for(int i=0; i<n; i++)
+    {
+        for(int j=n; j<m; j++)
+        {
+            rowPartition[i].push_back(numOfCells);
+        }
+    }
+
+    //do partitioning on each row
+    for (int i=0; i<n; i++)
+    {
+        partition.resize(0);
+        calculateCutset(rowPartition[i], numOfCells+1, netArray, cellList, m, numOfNets, cutset, partition, true);
+        rowPartition[i] = partition;
+    }
+
+    z = 0;
+
+    //update the minpartition with the new rows
+    for(int i=0; i<n; i++)
+    {
+        for (int j=0; j<n; j++)
+        {
+            mainPartition[z] = rowPartition[i][j];
+            z++;
+        }
+    }
 }
