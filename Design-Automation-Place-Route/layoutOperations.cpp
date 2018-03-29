@@ -51,7 +51,7 @@ void makeTrunk(net & N, int atRow, std::vector<std::vector<int> > & layout)
         layout[atRow][i] = 7;
     }
     N.y = atRow;
-    N.placed = true;
+    N.routed = true;
 }
 
 void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, std::vector<std::vector<int> >& layout)

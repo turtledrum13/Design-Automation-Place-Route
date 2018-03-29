@@ -11,7 +11,7 @@
 
 #include "structures.h"
 #include "classifyNets.hpp"
-#include "lin.h"
+#include "constraintList.hpp"
 #include <stdio.h>
 #include <vector>
 
@@ -21,14 +21,10 @@ void updateBelow(int numRows, int atRow, std::vector<cell> & cellData, std::vect
 
 void addTrack(int numRows, int atRow, std::vector<cell> & cellData, std::vector<net> & netlistPairs, std::vector<std::vector<int> > & layout, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels);
 
-std::vector<numberList> makeHCG(chan C, std::vector<net> & netlistPairs, std::vector<netPos> & indexPairs);
+std::vector<constraintList> makeHCG(chan C, std::vector<net> & netlistPairs);
 
-std::vector<numberList> makeVCG(chan C);
+std::vector<constraintList> makeVCG(chan C);
 
-void removeChild(int netNum, std::vector<numberList>& HCG, std::vector<numberList>& VCG);
-
-bool netCompare(netPos a, netPos b);
-
-bool noConstraints(std::vector<numberList> &VCG, int num, std::vector<netPos> & indexPairs);
+void removeChild(int netNum, std::vector<constraintList>& HCG, std::vector<constraintList>& VCG);
 
 #endif /* channelRouting_hpp */

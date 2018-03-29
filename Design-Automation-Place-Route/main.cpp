@@ -51,7 +51,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
             newNet.src = netPair1;
             newNet.dest = netPair2;
             newNet.num = n1;
-            newNet.placed = false;
+            newNet.routed = false;
 
             netlistPairs.push_back(newNet);
         }
