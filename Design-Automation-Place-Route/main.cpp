@@ -16,7 +16,7 @@
 int main()        //use argc and argv to pass command prompt arguments to main()
 {
     //initialize files
-    std::ifstream fileIn ("Resources/v1.2/1");
+    std::ifstream fileIn ("Resources/v1.2/2");
     std::ofstream outFile ("out.txt");
     std::ofstream outCSV ("magicCSV.csv");
     std::ofstream outMag ("magFile.mag");
@@ -31,7 +31,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     //initialize variables
     int numOfNets, cutset=0, numOfCells, numOfPartitions;
-    double isSquare;
+    double isSquare, n;
 
     fileIn >> numOfCells;
     fileIn >> numOfNets;
@@ -47,7 +47,8 @@ int main()        //use argc and argv to pass command prompt arguments to main()
             netlist.push_back(netPair1);
             netlist.push_back(netPair2);
 
-            net newNet;             //net structure which contains two pairs (cell, terminal) and (cell, terminal), net number, placed/not
+            //net structure which contains two pairs (cell, terminal) and (cell, terminal), net number, placed/not
+            net newNet;
             newNet.src = netPair1;
             newNet.dest = netPair2;
             newNet.num = n1;
@@ -56,6 +57,16 @@ int main()        //use argc and argv to pass command prompt arguments to main()
             netlistPairs.push_back(newNet);
         }
     }
+
+    n = std::sqrt(numOfCells);
+
+    //calculate the closest sqrt equal or greater than the current number of cells
+    if(n != (int) n)
+    {
+        n += 1;
+    }
+
+    n = int(n);
 
     cellData.resize(numOfCells);
 
@@ -71,38 +82,28 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     createCellList(numOfNets, netArray, cellList, netlist, numOfCells);
     std::cout<<"\npropagated input\n";
 
-    //calculate the cutset
-    calculateCutset(fullPartition, numOfCells, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition);
+    //perform the bisection placement partitioning in to columns
+    calculateCutset(fullPartition, numOfCells+1, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition, false);
     std::cout<<"\ncutset\n";
+
+    //perform the placement for each row of the layout
+    //rowPlacement(netArray, cellList,  numOfCells, numOfNets, mainPartition, n);
+    std::cout<<"\nrow Placement Finished";
 
     //Create the 2d array for the placement layout
     createArray(cellData, mainPartition, numOfCells);
     std::cout<<"\narray created\n";
 
-    //calculate the sqrt of mainpartition
-    isSquare = sqrt(mainPartition.size());
-
-    //if the sqrt is not an integer, create a rectangular layout
-    if (isSquare==(int) isSquare)
-    {
-        layout.resize(isSquare*7-1, std::vector<int>(isSquare*7-1, 0));
-    }
-    else
-    {
-        isSquare = sqrt(mainPartition.size()*2);
-        layout.resize(isSquare*7-1, std::vector<int>((isSquare/2)*7-1, 0));
-
-    }
+    layout.resize(n*7-1, std::vector<int>(n*7-1, 0));
 
     std::cout<<"\nlayout resized\n";
 
+    //create the cell layout using the x and y coordinates from the previous function
     for(int i=0; i<cellData.size(); i++)
     {
-        cellData[i].r = 1;    
+        cellData[i].r = 1;
         makeCell(cellData[i], layout);
     }
-    std::cout<<"\ncells placed\n";
-
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //Routing///////////////////////////////////////////////////////////////////////////////////////////
@@ -118,15 +119,15 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     //First: Global Routing
     classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs, boundaries, channels);
-    
+
     std::cout<<"\nnets classified\n";
-    
+
     global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
 
 
     //Second: Channel Routing
     channel(cellData, layout, netlistPairs, channels, boundaries);
-    
+
     //makeBranches(cellData, netlistPairs, layout);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,17 +186,3 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

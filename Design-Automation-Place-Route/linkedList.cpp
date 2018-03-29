@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include "lin.h"
+#include <stdio.h>
 
 numberList::numberList()
 {
@@ -116,7 +117,7 @@ void numberList::display()
     {
         std::cout<<"[empty]";
     }
-    
+
     while(newNode!=NULL)
     {
         std::cout<<newNode->value<<"--> ";

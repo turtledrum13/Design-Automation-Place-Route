@@ -7,18 +7,13 @@
 void createCellList(int numOfNets, std::vector<std::vector<int> > &netArray, std::vector<numberList> &cellList,
                     std::vector<std::pair<int,int> > &netlist, int numOfCells)
 {
+    //variabe for future use
     int a = 0;
 
-    if(numOfCells %2 !=0)
-    {
-        cellList.resize(numOfCells+1);
-    }
-    else
-    {
-        cellList.resize(numOfCells);
-    }
+    //resize the cellList, accounting for the dummy cells that will also be used
+    cellList.resize(numOfCells+1);
 
-
+    //resize the array of nets
     netArray.resize(2, std::vector<int>(numOfNets, 0));
 
     for (int i = 0; i<numOfNets; i++)
@@ -45,6 +40,7 @@ void createCellList(int numOfNets, std::vector<std::vector<int> > &netArray, std
     }
 }
 
+//a function used to sort the D values
 bool sortDValue(const std::vector<int> &vect1, const std::vector<int> &vect2)
 {
     if(vect1.size() > 0 && vect2.size() > 0)
