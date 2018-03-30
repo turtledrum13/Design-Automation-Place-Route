@@ -27,7 +27,7 @@ struct net
 {
     std::pair<int,int> src, dest;   //first and second cells connected by the net <cell,term>
     int num;                        //net number
-    bool placed;                    //whether the net has been placed yet or not
+    bool routed;                    //whether the net has been routed yet or not
     bool global;                    //true if net needs to be routed globally
     int channel;                    //channel number if channel routing is possible
     int x1, x2, xSrc, xDest, y;     //beginning column and end column of the net's trunk, row of trunk
@@ -78,12 +78,6 @@ struct chan
         bottom.resize(chanWidth, initVal);
         width = chanWidth;
     }
-};
-
-struct netPos
-{
-  int x, y, net, track;
-  bool placed;
 };
 
 #endif /* structures_h */

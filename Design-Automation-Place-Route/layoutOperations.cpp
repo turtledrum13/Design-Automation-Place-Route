@@ -51,7 +51,7 @@ void makeTrunk(net & N, int atRow, std::vector<std::vector<int> > & layout)
         layout[atRow][i] = 7;
     }
     N.y = atRow;
-    N.placed = true;
+    N.routed = true;
 }
 
 void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, std::vector<std::vector<int> >& layout)
@@ -89,8 +89,11 @@ void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, s
         }
 
         //draw via at intersections of metal 1 and metal 2
-        layout[yTrunk][xSrc] = 9;
-        layout[yTrunk][xDest] = 9;
+        if(xSrc != xDest)
+        {
+            layout[yTrunk][xSrc] = 9;
+            layout[yTrunk][xDest] = 9;
+        }
     }
 }
 
