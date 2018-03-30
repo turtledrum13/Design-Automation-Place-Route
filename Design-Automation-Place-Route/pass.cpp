@@ -64,6 +64,7 @@ void passRun(std::vector<int> &A, int &numOfNets, std::vector<std::vector<int> >
 
     while (!partitionAPrime.empty())
     {
+        //update the initial D values at the beginning of the loop
         if(b != 0)
         {
             if (aValue < numOfCells && bValue < numOfCells)
@@ -75,7 +76,7 @@ void passRun(std::vector<int> &A, int &numOfNets, std::vector<std::vector<int> >
             }
         }
 
-        //go through the
+        //go through the partitions and find the maximum D values
         for(int i = 0; i < numCells/2; i++)
         {
             if(i==0)
