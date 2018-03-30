@@ -27,4 +27,8 @@ std::vector<constraintList> makeVCG(chan C);
 
 void removeChild(int netNum, std::vector<constraintList>& HCG, std::vector<constraintList>& VCG);
 
+int detectCycle(std::vector<constraintList>& VCG);
+
+void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<constraintList>& VCG, std::vector<constraintList>& HCG, chan& channel);
+
 #endif /* channelRouting_hpp */

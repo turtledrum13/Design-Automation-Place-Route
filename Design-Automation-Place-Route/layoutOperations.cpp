@@ -89,8 +89,11 @@ void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, s
         }
 
         //draw via at intersections of metal 1 and metal 2
-        layout[yTrunk][xSrc] = 9;
-        layout[yTrunk][xDest] = 9;
+        if(xSrc != xDest)
+        {
+            layout[yTrunk][xSrc] = 9;
+            layout[yTrunk][xDest] = 9;
+        }
     }
 }
 

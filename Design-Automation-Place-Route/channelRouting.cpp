@@ -75,7 +75,9 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             if(channelVec[N].numNets>0)
             {
                 appendRows(2, layout);
-                updateBelow(2, atRow, cellData, netlistPairs, boundaries, channels);
+                //updateBelow(2, atRow, cellData, netlistPairs, boundaries, channels);
+                boundaries[boundaries.size()] += 2;
+                channels[channels.size()].first += 2;
                 atRow += 2;
             }
         }
@@ -89,7 +91,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         VCG = makeVCG(channelVec[N]);
 
         
-        ////////////////AARONS NEW CODE///////////////////
+        
         while(netsRemaining > 0)
         {
             
@@ -245,11 +247,8 @@ std::vector<constraintList> makeHCG(chan C, std::vector<net> & netlistPairs)
     {
         graph[i].appendNode(i+1); //create a vector of list heads in number order
 
-        x1 = netlistPairs[C.netPointer[i]].x1;
-        x2 = netlistPairs[C.netPointer[i]].x2;
-        
-        if(x1>0) x1-=1;
-        if(x2<C.width) x2+=1;
+        x1 = netlistPairs[C.netPointer[i]].x1-1; //-1 to block adjacent nets
+        x2 = netlistPairs[C.netPointer[i]].x2+1; //+1 to block adjacent nets
 
         for(size_t j = x1; j<x2+1; j++)
         {
@@ -365,6 +364,67 @@ void removeChild(int netNum, std::vector<constraintList>& HCG, std::vector<const
     
     printf("\n");
 }
+
+int detectCycle(std::vector<constraintList>& VCG)
+{
+    int foundCycle = 0;
+    std::vector<int> seen;
+    std::vector<bool> visited (VCG.size(), false);
+    
+    return foundCycle;
+}
+
+void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<constraintList>& VCG, std::vector<constraintList>& HCG, chan& channel)
+{
+    //take the child and break in two         //child and parent will be the actual IDs of the child and parent
+    //Rules for breaking: must happen at a place that does not cause any new vertical conflicts
+    //might have to detect cycle before doing any channel routing
+    
+    //must break net in a way such that its parent can now be routed ????
+    
+    //decide on a split point ???      ...arbitrary one for now (halfway point)
+    net& childNet = netlistPairs[channel.netPointer[child]];
+    net& parentNet = netlistPairs[channel.netPointer[parent]];
+    
+    int splitPoint = abs(childNet.xSrc-childNet.xDest)/2; //approximate center of the child
+    
+    //add the new net to the end of netlistPairs
+    netlistPairs.push_back(childNet);
+    net& newChildNet = netlistPairs[netlistPairs.size()];
+    
+    //update netlistPairs original net (A) with the split point as new endpoint (check if greater or lesser than remaining src point), same for new one
+    childNet.xDest = splitPoint;
+    //childNet.x1 = ???, childNet.x2 = ???
+    
+    newChildNet.xSrc = splitPoint;
+    //newChildNet.x1 = ???, newChildNet.x2 = ???
+    
+    
+    //add an implicit cell to cellData that is 1x1 at the split point and give it a lower left corner (use the default terminal offset and terminal coords cases)
+    cell newCell;
+    newCell.x = splitPoint;
+    newCell.y = childNet.y;
+    newCell.r = 0;
+    newCell.nets = 2;
+    newCell.cell = cellData.size();
+    
+    cellData.push_back(newCell);
+    
+    //point both nets to that new cell
+    std::pair<int,int> newCellPair (1,0);
+    childNet.dest = newCellPair;
+    newChildNet.src = newCellPair;
+    
+    //once new cells have been formed and pointed to the new cell, add one to the width and numNets of channel
+    channel.width ++;
+    channel.numNets ++;
+    
+    //modify top and bottom boundaries as needed, including inserting or whatever...
+    
+    
+    //recalculate VCG and HCG (but not in the full way, just update them)
+}
+
 
 
 

@@ -80,10 +80,4 @@ struct chan
     }
 };
 
-struct netPos
-{
-  int x, y, net, track;
-  bool placed;
-};
-
 #endif /* structures_h */
