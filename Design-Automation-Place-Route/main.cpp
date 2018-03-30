@@ -128,7 +128,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     //Second: Channel Routing
     channel(cellData, layout, netlistPairs, channels, boundaries);
 
-    //makeBranches(cellData, netlistPairs, layout);
+    makeBranches(cellData, netlistPairs, layout);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////

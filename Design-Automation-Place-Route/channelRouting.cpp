@@ -75,7 +75,6 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             if(channelVec[N].numNets>0)
             {
                 appendRows(2, layout);
-                //updateBelow(2, atRow, cellData, netlistPairs, boundaries, channels);
                 boundaries[boundaries.size()] += 2;
                 channels[channels.size()].first += 2;
                 atRow += 2;
@@ -418,11 +417,15 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     //once new cells have been formed and pointed to the new cell, add one to the width and numNets of channel
     channel.width ++;
     channel.numNets ++;
+    //update netpointer
     
     //modify top and bottom boundaries as needed, including inserting or whatever...
     
     
     //recalculate VCG and HCG (but not in the full way, just update them)
+    
+    //HCG = anything with a connection to the current net should be checked against both the new partial net and the old partial net, updated accordingly
+    std::vector<int> HConstraints = HCG[channel.netPointer[child]].returnList();
 }
 
 
