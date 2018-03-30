@@ -75,8 +75,8 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             if(channelVec[N].numNets>0)
             {
                 appendRows(2, layout);
-                boundaries[boundaries.size()] += 2;
-                channels[channels.size()].first += 2;
+                boundaries[boundaries.size()-1] += 2;
+                channels[channels.size()-1].first += 2;
                 atRow += 2;
             }
         }
