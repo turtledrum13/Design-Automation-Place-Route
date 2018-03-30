@@ -170,19 +170,43 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         outCSV << "\n";
     }
 
-    //print out the magic file
+    //print out the magic file head and cells
     outMag << "magic\ntech scmos\ntimestamp\n<< pdiffusion >>\n";
-    for(int i=0; i<cellData.size(); i++)
+    for (int i=0; i<layout.size(); i++)
     {
-        outMag << "rect\t" << cellData[i].x << "\t" << cellData[i].y << "\t";
-
-        if (cellData[i].cell <= numOfCells)
+        for(int j=0; j<layout[i].size(); j++)
         {
-            outMag << cellData[i].x + 6 << "\t" << cellData[i].y + 6 << "\n";
-        }
-        else
-        {
-            outMag << cellData[i].x + 3 << "\t" << cellData[i].y + 6 << "\n";
+            if(layout[i][j] == 1 || layout[i][j] == 3 || layout[i][j] == 5)
+            {
+                outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+            }
         }
     }
+
+    //print out the magic file metal1
+    outMag<<"<< metal1 >>\n";
+    for (int i=0; i<layout.size(); i++)
+    {
+        for(int j=0; j<layout[i].size(); j++)
+        {
+            if(layout[i][j] == 7)
+            {
+                outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+            }
+        }
+    }
+
+    //print out the magic file metal2
+    outMag<<"<< metal2 >>\n";
+    for (int i=0; i<layout.size(); i++)
+    {
+        for(int j=0; j<layout[i].size(); j++)
+        {
+            if(layout[i][j] == 8)
+            {
+                outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+            }
+        }
+    }
+
 }
