@@ -10,7 +10,6 @@
 
 #include <stdlib.h>
 #include <iostream>
-#include "lin.h"
 
 constraintList::constraintList()
 {
@@ -21,12 +20,12 @@ constraintList::constraintList()
 void constraintList::appendNode(int num)
 {
     graphNode *newNode;        //to point to a new node
-    
+
     //allocate a new node and store the values there
     newNode = new graphNode;
     newNode->value=num;
     newNode->next=NULL;
-    
+
     //make newnode the 1st node if no nodes in list
     if(!head)
     {
@@ -44,12 +43,12 @@ void constraintList::display()
 {
     graphNode *newNode= new graphNode;
     newNode=head;
-    
+
     if(newNode == NULL)
     {
         std::cout<<"[empty]";
     }
-    
+
     while(newNode!=NULL)
     {
         std::cout<<newNode->value<<"--> ";
@@ -61,7 +60,7 @@ int constraintList::lookUp(int num) const
 {
     graphNode *newNode=new graphNode;
     newNode=head;
-    
+
     while(newNode!=NULL)
     {
         if (newNode->value==num)
@@ -81,7 +80,7 @@ int constraintList::findHead()
 {
     graphNode *newNode = new graphNode;
     newNode = head;
-    
+
     return newNode->value;
 }
 
@@ -89,7 +88,7 @@ bool constraintList::notEmpty()
 {
     graphNode *newNode = new graphNode;
     newNode = head;
-    
+
     if (newNode==NULL)
     {
         return false;
@@ -104,7 +103,7 @@ bool constraintList::isEmpty(int self)
 {
     graphNode *newNode = new graphNode;
     newNode = head;
-    
+
     while(newNode != NULL)
     {
         if(newNode->value != self)
@@ -124,7 +123,7 @@ bool constraintList::findVal(int val)
 {
     graphNode *newNode = new graphNode;
     newNode = head;
-    
+
     while(newNode!=NULL)
     {
         if (newNode->value==val)
@@ -144,13 +143,13 @@ std::vector<int> constraintList::returnList()
     graphNode *newNode = new graphNode;
     newNode = head;
     std::vector<int> list;
-    
+
     while(newNode!=NULL)
     {
         list.push_back(newNode->value);
         newNode = newNode->next;
     }
-    
+
     return list;
 }
 
@@ -158,7 +157,7 @@ void constraintList::removeAll(int num)
 {
     graphNode *currentNode = head;
     graphNode *previousNode = NULL;
-    
+
     while(currentNode!=NULL)
     {
         if(currentNode->value == num)

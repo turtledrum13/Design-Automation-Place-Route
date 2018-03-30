@@ -15,8 +15,9 @@
 class constraintList
 {
 private:
-    
+
     //creating a structure for the list
+
     struct graphNode
     {
         int value;        //the value in this node
@@ -24,28 +25,28 @@ private:
         graphNode *next;    //to point to the next node
     };
     graphNode *head, *tail;    //list head and tail pointer
-    
+
 public:
     //constructor
     constraintList();
-    
+
     //create a new node
     void appendNode(int num);
-    
+
     void display();
-    
+
     int lookUp(int num) const;
-  
+
     int findHead();
-    
+
     bool notEmpty();
-    
+
     bool isEmpty(int self);
-    
+
     bool findVal(int val);
-    
+
     std::vector<int> returnList();
-    
+
     void removeAll(int num);
 };
 
