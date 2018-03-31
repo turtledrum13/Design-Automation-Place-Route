@@ -30,8 +30,8 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     std::vector<std::pair <int,int> > netlist, channels;
 
     //initialize variables
-    int numOfNets, cutset=0, numOfCells, numOfPartitions;
-    double isSquare, n;
+    int numOfNets, cutset=0, numOfCells;
+    double n;
 
     fileIn >> numOfCells;
     fileIn >> numOfNets;
@@ -57,6 +57,11 @@ int main()        //use argc and argv to pass command prompt arguments to main()
             netlistPairs.push_back(newNet);
         }
     }
+    
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    //PLACEMENT/////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     n = std::sqrt(numOfCells);
 
@@ -75,28 +80,23 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     {
         cellData[netlist[i].first].nets++;
         cellData[netlist[i].first].netIndex.push_back(i);
-        //printf("cell %i has %i nets\n",netlist[i].first+1,cellData[netlist[i].first].nets);
     }
 
     //create the list of cells and point them to their net pair
     createCellList(numOfNets, netArray, cellList, netlist, numOfCells);
-    std::cout<<"\npropagated input\n";
 
+    
     //perform the bisection placement partitioning in to columns
     calculateCutset(fullPartition, numOfCells+1, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition, false);
-    std::cout<<"\ncutset\n";
 
+    
     //perform the placement for each row of the layout
     rowPlacement(netArray, cellList,  numOfCells, numOfNets, mainPartition, n);
-    std::cout<<"\nrow Placement Finished";
 
+    
     //Create the 2d array for the placement layout
     createArray(cellData, mainPartition, numOfCells);
-    std::cout<<"\narray created\n";
-
     layout.resize(n*7-1, std::vector<int>(n*7-1, 0));
-
-    std::cout<<"\nlayout resized\n";
 
     //create the cell layout using the x and y coordinates from the previous function
     for(int i=0; i<cellData.size(); i++)
@@ -105,22 +105,20 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         makeCell(cellData[i], layout);
     }
 
+    
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Routing///////////////////////////////////////////////////////////////////////////////////////////
+    //ROUTING///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //converting dummies to -1
+    //converting dummy cells to 0
     for (int i=0; i<mainPartition.size(); i++)
     {
         if (mainPartition[i] > numOfCells-1) mainPartition[i] = 0;
-        else mainPartition[i]++;                        //add 1 to mainPartition Cells (not base 0)
+        else mainPartition[i]++;  //add 1 to mainPartition Cells (not base 0)
     }
-
 
     //First: Global Routing
     classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs, boundaries, channels);
-
-    std::cout<<"\nnets classified\n";
 
     global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
 
@@ -130,15 +128,6 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     makeBranches(cellData, netlistPairs, layout);
 
-    
-    
-//    printf("lower left cell corners:\n\n");
-//    for(int i=0; i<cellData.size(); i++)
-//    {
-//        printf("%i,%i  ",cellData[i].x, cellData[i].y);
-//    }
-//    printf("\n\n\n");
-    
 
     ////////////////////////////////////////////////////////////
     ////OUTPUT FILE PRINTING////////////////////////////////////
@@ -163,6 +152,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         std::cout<<mainPartition[i+mainPartition.size()/2]<<"\t";
     }
     
+    
     //print CSV -- using to paste into spreadsheet for debugging
     for (int i=0; i<layout.size(); i++)
     {
@@ -177,6 +167,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         outCSV << "\n";
     }
 
+    
     //print out the magic file head and cells
     outMag << "magic\ntech scmos\ntimestamp\n<< pdiffusion >>\n";
     for (int i=0; i<layout.size(); i++)

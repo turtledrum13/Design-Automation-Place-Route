@@ -10,6 +10,28 @@
 #include <vector>
 #include <stdlib.h>
 
+
+void classifyNets(std::vector<cell> cellData, std::vector<std::vector<int> > layout, std::vector<net> & netsGlobal, std::vector<net> & netsChannel, std::vector<net> & netlistPairs, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels)
+{
+    std::vector<bool> boundaryLoc;
+    
+    findBoundaries(cellData, layout, boundaryLoc);
+    makeBoundaryVec(boundaryLoc, boundaries);
+    makeChannelVec(boundaryLoc, channels);
+    
+    for (int i=0; i<netlistPairs.size(); i++)
+    {
+        isGlobal(channels, netlistPairs[i], cellData);
+    }
+    
+    for (int i=0; i<netlistPairs.size(); i++)
+    {
+        if (netlistPairs[i].global) netsGlobal.push_back(netlistPairs[i]);
+        else netsChannel.push_back(netlistPairs[i]);
+    }
+}
+
+
 void findBoundaries(std::vector<cell> cellData, std::vector<std::vector<int> > layout, std::vector<bool> & boundaryLoc)
 {
     size_t length = layout.size(); //parameter equal to number of rows in layout
@@ -187,44 +209,4 @@ void isGlobal(std::vector<std::pair<int,int> > channels, net & netPair, std::vec
         
     }
 }
-
-
-void classifyNets(std::vector<cell> cellData, std::vector<std::vector<int> > layout, std::vector<net> & netsGlobal, std::vector<net> & netsChannel, std::vector<net> & netlistPairs, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels)
-{
-    std::vector<bool> boundaryLoc;
-    
-    findBoundaries(cellData, layout, boundaryLoc);
-    makeBoundaryVec(boundaryLoc, boundaries);
-    makeChannelVec(boundaryLoc, channels);
-
-    for (int i=0; i<netlistPairs.size(); i++)
-    {
-        isGlobal(channels, netlistPairs[i], cellData);
-    }
-
-    for (int i=0; i<netlistPairs.size(); i++)
-    {
-        if (netlistPairs[i].global) netsGlobal.push_back(netlistPairs[i]);
-        else netsChannel.push_back(netlistPairs[i]);
-    }
-
-
-//    printf("\n\nboundary bool:\n");
-//    for (int i=0; i<boundaryLoc.size(); i++)
-//    {
-//        printf(boundaryLoc[i] ? "1 " : "0 ");
-//    }
-//
-//    printf("\n\nboundary locations:\n");
-//    for (int i=0; i<boundaries.size(); i++)
-//    {
-//        printf("%i ",boundaries[i]);
-//    }
-//    printf("\n\nchannel locations:\n");
-//    for (int i=0; i<channels.size(); i++)
-//    {
-//        printf("(%i,%i) ",channels[i].first, channels[i].second);
-//    }
-}
-
 

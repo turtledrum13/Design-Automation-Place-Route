@@ -20,7 +20,7 @@ void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> >& layou
 
 void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, std::vector<std::vector<int> >& layout);
 
-void addRows(int numRows, int atRow, std::vector<std::vector<int> > & layout);
+void insertRows(int numRows, int atRow, std::vector<std::vector<int> > & layout);
 
 void appendCols(int numCols, std::vector<std::vector<int> >& layout);
 

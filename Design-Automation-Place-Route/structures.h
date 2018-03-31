@@ -30,7 +30,9 @@ struct net
     bool routed;                    //whether the net has been routed yet or not
     bool global;                    //true if net needs to be routed globally
     int channel;                    //channel number if channel routing is possible
-    int x1, x2, xSrc, xDest, y;     //beginning column and end column of the net's trunk, row of trunk
+    int x1, x2, y;                  //beginning column and end column of the net's trunk, row of trunk
+    int xSrc, xDest;                //x-positions of Source/Destination Cell terminals
+    int span;                       //number of columns covered by the horizontal net component
     
     void setSpan(int srcX, int destX)
     {
@@ -47,6 +49,8 @@ struct net
             x1 = destX;
             x2 = srcX;
         }
+        
+        span = x2-x1;
     }
 };
 

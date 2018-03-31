@@ -71,8 +71,7 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
         layout[cellData[i].y][cellData[i].x] = cellData[i].r;
     }
     
-    printf("\nDid global routing\n\n"); 
-}
+}   //Finished with global routing///////////////////////////////////////
 
 
 

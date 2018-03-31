@@ -39,6 +39,7 @@ void constraintList::appendNode(int num)
     }
 }
 
+
 void constraintList::display()
 {
     graphNode *newNode = head;
@@ -55,15 +56,18 @@ void constraintList::display()
     }
 }
 
+
 int constraintList::findHead()
 {
     return head->value;
 }
 
+
 bool constraintList::notEmpty()
 {
     return (head != NULL);
 }
+
 
 bool constraintList::isEmpty(int self)
 {
@@ -78,6 +82,7 @@ bool constraintList::isEmpty(int self)
     return true;
 }
 
+
 bool constraintList::findVal(int val)
 {
     graphNode *newNode = head;
@@ -90,6 +95,7 @@ bool constraintList::findVal(int val)
     
     return false;
 }
+
 
 std::vector<int> constraintList::returnList()
 {
@@ -104,6 +110,7 @@ std::vector<int> constraintList::returnList()
 
     return list;
 }
+
 
 void constraintList::removeAll(int num)
 {
