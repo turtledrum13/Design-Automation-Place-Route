@@ -140,7 +140,7 @@ void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, i
         {
             if (mainPartition[z]!=numOfCells)
             {
-                cellData[mainPartition[z]].x = j*6;
+                cellData[mainPartition[z]].x = j*7;
                 cellData[mainPartition[z]].y = i*7+5;
                 cellData[mainPartition[z]].cell = mainPartition[z]+1;
             }

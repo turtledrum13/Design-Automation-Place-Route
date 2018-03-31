@@ -16,8 +16,9 @@
 int main()        //use argc and argv to pass command prompt arguments to main()
 {
     //initialize files
-    std::ifstream fileIn ("Resources/v1.2/1");
-    std::ofstream outFile ("out.txt");
+    std::string benchNum = "1";
+    std::ifstream fileIn ("Resources/v1.2/"+benchNum);
+    std::ofstream outFile ("output"+benchNum+".csv");
     std::ofstream outCSV ("magicCSV.csv");
     std::ofstream outMag ("magFile.mag");
 
@@ -133,28 +134,6 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     ////OUTPUT FILE PRINTING////////////////////////////////////
     ////////////////////////////////////////////////////////////
 
-    //output the cutset and partitions to output file
-    outFile<<cutset<<"\n";
-    std::cout<<"\ncutset: "<<cutset<<"\n";
-
-    for(int i=0; i<mainPartition.size()/2; i++)
-    {
-        outFile<<mainPartition[i]+1<<"\t";
-        std::cout<<mainPartition[i]<<"\t";
-    }
-
-    outFile<<"\n";
-    std::cout<<"\n";
-
-    for(int i=0; i<mainPartition.size()/2; i++)
-    {
-        outFile<<mainPartition[i+mainPartition.size()/2]+1<<"\t";
-        std::cout<<mainPartition[i+mainPartition.size()/2]<<"\t";
-    }
-    
-    printf("\n\nLAYOUT DIMENSIONS (WxH):\n\t  %i x %i\n\n",layout[0].size(), layout.size());
-    
-    
     //print CSV -- using to paste into spreadsheet for debugging
     for (int i=0; i<layout.size(); i++)
     {
@@ -170,6 +149,11 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     }
 
     
+    ////////////////////////////////////////////////////////////////////////////////////////
+    
+    int cellArea = 0;
+    int wireArea = 0;
+    
     //print out the magic file head and cells
     outMag << "magic\ntech scmos\ntimestamp\n<< pdiffusion >>\n";
     for (int i=0; i<layout.size(); i++)
@@ -179,6 +163,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
             if(layout[i][j] == 1 || layout[i][j] == 3 || layout[i][j] == 5)
             {
                 outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+                cellArea++;
             }
         }
     }
@@ -192,6 +177,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
             if(layout[i][j] == 7)
             {
                 outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+                wireArea++;
             }
         }
     }
@@ -205,8 +191,83 @@ int main()        //use argc and argv to pass command prompt arguments to main()
             if(layout[i][j] == 8)
             {
                 outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+                wireArea++;
             }
         }
     }
 
+    
+////////////////////////////////////////////////////////////////////////////////////////
+
+    //output basic program data
+    outFile  << "BENCH " << benchNum <<" REPORT:\n";
+    std::cout<< "\n\n\n\nBENCH " << benchNum <<" REPORT:\n\n";
+
+    outFile  << "ORIGINAL CELLS," << numOfCells <<"\n";
+    std::cout<< "ORIGINAL CELLS: " << numOfCells <<"\n";
+
+    outFile  << "ORIGINAL NETS," << numOfCells <<"\n\n";
+    std::cout<< "ORIGINAL NETS: " << numOfCells <<"\n\n";
+    
+    
+    int numFeedThru = 0;
+    for(size_t i=0; i<cellData.size(); i++) if(cellData[i].r > 4) numFeedThru++;
+    
+    outFile  << "FEED-THRU CELLS," << numFeedThru <<"\n";
+    std::cout<< "FEED-THRU CELLS: " << numFeedThru <<"\n";
+    
+    int numDogleg = cellData.size()-numOfCells-numFeedThru;
+    
+    outFile  << "FINAL NETS," << netlistPairs.size()-numDogleg <<"\n";
+    std::cout<< "FINAL NETS: " << netlistPairs.size()-numDogleg <<"\n";
+    
+    outFile  << "NUMBER OF DOGLEGS," << numDogleg <<"\n\n";
+    std::cout<< "NUMBER OF DOGLEGS: " << numDogleg <<"\n\n";
+    
+    
+    int totalArea = layout[0].size()*layout.size();
+    int emptySpace = totalArea-cellArea-wireArea;
+
+    outFile  << "LAYOUT DIMENSIONS (WxH)," << layout[0].size() <<"," << layout.size() <<"\n";
+    std::cout<< "LAYOUT DIMENSIONS (WxH): " << layout[0].size() <<"x" << layout.size() <<"\n";
+    
+    outFile  << "CELL AREA," << cellArea << "," << (float)cellArea/totalArea <<"\n";
+    std::cout<< "CELL AREA: " << cellArea << " = " << (float)cellArea/totalArea <<"\n";
+    
+    outFile  << "WIRE AREA," << wireArea << "," << (float)wireArea/totalArea <<"\n";
+    std::cout<< "WIRE AREA: " << wireArea << " = " << (float)wireArea/totalArea <<"\n";
+    
+    
+    outFile  << "EMPTY SPACE," << emptySpace << "\n\n";
+    std::cout<< "EMPTY SPACE: " << emptySpace << "\n\n";
+    
+    outFile  << "TOTAL AREA," << totalArea << "\n";
+    std::cout<< "TOTAL AREA: " << totalArea << "\n";
+    
+    outFile  << "FEATURE DENSITY," << (float)(cellArea+wireArea)/totalArea << "\n";
+    std::cout<< "FEATURE DENSITY: " << (float)(cellArea+wireArea)/totalArea << "\n";
+    
+
+
+
+
+//output the cutset and partitions to output file
+//    outFile<<cutset<<"\n";
+//    std::cout<<"\ncutset: "<<cutset<<"\n";
+//
+//    for(int i=0; i<mainPartition.size()/2; i++)
+//    {
+//        outFile<<mainPartition[i]+1<<"\t";
+//        std::cout<<mainPartition[i]<<"\t";
+//    }
+//
+//    outFile<<"\n";
+//    std::cout<<"\n";
+//
+//    for(int i=0; i<mainPartition.size()/2; i++)
+//    {
+//        outFile<<mainPartition[i+mainPartition.size()/2]+1<<"\t";
+//        std::cout<<mainPartition[i+mainPartition.size()/2]+1<<"\t";
+//    }
+    
 }

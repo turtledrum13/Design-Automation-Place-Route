@@ -29,6 +29,24 @@ void classifyNets(std::vector<cell> cellData, std::vector<std::vector<int> > lay
         if (netlistPairs[i].global) netsGlobal.push_back(netlistPairs[i]);
         else netsChannel.push_back(netlistPairs[i]);
     }
+    
+    //    printf("\n\nboundary bool:\n");
+    //    for (int i=0; i<boundaryLoc.size(); i++)
+    //    {
+    //        printf(boundaryLoc[i] ? "1 " : "0 ");
+    //    }
+    //
+        printf("\n\nboundary locations:\n");
+        for (int i=0; i<boundaries.size(); i++)
+        {
+            printf("%i ",boundaries[i]);
+        }
+        printf("\n\nchannel locations:\n");
+        for (int i=0; i<channels.size(); i++)
+        {
+            printf("(%i,%i) ",channels[i].first, channels[i].second);
+        }
+        printf("\n\n");
 }
 
 

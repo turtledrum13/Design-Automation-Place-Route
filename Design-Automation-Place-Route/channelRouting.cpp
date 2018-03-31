@@ -132,13 +132,15 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             }
             else        //caught in a cycle and need to dogleg
             {
-                printf("\n\nCYCLE  --  %i nets remaining\n\n\n", netsRemaining);
+                printf("\n\nCYCLE  --  %i nets remaining\n", netsRemaining);
                 for(size_t i=0; i<HCG.size(); i++)
                 {
                     net* cycleNet = channelVec[N].nets[i];
+                    printf("\t\tHCG SIZE %zu\n\n\n",HCG.size());
                     if(!cycleNet->routed)  //for the first unrouted net
                     {
                         //////////TEMP DOGLEG WORKAROUND///////////
+                        printf("skipping net %i\n\n\n",cycleNet->num);
                         cycleNet->routed = true;
                         netsRemaining --;
                         addTrack(2, atRow, cellData, netlistPairs, layout, boundaries, channels);
