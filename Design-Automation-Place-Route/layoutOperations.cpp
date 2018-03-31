@@ -15,21 +15,10 @@
 
 void makeCell(cell C, std::vector<std::vector<int> > & layout)
 {
-    bool isEmpty = true;
-
     int size = 6;           //default cell size is 6x6
     if (C.r > 4) size = 3;  //if the rotation code is 5 or 6 then cell is a pass through cell
 
-    for (int row=C.y; row>C.y-6; row--)
-    {
-        for (int col=C.x; col<C.x+size; col++)
-        {
-            if (layout[row][col] > 0) isEmpty = false;
-        }
-    }
 
-    if (isEmpty)
-    {
         for (int row=C.y; row>C.y-6; row--)
         {
             for (int col=C.x; col<C.x+size; col++)
@@ -37,22 +26,21 @@ void makeCell(cell C, std::vector<std::vector<int> > & layout)
                 layout[row][col] = C.r;
             }
         }
-    }
-    else
-    {
-        printf("failed to add cell here\n");
-    }
+    
+    layout[C.y][C.x] = 0; //make lower left corners 0 to help with feed-through cell placement
 }
 
-void makeTrunk(net & N, int atRow, std::vector<std::vector<int> > & layout)
+
+void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> > & layout)
 {
-    for(int i=N.x1; i < N.x2+1; i++)
+    for(int i=currentNet->x1; i < currentNet->x2+1; i++)
     {
         layout[atRow][i] = 7;
     }
-    N.y = atRow;
-    N.routed = true;
+    currentNet->y = atRow;
+    currentNet->routed = true;
 }
+
 
 void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, std::vector<std::vector<int> >& layout)
 {
@@ -97,7 +85,8 @@ void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, s
     }
 }
 
-void addRows(int numRows, int atRow, std::vector<std::vector<int> > & layout)
+
+void insertRows(int numRows, int atRow, std::vector<std::vector<int> > & layout)
 {
     for (int i=0; i<numRows; i++)
     {
@@ -107,6 +96,7 @@ void addRows(int numRows, int atRow, std::vector<std::vector<int> > & layout)
         layout.insert(layout.begin()+atRow,1,insertVec);
     }
 }
+
 
 void appendCols(int numCols, std::vector<std::vector<int> > & layout)
 {
@@ -119,6 +109,7 @@ void appendCols(int numCols, std::vector<std::vector<int> > & layout)
     }
 }
 
+
 void appendRows(int numCols, std::vector<std::vector<int> > & layout)
 {
     std::vector<int> dummyRow (layout[0].size(), 0);
@@ -128,6 +119,7 @@ void appendRows(int numCols, std::vector<std::vector<int> > & layout)
         layout.push_back(dummyRow);
     }
 }
+
 
 void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
@@ -148,7 +140,7 @@ void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, i
         {
             if (mainPartition[z]!=numOfCells)
             {
-                cellData[mainPartition[z]].x = j*7;
+                cellData[mainPartition[z]].x = j*6;
                 cellData[mainPartition[z]].y = i*7+5;
                 cellData[mainPartition[z]].cell = mainPartition[z]+1;
             }
