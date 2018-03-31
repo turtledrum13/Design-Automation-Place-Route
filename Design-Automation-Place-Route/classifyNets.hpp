@@ -19,7 +19,7 @@ void findBoundaries(std::vector<cell> cellData, std::vector<std::vector<int> > l
 
 void makeBoundaryVec (std::vector<bool> boundaryLoc, std::vector<int> & boundaries);
 
-void makeChannelVec (std::vector<bool> boundaryLoc, std::vector<std::pair<int,int> > & channels);
+void makeChannelVec (std::vector<int>& boundaries, std::vector<std::pair<int,int> > & channels);
 
 void isGlobal(std::vector<std::pair<int,int> > channels, net & netPair, std::vector<cell> cellData);
 

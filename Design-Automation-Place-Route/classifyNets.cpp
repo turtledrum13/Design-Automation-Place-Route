@@ -17,7 +17,7 @@ void classifyNets(std::vector<cell> cellData, std::vector<std::vector<int> > lay
     
     findBoundaries(cellData, layout, boundaryLoc);
     makeBoundaryVec(boundaryLoc, boundaries);
-    makeChannelVec(boundaryLoc, channels);
+    makeChannelVec(boundaries, channels);
     
     for (int i=0; i<netlistPairs.size(); i++)
     {
@@ -72,13 +72,18 @@ void findBoundaries(std::vector<cell> cellData, std::vector<std::vector<int> > l
 
 void makeBoundaryVec (std::vector<bool> boundaryLoc, std::vector<int> & boundaries)
 {
-    //set first boundary as bottom row
-    boundaries.push_back(boundaryLoc.size()-1);
+    int width = boundaryLoc.size()-1;
     
-    //from the second boundary to the second last, get boundaries from boundaryLoc
-    for (int i=boundaryLoc.size()-1; i>=0; i--)
+    //set first boundary as bottom row
+    boundaries.push_back(width);
+    
+    //for all the boundaries
+    for (int i=width; i>-1; i--)
     {
-        if (boundaryLoc[i]) boundaries.push_back(i);
+        if (i%7 == 0 || (i-5)%7 == 0)
+        {
+            boundaries.push_back(i);
+        }
     }
     
     //set last boundary as top row
@@ -86,37 +91,17 @@ void makeBoundaryVec (std::vector<bool> boundaryLoc, std::vector<int> & boundari
 }
 
 
-void makeChannelVec (std::vector<bool> boundaryLoc, std::vector<std::pair<int,int> > & channels)
+void makeChannelVec (std::vector<int>& boundaries, std::vector<std::pair<int,int> > & channels)
 {
-    //set first channel as <bottom boundary,bottom boundary>
-    std::pair<int,int> firstChannel (boundaryLoc.size()-1, boundaryLoc.size()-1);
-    channels.push_back(firstChannel);
-
-    //from the second boundary location to the second last boundary location
-    int bottomBoundary = 0, topBoundary = 0;
-
-    for (size_t i=boundaryLoc.size()-2; i>0; i--)
+    std::pair<int,int> newChannel;
+    
+    for(size_t i=0; i<boundaries.size()/2; i++)
     {
-        if (boundaryLoc[i])
-        {
-            if (topBoundary == 0)
-            {
-                if (bottomBoundary == 0) bottomBoundary = i;
-                else topBoundary = i;
-            }
-        }
-
-        if (bottomBoundary!= 0 && topBoundary != 0)
-        {
-            std::pair<int,int> nextChannel (bottomBoundary, topBoundary);
-            channels.push_back(nextChannel);
-            bottomBoundary = 0; topBoundary = 0;
-        }
+        newChannel.first = boundaries[2*i];
+        newChannel.second = boundaries[2*i+1];
+        
+        channels.push_back(newChannel);
     }
-
-    //set last channel as <0,0>
-    std::pair<int,int> lastChannel (0, 0);
-    channels.push_back(lastChannel);
 }
 
 
