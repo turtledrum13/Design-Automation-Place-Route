@@ -73,6 +73,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         int previousPlacement;
         int numTracks = 0;
         bool cycle = false;
+        
         //if the bottom channel has nets in it, create space to insert tracks via normal method
         if(N==0)
         {
@@ -440,8 +441,8 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     //once new cells have been formed and pointed to the new cell, add one to the width and numNets of channel
     channel.width ++;
     channel.numNets ++;
-    //update netpointer (now .nets)
-    
+    //update netpointer
+
     //modify top and bottom boundaries as needed, including inserting or whatever...
 
 
