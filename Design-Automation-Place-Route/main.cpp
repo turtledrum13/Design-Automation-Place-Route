@@ -153,6 +153,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     int cellArea = 0;
     int wireArea = 0;
+    int numVias = 0;
 
     //print out the magic file head and cells
     outMag << "magic\ntech scmos\ntimestamp\n<< pdiffusion >>\n";
@@ -236,7 +237,9 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     outFile  << "WIRE AREA," << wireArea << "," << (float)wireArea/totalArea <<"\n";
     std::cout<< "WIRE AREA: " << wireArea << " = " << (float)wireArea/totalArea <<"\n";
-
+    
+    outFile  << "NUMBER OF VIAS," << numVias << "," << (float)numVias/totalArea <<"\n";
+    std::cout<< "NUMBER OF VIAS: " << numVias << " = " << (float)numVias/totalArea <<"\n";
 
     outFile  << "EMPTY SPACE," << emptySpace << "\n\n";
     std::cout<< "EMPTY SPACE: " << emptySpace << "\n\n";
@@ -246,6 +249,8 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     outFile  << "FEATURE DENSITY," << (float)(cellArea+wireArea)/totalArea << "\n";
     std::cout<< "FEATURE DENSITY: " << (float)(cellArea+wireArea)/totalArea << "\n";
+    
+    
 
 
 
