@@ -65,12 +65,12 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
         }
         //printf("\n<%i,%i> <%i,%i> global = %i",netlistPairs[i].c1.first+1,netlistPairs[i].c1.second,netlistPairs[i].c2.first+1,netlistPairs[i].c2.second, netlistPairs[i].global);
     }
-    
+
     for(size_t i=0; i<cellData.size(); i++)                 //put the lower left corners of layout cells back to normal
     {
         layout[cellData[i].y][cellData[i].x] = cellData[i].r;
     }
-    
+
 }   //Finished with global routing///////////////////////////////////////
 
 
@@ -211,7 +211,7 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
                 result.x = index;
                 break;
             }
-            
+
             if(index<layout[result.y].size()-1) index++;
             else {result.x = index-5; break;}
         }
@@ -259,7 +259,7 @@ void updateLayout(coord XY, std::vector<std::vector<int> > &layout, int cellNum)
     {
         layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,3, 5);
     }
-    
+
     //check end of rows
     int expansion = 0;
     for(int i=1; i<4; i++)
@@ -270,7 +270,7 @@ void updateLayout(coord XY, std::vector<std::vector<int> > &layout, int cellNum)
 
     //expand columns as much as necessary
     appendCols(expansion, layout);
-    
+
     //chop the nub
     for(int i=0; i<6; i++)
     {
@@ -285,7 +285,7 @@ void printOut(std::ofstream & file, std::vector<std::vector<int> > & layout)
     for (int i=0; i<layout.size(); i++)
     {
         size_t index = layout[i].size();
-        
+
         for(int j=0; j<index; j++)
         {
             file << layout[i][j] << ",";
