@@ -204,12 +204,10 @@ void isGlobal(std::vector<std::pair<int,int> > channels, net & netPair, std::vec
                     netPair.channel = j; break;
             }
         }
-
     }
     else
     {
         netPair.global = true;
-        
     }
 }
 
