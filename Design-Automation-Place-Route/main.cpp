@@ -3,6 +3,8 @@
 #include <vector>
 #include <stdlib.h>
 #include <cmath>
+#include <cstdio>
+#include <ctime>
 
 #include "lin.h"
 #include "celllist.h"
@@ -13,14 +15,42 @@
 #include "structures.h"
 #include "classifyNets.hpp"
 
-int main()        //use argc and argv to pass command prompt arguments to main()
+int main(int argc,char *argv[])
 {
+    //Extract bench number from user input////////////////////////////////
+    
+    std::string inputFile;
+    std::string benchNum;
+    
+    for(int i = 1; i < argc; i++)
+    {
+        inputFile += argv[i];
+    }
+    if(inputFile.size() >= 7)
+    {
+        benchNum = inputFile[0];
+        if(inputFile[1] != '.') benchNum += inputFile[1];
+    }
+    else
+    {
+        benchNum = "X";
+    }
+    
+    
+    std::ifstream fileIn (argv[1]);
+    std::ofstream outMag (argv[2]);
+    
+    
+    //initiate program timer
+    std::clock_t startTime;
+    startTime = std::clock();
+    
     //initialize files
-    std::string benchNum = "1";
-    std::ifstream fileIn ("Resources/v1.2/"+benchNum);
-    std::ofstream outFile ("output"+benchNum+".csv");
-    std::ofstream outCSV ("magicCSV.csv");
-    std::ofstream outMag ("magFile.mag");
+    //std::string benchNum = "1";
+    //std::ifstream fileIn ("Resources/v1.2/"+benchNum);
+    //std::ofstream outFile ("output"+benchNum+".csv");
+    //std::ofstream outCSV ("magicCSV.csv");
+    //std::ofstream outMag ("magFile.mag");
 
     //intitilaize vectors
     std::vector<numberList> cellList;
@@ -198,19 +228,6 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     }
     
     //print out the magic file vias
-    outMag<<"<< metal2 >>\n";
-    for (int i=0; i<layout.size(); i++)
-    {
-        for(int j=0; j<layout[i].size(); j++)
-        {
-            if(layout[i][j] == 9)
-            {
-                outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
-                numVias++;
-            }
-        }
-    }
-
     outMag<<"<< via >>\n";
     for (int i=0; i<layout.size(); i++)
     {
@@ -219,6 +236,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
             if(layout[i][j] == 9)
             {
                 outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+                numVias++;
             }
         }
     }
@@ -273,32 +291,11 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     outFile  << "TOTAL AREA," << totalArea << "\n";
     std::cout<< "TOTAL AREA: " << totalArea << "\n";
 
-    outFile  << "FEATURE DENSITY," << (float)(cellArea+wireArea)/totalArea << "\n";
-    std::cout<< "FEATURE DENSITY: " << (float)(cellArea+wireArea)/totalArea << "\n";
+    outFile  << "FEATURE DENSITY," << (float)(cellArea+wireArea)/totalArea << "\n\n\n";
+    std::cout<< "FEATURE DENSITY: " << (float)(cellArea+wireArea)/totalArea << "\n\n\n";
     
     
-
-
-
-
-
-//output the cutset and partitions to output file
-//    outFile<<cutset<<"\n";
-//    std::cout<<"\ncutset: "<<cutset<<"\n";
-//
-//    for(int i=0; i<mainPartition.size()/2; i++)
-//    {
-//        outFile<<mainPartition[i]+1<<"\t";
-//        std::cout<<mainPartition[i]<<"\t";
-//    }
-//
-//    outFile<<"\n";
-//    std::cout<<"\n";
-//
-//    for(int i=0; i<mainPartition.size()/2; i++)
-//    {
-//        outFile<<mainPartition[i+mainPartition.size()/2]+1<<"\t";
-//        std::cout<<mainPartition[i+mainPartition.size()/2]+1<<"\t";
-//    }
-
+    double endTime = ( std::clock() - startTime ) / (double) CLOCKS_PER_SEC;
+    outFile  << "EXECUTION TIME," << endTime << ",s";
+    std::cout<< "EXECUTION TIME: " << endTime << " s\n\n";
 }
