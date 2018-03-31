@@ -211,6 +211,18 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         }
     }
 
+    outMag<<"<< via >>\n";
+    for (int i=0; i<layout.size(); i++)
+    {
+        for(int j=0; j<layout[i].size(); j++)
+        {
+            if(layout[i][j] == 9)
+            {
+                outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+            }
+        }
+    }
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
