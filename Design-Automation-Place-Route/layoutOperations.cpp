@@ -19,14 +19,14 @@ void makeCell(cell C, std::vector<std::vector<int> > & layout)
     if (C.r > 4) size = 3;  //if the rotation code is 5 or 6 then cell is a pass through cell
 
 
-        for (int row=C.y; row>C.y-6; row--)
+    for (int row=C.y; row>C.y-6; row--)
+    {
+        for (int col=C.x; col<C.x+size; col++)
         {
-            for (int col=C.x; col<C.x+size; col++)
-            {
-                layout[row][col] = C.r;
-            }
+            layout[row][col] = C.r;
         }
-    
+    }
+
     layout[C.y][C.x] = 0; //make lower left corners 0 to help with feed-through cell placement
 }
 
