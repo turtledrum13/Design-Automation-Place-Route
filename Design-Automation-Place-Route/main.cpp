@@ -16,7 +16,7 @@
 int main()        //use argc and argv to pass command prompt arguments to main()
 {
     //initialize files
-    std::string benchNum = "6";
+    std::string benchNum = "1";
     std::ifstream fileIn ("Resources/v1.2/"+benchNum);
     std::ofstream outFile ("output"+benchNum+".csv");
     std::ofstream outCSV ("magicCSV.csv");
@@ -196,6 +196,20 @@ int main()        //use argc and argv to pass command prompt arguments to main()
             }
         }
     }
+    
+    //print out the magic file vias
+    outMag<<"<< metal2 >>\n";
+    for (int i=0; i<layout.size(); i++)
+    {
+        for(int j=0; j<layout[i].size(); j++)
+        {
+            if(layout[i][j] == 9)
+            {
+                outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+                numVias++;
+            }
+        }
+    }
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -229,8 +243,8 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     int totalArea = layout[0].size()*layout.size();
     int emptySpace = totalArea-cellArea-wireArea;
 
-    outFile  << "LAYOUT DIMENSIONS (WxH)," << layout[0].size() <<"," << layout.size() <<"\n";
-    std::cout<< "LAYOUT DIMENSIONS (WxH): " << layout[0].size() <<"x" << layout.size() <<"\n";
+    outFile  << "LAYOUT DIMENSIONS (WxH)," << layout[0].size() <<"," << layout.size() <<"\n\n";
+    std::cout<< "LAYOUT DIMENSIONS (WxH): " << layout[0].size() <<"x" << layout.size() <<"\n\n";
 
     outFile  << "CELL AREA," << cellArea << "," << (float)cellArea/totalArea <<"\n";
     std::cout<< "CELL AREA: " << cellArea << " = " << (float)cellArea/totalArea <<"\n";
