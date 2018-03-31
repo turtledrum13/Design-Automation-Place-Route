@@ -32,10 +32,17 @@ void findBoundaries(std::vector<cell> cellData, std::vector<std::vector<int> > l
 
 void makeBoundaryVec (std::vector<bool> boundaryLoc, std::vector<int> & boundaries)
 {
+    //set first boundary as bottom row
+    boundaries.push_back(boundaryLoc.size()-1);
+    
+    //from the second boundary to the second last, get boundaries from boundaryLoc
     for (int i=boundaryLoc.size()-1; i>=0; i--)
     {
         if (boundaryLoc[i]) boundaries.push_back(i);
     }
+    
+    //set last boundary as top row
+    boundaries.push_back(0);
 }
 
 
@@ -214,9 +221,9 @@ void classifyNets(std::vector<cell> cellData, std::vector<std::vector<int> > lay
 //        printf("%i ",boundaries[i]);
 //    }
 //    printf("\n\nchannel locations:\n");
-//    for (int i=0; i<channelVec.size(); i++)
+//    for (int i=0; i<channels.size(); i++)
 //    {
-//        printf("(%i,%i) ",channelVec[i].first, channelVec[i].second);
+//        printf("(%i,%i) ",channels[i].first, channels[i].second);
 //    }
 }
 

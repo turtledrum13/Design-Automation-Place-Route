@@ -42,8 +42,7 @@ void constraintList::appendNode(int num)
 
 void constraintList::display()
 {
-    graphNode *newNode= new graphNode;
-    newNode=head;
+    graphNode *newNode = head;
     
     if(newNode == NULL)
     {
@@ -57,92 +56,45 @@ void constraintList::display()
     }
 }
 
-int constraintList::lookUp(int num) const
-{
-    graphNode *newNode=new graphNode;
-    newNode=head;
-    
-    while(newNode!=NULL)
-    {
-        if (newNode->value==num)
-        {
-            return 1;
-        }
-        else
-        {
-            newNode=newNode->next;
-        }
-    }
-    return 0;
-}
-
-
 int constraintList::findHead()
 {
-    graphNode *newNode = new graphNode;
-    newNode = head;
-    
-    return newNode->value;
+    return head->value;
 }
 
 bool constraintList::notEmpty()
 {
-    graphNode *newNode = new graphNode;
-    newNode = head;
-    
-    if (newNode==NULL)
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
+    return (head != NULL);
 }
 
 bool constraintList::isEmpty(int self)
 {
-    graphNode *newNode = new graphNode;
-    newNode = head;
+    graphNode *newNode = head;
     
     while(newNode != NULL)
     {
-        if(newNode->value != self)
-        {
-            //printf("\n\nfound something!!! %i - %i\n", self, newNode->value);
-            return false;
-        }
-        else
-        {
-            newNode = newNode->next;
-        }
+        if(newNode->value != self) return false;
+        else newNode = newNode->next;
     }
+    
     return true;
 }
 
 bool constraintList::findVal(int val)
 {
-    graphNode *newNode = new graphNode;
-    newNode = head;
+    graphNode *newNode = head;
     
     while(newNode!=NULL)
     {
-        if (newNode->value==val)
-        {
-            return true;
-        }
-        else
-        {
-            newNode=newNode->next;
-        }
+        if (newNode->value==val) return true;
+        else newNode=newNode->next;
     }
+    
     return false;
 }
 
 std::vector<int> constraintList::returnList()
 {
-    graphNode *newNode = new graphNode;
-    newNode = head;
+    graphNode *newNode = head;
     std::vector<int> list;
     
     while(newNode!=NULL)

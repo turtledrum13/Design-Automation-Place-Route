@@ -54,18 +54,23 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
                 destNet.second = 1;
             }
 
-            netlistPairs.push_back(netlistPairs[i]);    //copy the current netlist of focus to the end of the list
+            netlistPairs.push_back(netlistPairs[i]);        //copy the current netlist of focus to the end of the list
 
-            netlistPairs[i].dest = srcNet;                //replace second cell with new pass through cell
+            netlistPairs[i].dest = srcNet;                  //replace second cell with new pass through cell
             isGlobal(channels, netlistPairs[i], cellData);
 
-            netlistPairs.back().src = destNet;           //replace first cell with new pass through cell
+            netlistPairs.back().src = destNet;              //replace first cell with new pass through cell
+            netlistPairs.back().num = cellData.size();      //assign new net number to the new net segment
             isGlobal(channels, netlistPairs.back(), cellData);
-
         }
-
         //printf("\n<%i,%i> <%i,%i> global = %i",netlistPairs[i].c1.first+1,netlistPairs[i].c1.second,netlistPairs[i].c2.first+1,netlistPairs[i].c2.second, netlistPairs[i].global);
     }
+    
+    for(size_t i=0; i<cellData.size(); i++)                 //put the lower left corners of layout cells back to normal
+    {
+        layout[cellData[i].y][cellData[i].x] = cellData[i].r;
+    }
+    
     printf("\nDid global routing\n\n"); 
 }
 
@@ -155,15 +160,13 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
     bool right = dest.x >= src.x;       //if the destination is to the right of the source in the layout
     bool top = false;
 
-    for(int i=0; i<bound.size(); i++)   //determine if the boundary is on a top edge or bottom edge
+    for(int i=1; i<bound.size(); i++)   //determine if the boundary is on a top cell edge or bottom cell edge
     {
         if (src.y == bound[i])
         {
-            if (i%2 != 0)
-            {
-                top = true;
-                break;
-            }
+            if (i%2 == 0) top = true;
+            else top = false;
+            break;
         }
     }
 
@@ -199,32 +202,33 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
     }
 
     //search in the direction of the destination for a column in which the partial net can terminate. This is the x-coordinate
-    if(right)
+    if(right) //search to the right
     {
         int index = src.x;
         while (true)
         {
-            if(layout[result.y][index] < 1 )//|| layout[result.y][index] > 4)
+            if(layout[result.y][index] < 1 && layout[result.y][index-1] != 0)
             {
                 result.x = index;
                 break;
             }
-            if(index<layout[result.y].size()-1) {index++;}
+            
+            if(index<layout[result.y].size()-1) index++;
             else {result.x = index-5; break;}
         }
     }
-    else
+    else //search to the left
     {
         int index = src.x;
         while (true)
         {
-            if(layout[result.y][index] < 1)//|| layout[result.y][index] > 4)
+            if(layout[result.y][index] > 0 && layout[result.y][index+1] == 0)
             {
-                result.x = index;
+                result.x = index+1;
                 break;
             }
 
-            if(index>0){index--;}
+            if(index>0) index--;
             else{result.x = 0; break;}
         }
     }

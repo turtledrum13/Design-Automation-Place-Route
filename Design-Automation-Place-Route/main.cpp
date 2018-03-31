@@ -130,12 +130,19 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     makeBranches(cellData, netlistPairs, layout);
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
+//    printf("lower left cell corners:\n\n");
+//    for(int i=0; i<cellData.size(); i++)
+//    {
+//        printf("%i,%i  ",cellData[i].x, cellData[i].y);
+//    }
+//    printf("\n\n\n");
+    
 
-
-
+    ////////////////////////////////////////////////////////////
+    ////OUTPUT FILE PRINTING////////////////////////////////////
+    ////////////////////////////////////////////////////////////
 
     //output the cutset and partitions to output file
     outFile<<cutset<<"\n";
@@ -155,7 +162,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         outFile<<mainPartition[i+mainPartition.size()/2]+1<<"\t";
         std::cout<<mainPartition[i+mainPartition.size()/2]<<"\t";
     }
-
+    
     //print CSV -- using to paste into spreadsheet for debugging
     for (int i=0; i<layout.size(); i++)
     {

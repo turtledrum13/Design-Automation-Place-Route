@@ -33,9 +33,7 @@ public:
     void appendNode(int num);
     
     void display();
-    
-    int lookUp(int num) const;
-  
+
     int findHead();
     
     bool notEmpty();
