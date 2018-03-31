@@ -58,8 +58,8 @@ int main()        //use argc and argv to pass command prompt arguments to main()
             netlistPairs.push_back(newNet);
         }
     }
-    
-    
+
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //PLACEMENT/////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,15 +86,15 @@ int main()        //use argc and argv to pass command prompt arguments to main()
     //create the list of cells and point them to their net pair
     createCellList(numOfNets, netArray, cellList, netlist, numOfCells);
 
-    
+
     //perform the bisection placement partitioning in to columns
     calculateCutset(fullPartition, numOfCells+1, netArray, cellList, numOfCells, numOfNets, cutset, mainPartition, false);
 
-    
+
     //perform the placement for each row of the layout
     rowPlacement(netArray, cellList,  numOfCells, numOfNets, mainPartition, n);
 
-    
+
     //Create the 2d array for the placement layout
     createArray(cellData, mainPartition, numOfCells);
     layout.resize(n*7-1, std::vector<int>(n*7-1, 0));
@@ -106,7 +106,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         makeCell(cellData[i], layout);
     }
 
-    
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //ROUTING///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,12 +148,12 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         outCSV << "\n";
     }
 
-    
+
     ////////////////////////////////////////////////////////////////////////////////////////
-    
+
     int cellArea = 0;
     int wireArea = 0;
-    
+
     //print out the magic file head and cells
     outMag << "magic\ntech scmos\ntimestamp\n<< pdiffusion >>\n";
     for (int i=0; i<layout.size(); i++)
@@ -196,7 +196,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         }
     }
 
-    
+
 ////////////////////////////////////////////////////////////////////////////////////////
 
     //output basic program data
@@ -208,45 +208,45 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 
     outFile  << "ORIGINAL NETS," << numOfCells <<"\n\n";
     std::cout<< "ORIGINAL NETS: " << numOfCells <<"\n\n";
-    
-    
+
+
     int numFeedThru = 0;
     for(size_t i=0; i<cellData.size(); i++) if(cellData[i].r > 4) numFeedThru++;
-    
+
     outFile  << "FEED-THRU CELLS," << numFeedThru <<"\n";
     std::cout<< "FEED-THRU CELLS: " << numFeedThru <<"\n";
-    
+
     int numDogleg = cellData.size()-numOfCells-numFeedThru;
-    
+
     outFile  << "FINAL NETS," << netlistPairs.size()-numDogleg <<"\n";
     std::cout<< "FINAL NETS: " << netlistPairs.size()-numDogleg <<"\n";
-    
+
     outFile  << "NUMBER OF DOGLEGS," << numDogleg <<"\n\n";
     std::cout<< "NUMBER OF DOGLEGS: " << numDogleg <<"\n\n";
-    
-    
+
+
     int totalArea = layout[0].size()*layout.size();
     int emptySpace = totalArea-cellArea-wireArea;
 
     outFile  << "LAYOUT DIMENSIONS (WxH)," << layout[0].size() <<"," << layout.size() <<"\n";
     std::cout<< "LAYOUT DIMENSIONS (WxH): " << layout[0].size() <<"x" << layout.size() <<"\n";
-    
+
     outFile  << "CELL AREA," << cellArea << "," << (float)cellArea/totalArea <<"\n";
     std::cout<< "CELL AREA: " << cellArea << " = " << (float)cellArea/totalArea <<"\n";
-    
+
     outFile  << "WIRE AREA," << wireArea << "," << (float)wireArea/totalArea <<"\n";
     std::cout<< "WIRE AREA: " << wireArea << " = " << (float)wireArea/totalArea <<"\n";
-    
-    
+
+
     outFile  << "EMPTY SPACE," << emptySpace << "\n\n";
     std::cout<< "EMPTY SPACE: " << emptySpace << "\n\n";
-    
+
     outFile  << "TOTAL AREA," << totalArea << "\n";
     std::cout<< "TOTAL AREA: " << totalArea << "\n";
-    
+
     outFile  << "FEATURE DENSITY," << (float)(cellArea+wireArea)/totalArea << "\n";
     std::cout<< "FEATURE DENSITY: " << (float)(cellArea+wireArea)/totalArea << "\n";
-    
+
 
 
 
@@ -269,5 +269,5 @@ int main()        //use argc and argv to pass command prompt arguments to main()
 //        outFile<<mainPartition[i+mainPartition.size()/2]+1<<"\t";
 //        std::cout<<mainPartition[i+mainPartition.size()/2]+1<<"\t";
 //    }
-    
+
 }
