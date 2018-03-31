@@ -48,10 +48,14 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         else if(destTerm.y == boundBottom)  channelVec[channelVecIndex].bottom[destTerm.x] = netID[channelVecIndex];
     }
 
+    printf("\nNets by Channel:\n");
     for(size_t i=0; i<netID.size(); i++)
     {
+        printf("%i  ",netID[i]);
         channelVec[i].numNets = netID[i];
     }
+    printf("\n\nTotal number of nets: %zu",netlistPairs.size());
+
 
     
     ///////////////////////////////////////////////
@@ -101,7 +105,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         {
 
             //////////PRINT UNROUTED NETS///////////
-            printf("\n\nUnrouted: \n");
+            printf("\n\n%i Unrouted: \n", netsRemaining);
             for(size_t i=0; i<HCG.size(); i++)
             {
                 int ind = HCG[i].findHead()-1;
@@ -128,7 +132,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             }
             else        //caught in a cycle and need to dogleg
             {
-                printf("\n\nCYCLE\n\n\n");
+                printf("\n\nCYCLE  --  %i nets remaining\n\n\n", netsRemaining);
                 for(size_t i=0; i<HCG.size(); i++)
                 {
                     net* cycleNet = channelVec[N].nets[i];

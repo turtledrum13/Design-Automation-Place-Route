@@ -152,6 +152,8 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         std::cout<<mainPartition[i+mainPartition.size()/2]<<"\t";
     }
     
+    printf("\n\nLAYOUT DIMENSIONS (WxH):\n\t  %i x %i\n\n",layout[0].size(), layout.size());
+    
     
     //print CSV -- using to paste into spreadsheet for debugging
     for (int i=0; i<layout.size(); i++)
