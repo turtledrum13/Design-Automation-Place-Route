@@ -47,7 +47,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         if(destTerm.y == boundTop && srcTerm.y != 0)  channelVec[channelVecIndex].top[destTerm.x] = netID[channelVecIndex];
         else if(destTerm.y == boundBottom)  channelVec[channelVecIndex].bottom[destTerm.x] = netID[channelVecIndex];
     }
-    
+
     for(size_t i=0; i<netID.size(); i++)
     {
         channelVec[i].numNets = netID[i];
@@ -73,7 +73,6 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         int previousPlacement;
         int numTracks = 0;
         bool cycle = false;
-        
         //if the bottom channel has nets in it, create space to insert tracks via normal method
         if(N==0)
         {
@@ -85,20 +84,20 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
                 atRow += 2;
             }
         }
-        
+
         //Loop through boundary vectors to create HCG (undirected graph)
         std::vector<constraintList> HCG;
         HCG = makeHCG(channelVec[N], netlistPairs);
-        
+
         //Loop through boundary vectors to create VCG (directed graph)
         std::vector<constraintList> VCG;
         VCG = makeVCG(channelVec[N]);
 
-        
-        
+
+
         while(netsRemaining > 0)
         {
-            
+
             //////////PRINT UNROUTED NETS///////////
             printf("\n\nUnrouted: ");
             for(size_t i=0; i<HCG.size(); i++)
@@ -116,8 +115,8 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             }
             printf("\n\n");
             //////////PRINT UNROUTED NETS///////////
-            
-            
+
+
             if(!cycle)  //if not caught in a cycle, add a new track
             {
                 addTrack(2, atRow, cellData, netlistPairs, layout, boundaries, channels);
@@ -144,8 +143,8 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
                     }
                 }
             }
-            
-            
+
+
             cycle = true; //assume cycle is true before scanning HCG (which could prove this assumption false)
 
             for(size_t i=0; i<HCG.size(); i++)
@@ -164,9 +163,9 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             }
         }
 
-        
+
         //////PRINTING//////////
-        
+
         //printing HCG
         std::cout << "\nHorizontal Constraint Graph:\n\n";
 
@@ -176,7 +175,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             std::cout << "\n\n";
         }
 
-        
+
         //printing out channel boundaries for debugging
         printf("\n\n");
         for(size_t j=0; j<channelVec[N].width; j++)
@@ -189,7 +188,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             printf("%i ",channelVec[N].bottom[j]);
         }
         printf("\n\n\n");
-        
+
         //printing VCG
         std::cout << "\n\nVertical Constraint Graph:\n\n";
 
@@ -239,7 +238,7 @@ void updateBelow(int numRows, int atRow, std::vector<cell> & cellData, std::vect
             channels[k].first += numRows;
         }
     }
-    
+
     for (size_t l=0; l<netlistPairs.size(); l++)
     {
         if (netlistPairs[l].y >= atRow)
@@ -374,7 +373,7 @@ std::vector<constraintList> makeVCG(chan C)
 void removeChild(int netNum, std::vector<constraintList>& HCG, std::vector<constraintList>& VCG)
 {
     std::vector<int> connections = HCG[netNum].returnList();
-    
+
     printf("Removed  ");
     for(size_t i=0; i<connections.size(); i++)
     {
@@ -384,7 +383,7 @@ void removeChild(int netNum, std::vector<constraintList>& HCG, std::vector<const
 //        VCG[connections[i]-1].display();
 //        printf("\n\n");
     }
-    
+
     printf("\n");
 }
 
@@ -393,7 +392,7 @@ int detectCycle(std::vector<constraintList>& VCG)
     int foundCycle = 0;
     std::vector<int> seen;
     std::vector<bool> visited (VCG.size(), false);
-    
+
     return foundCycle;
 }
 
@@ -402,9 +401,9 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     //take the child and break in two         //child and parent will be the actual IDs of the child and parent
     //Rules for breaking: must happen at a place that does not cause any new vertical conflicts
     //might have to detect cycle before doing any channel routing
-    
+
     //must break net in a way such that its parent can now be routed ????
-    
+
     //decide on a split point ???      ...arbitrary one for now (halfway point)
     net* childNet = channel.nets[child];
     net* parentNet = channel.nets[parent];
@@ -421,8 +420,8 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     
     newChildNet->xSrc = splitPoint;
     //newChildNet.x1 = ???, newChildNet.x2 = ???
-    
-    
+
+
     //add an implicit cell to cellData that is 1x1 at the split point and give it a lower left corner (use the default terminal offset and terminal coords cases)
     cell newCell;
     newCell.x = splitPoint;
@@ -430,9 +429,9 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     newCell.r = 0;
     newCell.nets = 2;
     newCell.cell = cellData.size();
-    
+
     cellData.push_back(newCell);
-    
+
     //point both nets to that new cell
     std::pair<int,int> newCellPair (1,0);
     childNet->dest = newCellPair;
@@ -444,10 +443,10 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     //update netpointer (now .nets)
     
     //modify top and bottom boundaries as needed, including inserting or whatever...
-    
-    
+
+
     //recalculate VCG and HCG (but not in the full way, just update them)
-    
+
     //HCG = anything with a connection to the current net should be checked against both the new partial net and the old partial net, updated accordingly
     std::vector<int> HConstraints = HCG[child].returnList();
 }
