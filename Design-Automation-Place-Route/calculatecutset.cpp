@@ -163,6 +163,7 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vecto
         cutset = cutset - Gmax;
 
         //finish the algorithm
+
         buffer=false;
 
         X.clear();

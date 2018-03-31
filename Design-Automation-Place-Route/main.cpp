@@ -178,7 +178,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         {
             if(layout[i][j] == 1 || layout[i][j] == 3 || layout[i][j] == 5)
             {
-                outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+                outMag<<"rect\t"<<j<<"\t"<<i<<"\t"<<j+1<<"\t"<<i+1<<"\n";
             }
         }
     }
@@ -191,7 +191,7 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         {
             if(layout[i][j] == 7)
             {
-                outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+                outMag<<"rect\t"<<j<<"\t"<<i<<"\t"<<j+1<<"\t"<<i+1<<"\n";
             }
         }
     }
@@ -204,7 +204,19 @@ int main()        //use argc and argv to pass command prompt arguments to main()
         {
             if(layout[i][j] == 8)
             {
-                outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+                outMag<<"rect\t"<<j<<"\t"<<i<<"\t"<<j+1<<"\t"<<i+1<<"\n";
+            }
+        }
+    }
+
+        outMag<<"<< via >>\n";
+    for (int i=0; i<layout.size(); i++)
+    {
+        for(int j=0; j<layout[i].size(); j++)
+        {
+            if(layout[i][j] == 9)
+            {
+                outMag<<"rect\t"<<j<<"\t"<<i<<"\t"<<j+1<<"\t"<<i+1<<"\n";
             }
         }
     }
