@@ -481,7 +481,17 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     printf("\nparent(%i): %i<-->%i\n",parent, parentNet->xSrc, parentNet->xDest);
     printf("child(%i): %i<-->%i\n",child, childNet->xSrc, childNet->xDest);
 
-    int splitPoint = childNet->x1 + abs(childNet->xSrc - childNet->xDest)/2; //approximate center of the child\
+    int splitPoint = childNet->x1 + 1;//abs(childNet->xSrc - childNet->xDest)/2; //approximate center of the child
+    
+    while (true)
+    {
+        if(abs(parentNet->x1-splitPoint) > 1 && abs(parentNet->x2-splitPoint) > 1) break;
+        else
+        {
+            splitPoint += 1;
+        }
+    }
+
     
     printf("\n<<Splitting child at %i>>\n\n",splitPoint);
     
