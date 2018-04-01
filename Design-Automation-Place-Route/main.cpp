@@ -17,24 +17,6 @@
 
 int main()//int argc,char *argv[])
 {
-
-    std::vector<constraintList> list(4);
-
-    list[0].appendNode(3);
-    list[1].appendNode(4);
-    list[2].appendNode(2);
-    list[3].appendNode(2);
-
-    int num;
-
-    num = detectCycle(list);
-
-    std::cout<<num;
-
-
-
-
-
     //Extract bench number from user input////////////////////////////////
     
 //    std::string inputFile;
@@ -64,7 +46,7 @@ int main()//int argc,char *argv[])
     startTime = std::clock();
     
     //initialize files
-    std::string benchNum = "1";
+    std::string benchNum = "2";
     std::ifstream fileIn ("Resources/v1.2/"+benchNum);
     std::ofstream outFile ("output"+benchNum+".csv");
     std::ofstream outCSV ("magicCSV.csv");

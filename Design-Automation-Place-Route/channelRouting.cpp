@@ -385,16 +385,33 @@ std::vector<constraintList> makeVCG(chan C)//, std::vector<constraintList>& HCG)
                 xSplit = x2;                //switch it to x2 if "id" can't be found on either boundary @ x2
             }
             
+            printf("\nnet %i floating at %i\n\n",id, xSplit);
+            
+            printf("Top:   %i  %i  %i\n\n",C.top[xSplit-1],C.top[xSplit],C.top[xSplit+1]);
+            printf("Btm:   %i  %i  %i\n\n\n",C.bottom[xSplit-1],C.bottom[xSplit],C.bottom[xSplit+1]);
+
             
             //add dogleg net to the VCG of the upper terminal --> for the x value that is not already there --> && !graph[C.top[xSplit+1]-1].findVal(i)
+            printf("\n%i: ",xSplit-1);if(C.top[xSplit-1] > 0) graph[C.top[xSplit-1]-1].display();
+            printf("\n%i: ",xSplit);  if(C.top[xSplit] > 0)   graph[C.top[xSplit]-1].display();
+            printf("\n%i: ",xSplit+1);if(C.top[xSplit+1] > 0) graph[C.top[xSplit+1]-1].display();
+            
             if(C.top[xSplit-1] > 0)     graph[C.top[xSplit-1]-1].appendNode(id);
             if(C.top[xSplit] > 0)       graph[C.top[xSplit]-1].appendNode(id);
             if(C.top[xSplit+1] > 0)     graph[C.top[xSplit+1]-1].appendNode(id);
             
+            printf("\n\nTop after: \n");
+            printf("\n%i: ",xSplit-1);if(C.top[xSplit-1] > 0) graph[C.top[xSplit-1]-1].display();
+            printf("\n%i: ",xSplit);  if(C.top[xSplit] > 0)   graph[C.top[xSplit]-1].display();
+            printf("\n%i: ",xSplit+1);if(C.top[xSplit+1] > 0) graph[C.top[xSplit+1]-1].display();
+            
             //add the lower terminals to the VCG of the dogleg net
-            if(C.bottom[xSplit-1] > 0)  graph[id-1].appendNode(C.bottom[xSplit-1]);
-            if(C.bottom[xSplit] > 0)    graph[id-1].appendNode(C.bottom[xSplit]);
-            if(C.bottom[xSplit+1] > 0)  graph[id-1].appendNode(C.bottom[xSplit+1]);
+            
+            
+            
+            if(C.bottom[xSplit-1] > 0 && C.bottom[xSplit-1] != id)  graph[id-1].appendNode(C.bottom[xSplit-1]);
+            if(C.bottom[xSplit] > 0 && C.bottom[xSplit] != id)      graph[id-1].appendNode(C.bottom[xSplit]);
+            if(C.bottom[xSplit+1] > 0 && C.bottom[xSplit+1] != id)  graph[id-1].appendNode(C.bottom[xSplit+1]);
         }
     }
     
