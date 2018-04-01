@@ -57,7 +57,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
     printf("\n\nTotal number of nets: %zu",netlistPairs.size());
 
 
-    
+
     ///////////////////////////////////////////////
     //For each of the channels in layout....///////
     ///////////////////////////////////////////////
@@ -66,19 +66,19 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
     {
         printf("\n\n\n");
         printf("\n\nCHANNEL %zu\n\n",N+1);
-        
+
 //        for(int i=0; i<channelVec[N].nets.size(); i++)
 //        {
 //            printf("%i  ",channelVec[N].nets[i]->num);
 //        }
-        
-    
+
+
         int atRow = channels[N].first;
         int netsRemaining = channelVec[N].numNets;
         int previousPlacement;
         int numTracks = 0;
         bool cycle = false;
-        
+
         //if the bottom channel has nets in it, create space to insert tracks via normal method
         if(N==0)
         {
@@ -108,7 +108,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             for(size_t i=0; i<HCG.size(); i++)
             {
                 int ind = HCG[i].findHead()-1;
-                
+
                 if(!channelVec[N].nets[ind]->routed)
                 {
                     //printf("%i  ",HCG[i].findHead());
@@ -159,7 +159,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             {
                 int ID = HCG[i].findHead();
                 net* currentNet = channelVec[N].nets[ID-1];
-                
+
                 if(!currentNet->routed && !HCG[i].findVal(previousPlacement) && VCG[ID-1].isEmpty(ID))
                 {
                     makeTrunk(currentNet, atRow, layout);                   //draw horizontal component on layout
@@ -208,7 +208,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 //        }
 //
 //        std::cout << "\n\n\n\n";
-        
+
     }
 }
 
@@ -233,7 +233,7 @@ void updateBelow(int numRows, int atRow, std::vector<cell> & cellData, std::vect
     {
         if (channels[k].second >= atRow)
             channels[k].second += numRows;
-        
+
         if (channels[k].first >= atRow)
             channels[k].first += numRows;
     }
@@ -397,11 +397,23 @@ void removeChild(int netNum, std::vector<constraintList>& HCG, std::vector<const
 }
 
 
-int detectCycle(std::vector<constraintList>& VCG)
+int detectCycle(std::vector<constraintList> &VCG)
 {
+    bool detected = false;
     int foundCycle = 0;
-    std::vector<int> seen;
-    std::vector<bool> visited (VCG.size(), false);
+    std::vector<bool> visited;
+
+    for(int i=0; i<VCG.size(); i++)
+    {
+        visited.resize(0);
+        visited.resize(VCG.size(), false);
+        detected = VCG[i].cycleDetection(i+1, VCG, visited);
+        if (detected)
+        {
+            foundCycle = i+1;
+            break;
+        }
+    }
 
     return foundCycle;
 }
@@ -420,7 +432,7 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     //decide on a split point ???      ...arbitrary one for now (halfway point)
     net* childNet = channel.nets[child];
     net* parentNet = channel.nets[parent];
-    
+
     int splitPoint = abs(childNet->xSrc - childNet->xDest)/2; //approximate center of the child
     
     

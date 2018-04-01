@@ -17,6 +17,24 @@
 
 int main()//int argc,char *argv[])
 {
+
+    std::vector<constraintList> list(4);
+
+    list[0].appendNode(3);
+    list[1].appendNode(4);
+    list[2].appendNode(2);
+    list[3].appendNode(2);
+
+    int num;
+
+    num = detectCycle(list);
+
+    std::cout<<num;
+
+
+
+
+
     //Extract bench number from user input////////////////////////////////
     
 //    std::string inputFile;
@@ -42,9 +60,9 @@ int main()//int argc,char *argv[])
     
     
     //initiate program timer
-    std::clock_t startTime;
+    /*std::clock_t startTime;
     startTime = std::clock();
-    
+
     //initialize files
     std::string benchNum = "1";
     std::ifstream fileIn ("Resources/v1.2/"+benchNum);
@@ -226,7 +244,7 @@ int main()//int argc,char *argv[])
             }
         }
     }
-    
+
     //print out the magic file vias
     outMag<<"<< via >>\n";
     for (int i=0; i<layout.size(); i++)
@@ -281,7 +299,7 @@ int main()//int argc,char *argv[])
 
     outFile  << "WIRE AREA," << wireArea << "," << (float)wireArea/totalArea <<"\n";
     std::cout<< "WIRE AREA: " << wireArea << " = " << (float)wireArea/totalArea <<"\n";
-    
+
     outFile  << "NUMBER OF VIAS," << numVias << "," << (float)numVias/totalArea <<"\n";
     std::cout<< "NUMBER OF VIAS: " << numVias << " = " << (float)numVias/totalArea <<"\n";
 
@@ -293,9 +311,9 @@ int main()//int argc,char *argv[])
 
     outFile  << "FEATURE DENSITY," << (float)(cellArea+wireArea)/totalArea << "\n\n\n";
     std::cout<< "FEATURE DENSITY: " << (float)(cellArea+wireArea)/totalArea << "\n\n\n";
-    
-    
+
+
     double endTime = ( std::clock() - startTime ) / (double) CLOCKS_PER_SEC;
     outFile  << "EXECUTION TIME," << endTime << ",s";
-    std::cout<< "EXECUTION TIME: " << endTime << " s\n\n";
+    std::cout<< "EXECUTION TIME: " << endTime << " s\n\n";*/
 }

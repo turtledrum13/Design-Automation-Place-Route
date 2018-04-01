@@ -43,7 +43,7 @@ void constraintList::appendNode(int num)
 void constraintList::display()
 {
     graphNode *newNode = head;
-    
+
     if(newNode == NULL)
     {
         std::cout<<"[empty]";
@@ -72,13 +72,13 @@ bool constraintList::notEmpty()
 bool constraintList::isEmpty(int self)
 {
     graphNode *newNode = head;
-    
+
     while(newNode != NULL)
     {
         if(newNode->value != self) return false;
         else newNode = newNode->next;
     }
-    
+
     return true;
 }
 
@@ -86,13 +86,13 @@ bool constraintList::isEmpty(int self)
 bool constraintList::findVal(int val)
 {
     graphNode *newNode = head;
-    
+
     while(newNode!=NULL)
     {
         if (newNode->value==val) return true;
         else newNode=newNode->next;
     }
-    
+
     return false;
 }
 
@@ -141,4 +141,45 @@ void constraintList::removeAll(int num)
         }
     }
 }
+
+bool constraintList::cycleDetection(int num, std::vector<constraintList> &VCG, std::vector<bool> &visited)
+{
+    graphNode *newNode = head;
+
+    while (newNode!=NULL)
+    {
+        if (newNode->value==num) return true;
+        else if (visited[newNode->value-1])
+        {
+            newNode = newNode->next;
+        }
+        else
+        {
+            visited[newNode->value-1] = true;
+            if (VCG[newNode->value-1].cycleDetection(num, VCG, visited))
+            {
+                return true;
+            }
+            else newNode=newNode->next;
+        }
+    }
+
+    return false;
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
