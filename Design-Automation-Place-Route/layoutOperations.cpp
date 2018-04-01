@@ -31,14 +31,29 @@ void makeCell(cell C, std::vector<std::vector<int> > & layout)
 }
 
 
-void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> > & layout)
+void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> > & layout, std::vector<cell> &cellData, std::vector<net>& netlistPairs)
 {
     for(int i=currentNet->x1; i < currentNet->x2+1; i++)
     {
-        layout[atRow][i] = 7;
+        layout[atRow][i] = currentNet->num;//7;
     }
+    
+    
+    if(currentNet->dogleg && netlistPairs[currentNet->num-1].routed)
+    {
+        cellData[currentNet->dest.first].y = netlistPairs[currentNet->num-1].y;
+    }
+    else if(currentNet->dogleg)
+    {
+        cellData[currentNet->dest.first].y = atRow;
+    }
+    
+    
     currentNet->y = atRow;
     currentNet->routed = true;
+    
+    //printf("Routed = %i",currentNet->num);
+    //printf("Netlist routed = %i",netlistPairs[currentNet->num-1].routed);
 }
 
 
@@ -48,39 +63,42 @@ void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, s
 
     for(size_t i=0; i<netlistPairs.size(); i++)
     {
-        net& currentNet = netlistPairs[i];
-        cell&  cellSrc = cellData[currentNet.src.first];
-        cell&  cellDest = cellData[currentNet.dest.first];
-
-        yTrunk = currentNet.y;
-        ySrc = cellSrc.y + terminalOffset(currentNet.src.second, cellSrc.r);
-        yDest = cellDest.y + terminalOffset(currentNet.dest.second, cellDest.r);
-        xSrc = currentNet.xSrc;
-        xDest = currentNet.xDest;
-        iSrc=0;
-        iDest=0;
-
-        while(yTrunk+iSrc != ySrc)
+        if(netlistPairs[i].routed)
         {
-            layout[yTrunk+iSrc][xSrc] = 8; //draw metal 2 onto layout;
+            net& currentNet = netlistPairs[i];
+            cell&  cellSrc = cellData[currentNet.src.first];
+            cell&  cellDest = cellData[currentNet.dest.first];
 
-            if(yTrunk<ySrc) iSrc++;
-            else iSrc--;
-        }
+            yTrunk = currentNet.y;
+            ySrc = cellSrc.y + terminalOffset(currentNet.src.second, cellSrc.r);
+            yDest = cellDest.y + terminalOffset(currentNet.dest.second, cellDest.r);
+            xSrc = currentNet.xSrc;
+            xDest = currentNet.xDest;
+            iSrc=0;
+            iDest=0;
 
-        while(yTrunk+iDest != yDest)
-        {
-            layout[yTrunk+iDest][xDest] = 8; //draw metal 2 onto layout;
+            while(yTrunk+iSrc != ySrc)
+            {
+                layout[yTrunk+iSrc][xSrc] = 8; //draw metal 2 onto layout;
 
-            if(yTrunk<yDest) iDest++;
-            else iDest--;
-        }
+                if(yTrunk<ySrc) iSrc++;
+                else iSrc--;
+            }
 
-        //draw via at intersections of metal 1 and metal 2
-        if(xSrc != xDest)
-        {
-            layout[yTrunk][xSrc] = 9;
-            layout[yTrunk][xDest] = 9;
+            while(yTrunk+iDest != yDest)
+            {
+                layout[yTrunk+iDest][xDest] = 8; //draw metal 2 onto layout;
+
+                if(yTrunk<yDest) iDest++;
+                else iDest--;
+            }
+
+            //draw via at intersections of metal 1 and metal 2
+//            if(xSrc != xDest)
+//            {
+//                layout[yTrunk][xSrc] = 9;
+//                layout[yTrunk][xDest] = 9;
+//            }
         }
     }
 }
