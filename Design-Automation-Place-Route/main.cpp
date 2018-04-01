@@ -18,7 +18,7 @@
 int main()//int argc,char *argv[])
 {
     //Extract bench number from user input////////////////////////////////
-    
+
 //    std::string inputFile;
 //    std::string benchNum;
 //
@@ -39,16 +39,19 @@ int main()//int argc,char *argv[])
 //
 //    std::ifstream fileIn (argv[1]);
 //    std::ofstream outMag (argv[2]);
-    
-    
+
+
     //initiate program timer
     std::clock_t startTime;
     startTime = std::clock();
-    
+
     //initialize files
     std::string benchNum = "2";
-    std::ifstream fileIn ("Resources/v1.2/"+benchNum);
-    std::ofstream outFile ("output"+benchNum+".csv");
+    //std::ifstream fileIn ("Resources/v1.2/"+benchNum);
+    //std::ofstream outFile ("output"+benchNum+".csv");
+
+    std::ifstream fileIn ("Resources/v1.2/2");
+    std::ofstream outFile ("output2.csv");
     std::ofstream outCSV ("magicCSV.csv");
     std::ofstream outMag ("magFile.mag");
 
@@ -281,7 +284,7 @@ int main()//int argc,char *argv[])
 
     outFile  << "WIRE AREA," << wireArea << "," << (float)wireArea/totalArea <<"\n";
     std::cout<< "WIRE AREA: " << wireArea << " = " << (float)wireArea/totalArea <<"\n";
-    
+
     outFile  << "NUMBER OF VIAS," << numVias << "," << (float)numVias/totalArea <<"\n";
     std::cout<< "NUMBER OF VIAS: " << numVias << " = " << (float)numVias/totalArea <<"\n";
 
@@ -293,8 +296,8 @@ int main()//int argc,char *argv[])
 
     outFile  << "FEATURE DENSITY," << (float)(cellArea+wireArea)/totalArea << "\n\n\n";
     std::cout<< "FEATURE DENSITY: " << (float)(cellArea+wireArea)/totalArea << "\n\n\n";
-    
-    
+
+
     double endTime = ( std::clock() - startTime ) / (double) CLOCKS_PER_SEC;
     outFile  << "EXECUTION TIME," << endTime << ",s";
     std::cout<< "EXECUTION TIME: " << endTime << " s\n\n";
