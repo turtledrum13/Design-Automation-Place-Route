@@ -100,7 +100,7 @@ bool constraintList::findVal(int val)
 std::vector<int> constraintList::returnList()
 {
     graphNode *newNode = head;
-    std::vector<int> list;
+    std::vector<int> list (NULL);
 
     while(newNode!=NULL)
     {
