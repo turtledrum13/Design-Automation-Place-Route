@@ -16,7 +16,7 @@
 
 void makeCell(cell C, std::vector<std::vector<int> >& layout);
 
-void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> >& layout);
+void makeTrunk(net& currentNet, int atRow, std::vector<std::vector<int> >& layout);
 
 void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, std::vector<std::vector<int> >& layout);
 

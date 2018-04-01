@@ -18,25 +18,27 @@
 int main(int argc,char *argv[])
 {
     //Extract bench number from user input////////////////////////////////
-    
+
     std::string inputFile;
     std::string benchNum;
-    
+
     for(int i = 1; i < argc; i++)
     {
         inputFile += argv[i];
     }
-    if(inputFile.size() >= 7)
+    
+    benchNum = inputFile[0];
+    
+    if(inputFile.size() >= 1)
     {
-        benchNum = inputFile[0];
-        if(inputFile[1] != '.') benchNum += inputFile[1];
+        benchNum += inputFile[1];
     }
     else
     {
         benchNum = "X";
     }
-    
-    
+
+
     std::ifstream fileIn (argv[1]);
     std::ofstream outMag (argv[2]);
     
@@ -46,10 +48,10 @@ int main(int argc,char *argv[])
     startTime = std::clock();
     
     //initialize files
-    //std::string benchNum = "1";
+    //std::string benchNum = "2";
     //std::ifstream fileIn ("Resources/v1.2/"+benchNum);
-    //std::ofstream outFile ("output"+benchNum+".csv");
-    //std::ofstream outCSV ("magicCSV.csv");
+    std::ofstream outFile ("output"+benchNum+".csv");
+    std::ofstream outCSV ("magicCSV.csv");
     //std::ofstream outMag ("magFile.mag");
 
     //intitilaize vectors

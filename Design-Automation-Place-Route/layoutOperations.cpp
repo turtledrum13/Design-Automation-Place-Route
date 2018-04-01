@@ -31,14 +31,14 @@ void makeCell(cell C, std::vector<std::vector<int> > & layout)
 }
 
 
-void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> > & layout)
+void makeTrunk(net& currentNet, int atRow, std::vector<std::vector<int> >& layout)
 {
-    for(int i=currentNet->x1; i < currentNet->x2+1; i++)
+    for(int i=currentNet.x1; i < currentNet.x2+1; i++)
     {
         layout[atRow][i] = 7;
     }
-    currentNet->y = atRow;
-    currentNet->routed = true;
+    currentNet.y = atRow;
+    currentNet.routed = true;
 }
 
 
@@ -60,6 +60,14 @@ void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, s
         iSrc=0;
         iDest=0;
 
+        if(currentNet.y> 30000)
+        {
+            while(true)
+            {
+                printf("y = %i\n",currentNet.y);
+            }
+        }
+        
         while(yTrunk+iSrc != ySrc)
         {
             layout[yTrunk+iSrc][xSrc] = 8; //draw metal 2 onto layout;

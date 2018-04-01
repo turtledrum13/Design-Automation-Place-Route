@@ -75,7 +75,7 @@ struct chan
     std::vector<int> top, bottom;   //connectivity vectors
     size_t width;                   //total number of columns in the channel
     int numNets;                    //number of full and partial nets in the channel
-    std::vector<net *> nets;        //pointers to the nets in netlistPairs contained in channel
+    std::vector<int> nets;        //pointers to the nets in netlistPairs contained in channel
 
     chan(size_t chanWidth, int initVal)
     {

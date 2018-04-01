@@ -37,7 +37,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         coord destTerm = terminalCoords(netlistPairs[i].dest, cellData);
 
         netlistPairs[i].setSpan(srcTerm.x, destTerm.x);
-        channelVec[channelVecIndex].nets.push_back(&netlistPairs[i]);
+        channelVec[channelVecIndex].nets.push_back(i);
 
         //enter the source terminal into the appropriate boundary vector
         if(srcTerm.y == boundTop && srcTerm.y != 0)  channelVec[channelVecIndex].top[srcTerm.x] = netID[channelVecIndex];
@@ -75,7 +75,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
     
         int atRow = channels[N].first;
         int netsRemaining = channelVec[N].numNets;
-        int previousPlacement;
+        int previousPlacement = 0;
         int numTracks = 0;
         bool cycle = false;
         
@@ -110,12 +110,12 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             {
                 int ind = HCG[i].findHead()-1;
                 
-                if(!channelVec[N].nets[ind]->routed)
+                if(!netlistPairs[channelVec[N].nets[ind]].routed)
                 {
                     //printf("%i  ",HCG[i].findHead());
-                    printf("NET#%i    %i-[%i->%i]\t",channelVec[N].nets[ind]->num, HCG[i].findHead(), channelVec[N].nets[ind]->x1, channelVec[N].nets[ind]->x2);
-                    printf("src cell: %i @ (%i,%i),\t", channelVec[N].nets[ind]->src.first, cellData[channelVec[N].nets[ind]->src.first].x, cellData[channelVec[N].nets[ind]->src.first].y);
-                    printf("dest cell: %i @ (%i,%i)\n", channelVec[N].nets[ind]->dest.first, cellData[channelVec[N].nets[ind]->dest.first].x, cellData[channelVec[N].nets[ind]->dest.first].y);
+                    //printf("NET#%i    %i-[%i->%i]\t",channelVec[N].nets[ind]->num, HCG[i].findHead(), channelVec[N].nets[ind]->x1, channelVec[N].nets[ind]->x2);
+                    //printf("src cell: %i @ (%i,%i),\t", channelVec[N].nets[ind]->src.first, cellData[channelVec[N].nets[ind]->src.first].x, cellData[channelVec[N].nets[ind]->src.first].y);
+                    //printf("dest cell: %i @ (%i,%i)\n", channelVec[N].nets[ind]->dest.first, cellData[channelVec[N].nets[ind]->dest.first].x, cellData[channelVec[N].nets[ind]->dest.first].y);
 
                 }
             }
@@ -135,13 +135,13 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
                 printf("\n\nCYCLE  --  %i nets remaining\n", netsRemaining);
                 for(size_t i=0; i<HCG.size(); i++)
                 {
-                    net* cycleNet = channelVec[N].nets[i];
+                    net& cycleNet = netlistPairs[channelVec[N].nets[i]];
                     printf("\t\tHCG SIZE %zu\n\n\n",HCG.size());
-                    if(!cycleNet->routed)  //for the first unrouted net
+                    if(!cycleNet.routed)  //for the first unrouted net
                     {
                         //////////TEMP DOGLEG WORKAROUND///////////
-                        printf("skipping net %i\n\n\n",cycleNet->num);
-                        cycleNet->routed = true;
+                        printf("skipping net %i\n\n\n",cycleNet.num);
+                        cycleNet.routed = true;
                         netsRemaining --;
                         addTrack(2, atRow, cellData, netlistPairs, layout, boundaries, channels);
                         numTracks++;
@@ -158,13 +158,13 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             for(size_t i=0; i<HCG.size(); i++)
             {
                 int ID = HCG[i].findHead();
-                net* currentNet = channelVec[N].nets[ID-1];
+                net& currentNet = netlistPairs[channelVec[N].nets[ID-1]];
                 
-                if(!currentNet->routed && !HCG[i].findVal(previousPlacement) && VCG[ID-1].isEmpty(ID))
+                if(!currentNet.routed && !HCG[i].findVal(previousPlacement) && VCG[ID-1].isEmpty(ID))
                 {
                     makeTrunk(currentNet, atRow, layout);                           //draw horizontal component on layout
                     removeChild(i, HCG, VCG);                                       //remove net as a child from any parents in the VCG
-                    if(currentNet->span != 0) previousPlacement = ID;               //keep track of the most recently placed non-zero-span net
+                    if(currentNet.span != 0) previousPlacement = ID;               //keep track of the most recently placed non-zero-span net
                     netsRemaining--;                                                //decrement counter for while loop
                     cycle = false;                                                  //reset cycle flag since a net was placed
                 }
@@ -263,10 +263,10 @@ std::vector<constraintList> makeHCG(chan C, std::vector<net> & netlistPairs)
     {
         graph[i].appendNode(i+1);               //create a vector of list heads in number order
 
-        x1 = C.nets[i]->x1 -1;                  //-1 to account for adjacent nets
-        x2 = C.nets[i]->x2 +1;                  //+1 to account for adjacent nets
+        x1 = netlistPairs[C.nets[i]].x1 -1;                  //-1 to account for adjacent nets
+        x2 = netlistPairs[C.nets[i]].x2 +1;                  //+1 to account for adjacent nets
 
-        if(C.nets[i]->span != 0)                //if net has no span we won't check for horizontal constraints
+        if(netlistPairs[C.nets[i]].span != 0)                //if net has no span we won't check for horizontal constraints
         {
             for(size_t j = x1; j<x2+1; j++)
             {
@@ -402,27 +402,27 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     //must break net in a way such that its parent can now be routed ????
 
     //decide on a split point ???      ...arbitrary one for now (halfway point)
-    net* childNet = channel.nets[child];
-    net* parentNet = channel.nets[parent];
+    net& childNet = netlistPairs[channel.nets[child]];
+    net& parentNet = netlistPairs[channel.nets[parent]];
     
-    int splitPoint = abs(childNet->xSrc - childNet->xDest)/2; //approximate center of the child
+    int splitPoint = abs(childNet.xSrc - childNet.xDest)/2; //approximate center of the child
     
     //add the new net to the end of netlistPairs
     //netlistPairs.push_back(childNet);   need a way to push back a pointer?
-    net* newChildNet = &netlistPairs[netlistPairs.size()];
+    net& newChildNet = netlistPairs[netlistPairs.size()];
     
     //update netlistPairs original net (A) with the split point as new endpoint (check if greater or lesser than remaining src point), same for new one
-    childNet->xDest = splitPoint;
+    childNet.xDest = splitPoint;
     //childNet.x1 = ???, childNet.x2 = ???
     
-    newChildNet->xSrc = splitPoint;
+    newChildNet.xSrc = splitPoint;
     //newChildNet.x1 = ???, newChildNet.x2 = ???
 
 
     //add an implicit cell to cellData that is 1x1 at the split point and give it a lower left corner (use the default terminal offset and terminal coords cases)
     cell newCell;
     newCell.x = splitPoint;
-    newCell.y = childNet->y;
+    newCell.y = childNet.y;
     newCell.r = 0;
     newCell.nets = 2;
     newCell.cell = cellData.size();
@@ -431,8 +431,8 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
 
     //point both nets to that new cell
     std::pair<int,int> newCellPair (1,0);
-    childNet->dest = newCellPair;
-    newChildNet->src = newCellPair;
+    childNet.dest = newCellPair;
+    newChildNet.src = newCellPair;
     
     //once new cells have been formed and pointed to the new cell, add one to the width and numNets of channel
     channel.width ++;
