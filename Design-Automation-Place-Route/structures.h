@@ -29,6 +29,7 @@ struct net
     int num;                        //net number
     bool routed;                    //whether the net has been routed yet or not
     bool global;                    //true if net needs to be routed globally
+    bool dogleg;                    //specifies whether net is a dogleg or not
     int channel;                    //channel number if channel routing is possible
     int x1, x2, y;                  //beginning column and end column of the net's trunk, row of trunk
     int xSrc, xDest;                //x-positions of Source/Destination Cell terminals
@@ -72,10 +73,10 @@ struct coord
 
 struct chan
 {
-    std::vector<int> top, bottom;   //connectivity vectors
+    std::vector<int> top, bottom;   //connectivity vectors holding ID-numbers of the nets
     size_t width;                   //total number of columns in the channel
     int numNets;                    //number of full and partial nets in the channel
-    std::vector<net *> nets;        //pointers to the nets in netlistPairs contained in channel
+    std::vector<net *> nets;        //pointers to the nets in netlistPairs contained in channel in ID-number order
 
     chan(size_t chanWidth, int initVal)
     {
