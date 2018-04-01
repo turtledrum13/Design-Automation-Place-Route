@@ -104,8 +104,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             VCG = makeVCG(channelVec[N]);                   //Loop through boundary vectors to create VCG (directed graph)
             
             //printing VCG
-            std::cout << "\n\nVertical Constraint Graph:\n\n";
-    
+            std::cout << "\n\n\nNew Vertical Constraint Graph:\n\n";
             for(size_t i=0; i<VCG.size(); i++)
             {
                 std::cout << i+1 <<":\t";
@@ -113,6 +112,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
                 std::cout << "\n\n";
             }
             std::cout << "\n\n\n\n";
+            
             
             cycleParent = detectCycle(VCG);                 //find a cycle
             
@@ -392,26 +392,27 @@ std::vector<constraintList> makeVCG(chan C)//, std::vector<constraintList>& HCG)
 
             
             //add dogleg net to the VCG of the upper terminal --> for the x value that is not already there --> && !graph[C.top[xSplit+1]-1].findVal(i)
-            printf("\n%i: ",xSplit-1);if(C.top[xSplit-1] > 0) graph[C.top[xSplit-1]-1].display();
-            printf("\n%i: ",xSplit);  if(C.top[xSplit] > 0)   graph[C.top[xSplit]-1].display();
-            printf("\n%i: ",xSplit+1);if(C.top[xSplit+1] > 0) graph[C.top[xSplit+1]-1].display();
+            printf("\n@%i  %i: ",xSplit-1,C.top[xSplit-1]); if(C.top[xSplit-1] > 0) graph[C.top[xSplit-1]-1].display();
+            printf("\n@%i  %i: ",xSplit,C.top[xSplit]);     if(C.top[xSplit] > 0)   graph[C.top[xSplit]-1].display();
+            printf("\n@%i  %i: ",xSplit+1,C.top[xSplit+1]); if(C.top[xSplit+1] > 0) graph[C.top[xSplit+1]-1].display();
             
-            if(C.top[xSplit-1] > 0)     graph[C.top[xSplit-1]-1].appendNode(id);
-            if(C.top[xSplit] > 0)       graph[C.top[xSplit]-1].appendNode(id);
-            if(C.top[xSplit+1] > 0)     graph[C.top[xSplit+1]-1].appendNode(id);
+            if(C.top[xSplit-1] > 0 && C.top[xSplit-1] != id)    {graph[C.top[xSplit-1]-1].appendNode(id); printf("\nadded left");}
+            if(C.top[xSplit] > 0 && C.top[xSplit] != id)        {graph[C.top[xSplit]-1].appendNode(id); printf("\nadded middle");}
+            if(C.top[xSplit+1] > 0 && C.top[xSplit+1] != id)    {graph[C.top[xSplit+1]-1].appendNode(id); printf("\nadded right");}
             
             printf("\n\nTop after: \n");
-            printf("\n%i: ",xSplit-1);if(C.top[xSplit-1] > 0) graph[C.top[xSplit-1]-1].display();
-            printf("\n%i: ",xSplit);  if(C.top[xSplit] > 0)   graph[C.top[xSplit]-1].display();
-            printf("\n%i: ",xSplit+1);if(C.top[xSplit+1] > 0) graph[C.top[xSplit+1]-1].display();
+            printf("\n@%i  %i: ",xSplit-1,C.top[xSplit-1]); if(C.top[xSplit-1] > 0) graph[C.top[xSplit-1]-1].display();
+            printf("\n@%i  %i: ",xSplit,C.top[xSplit]);     if(C.top[xSplit] > 0)   graph[C.top[xSplit]-1].display();
+            printf("\n@%i  %i: ",xSplit+1,C.top[xSplit+1]); if(C.top[xSplit+1] > 0) graph[C.top[xSplit+1]-1].display();
             
             //add the lower terminals to the VCG of the dogleg net
             
+            printf("\n\nDogleg VCG:\n@%i  ",id);
+            graph[id-1].display();
             
-            
-            if(C.bottom[xSplit-1] > 0 && C.bottom[xSplit-1] != id)  graph[id-1].appendNode(C.bottom[xSplit-1]);
-            if(C.bottom[xSplit] > 0 && C.bottom[xSplit] != id)      graph[id-1].appendNode(C.bottom[xSplit]);
-            if(C.bottom[xSplit+1] > 0 && C.bottom[xSplit+1] != id)  graph[id-1].appendNode(C.bottom[xSplit+1]);
+            if(C.bottom[xSplit-1] > 0 && C.bottom[xSplit-1] != id)  {graph[id-1].appendNode(C.bottom[xSplit-1]);printf("\nadded %i left",C.bottom[xSplit-1]);}
+            if(C.bottom[xSplit] > 0 && C.bottom[xSplit] != id)      {graph[id-1].appendNode(C.bottom[xSplit]);  printf("\nadded %i middle",C.bottom[xSplit]);}
+            if(C.bottom[xSplit+1] > 0 && C.bottom[xSplit+1] != id)  {graph[id-1].appendNode(C.bottom[xSplit+1]);printf("\nadded %i right",C.bottom[xSplit+1]);}
         }
     }
     
