@@ -110,9 +110,14 @@ int terminalOffset(int terminal, int rotation)
     int offset = 0;
     switch(rotation)
     {
+        case 0:
+        {
+            offset = 0; break;
+        }
         case 1 :
             switch(terminal)
             {
+                case 0: offset = 0; break;
                 case 1 : offset = -5; break;
                 case 2 : offset = -5; break;
                 case 3 : offset = 0; break;
@@ -124,6 +129,7 @@ int terminalOffset(int terminal, int rotation)
         case 2 :
             switch(terminal)
             {
+                case 0: offset = 0; break;
                 case 1 : offset = -5; break;
                 case 2 : offset = 0; break;
                 case 3 : offset = -5; break;
@@ -135,6 +141,7 @@ int terminalOffset(int terminal, int rotation)
         case 3 :
             switch(terminal)
             {
+                case 0: offset = 0; break;
                 case 1 : offset = 0; break;
                 case 2 : offset = 0; break;
                 case 3 : offset = -5; break;
@@ -146,6 +153,7 @@ int terminalOffset(int terminal, int rotation)
         case 4 :
             switch(terminal)
             {
+                case 0: offset = 0; break;
                 case 1 : offset = 0; break;
                 case 2 : offset = -5; break;
                 case 3 : offset = 0; break;
@@ -157,6 +165,7 @@ int terminalOffset(int terminal, int rotation)
         case 5 :
             switch(terminal)
             {
+                case 0: offset = 0; break;
                 case 1 : offset = -5; break;
                 case 2 : offset = 0; break;
                 default : break;
@@ -166,6 +175,7 @@ int terminalOffset(int terminal, int rotation)
         case 6 :
             switch(terminal)
             {
+                case 0: offset = 0; break;
                 case 1 : offset = 0; break;
                 case 2 : offset = -5; break;
                 default : break;
