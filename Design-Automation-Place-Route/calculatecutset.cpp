@@ -17,19 +17,28 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vecto
     std::vector<int> partitionAPrime, partitionBPrime, A, B, X, Y, gains, partitionA, partitionB, dummyPartition;
     std::vector<bool> truth(numOfNets, false);
     bool buffer=true;
-    double n;
+    double n, f;
 
-    //used to find the row size of the layout. If doing rowplacement, make the size equal to 2.
+    //used to find the row size of the layout. If doing row placement, make the size equal to 2.
     if(!isRowPlacement)
     {
-        n = std::sqrt(totalCells-1);
+        //calculate the number of rows and cells per row to ensure a square in the final layout
+        f = std::sqrt(totalCells-1);
+        if(f != (int) f)
+        {
+            f += 1;
+        }
+        f = int(f);
+
+        n = f/std::sqrt(2);
         if(n != (int) n)
         {
             n += 1;
         }
 
         n = int(n);
-        numOfPartitions = n;
+
+        numOfPartitions = n*2;
     }
     else
     {
@@ -58,7 +67,7 @@ void calculateCutset(std::vector<int> &fullPartition, int totalCells, std::vecto
             fullPartition.push_back(i+totalCells/2);
         }
         //calculate the total number of dummy cells needed to be added for partitioning
-        addNum = ((m-n)*n) + std::pow(n, 2);
+        addNum = ((n*numOfPartitions)) + ((m-n)*numOfPartitions);
 
         //add the dummy cells to the partition
         for(int i=numOfCells; i<addNum; i++)

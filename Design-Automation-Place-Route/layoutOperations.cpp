@@ -154,19 +154,32 @@ void appendRows(int numCols, std::vector<std::vector<int> > & layout)
 void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells)
 {
     int z = 0;
-    double n = std::sqrt(numOfCells);
+    double f = std::sqrt(numOfCells);
+    double n;
+    int numOfPartitions;
 
-    //get the closest sqrt that is equal or greater than the number of cells
+    //get the number of rows and cells per row to ensure a square in the final layout
+    f = std::sqrt(numOfCells);
+    if(f != (int) f)
+    {
+        f += 1;
+    }
+    f = int(f);
+
+    n = f/std::sqrt(2);
     if(n != (int) n)
     {
         n += 1;
     }
+
     n = int(n);
+
+    numOfPartitions = n*2;
 
     //add the x and y coordinates to the cells in an nxn manner
     for (int i=0; i<n; i++)
     {
-        for(int j=0; j<n; j++)
+        for(int j=0; j<numOfPartitions; j++)
         {
             if (mainPartition[z]!=numOfCells)
             {

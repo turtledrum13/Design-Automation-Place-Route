@@ -16,7 +16,7 @@
 #include "structures.h"
 #include "classifyNets.hpp"
 
-int main(int argc,char *argv[])
+int main()//int argc,char *argv[])
 {
     //Extract bench number from user input////////////////////////////////
     
@@ -61,8 +61,8 @@ int main(int argc,char *argv[])
     std::vector<std::pair <int,int> > netlist, channels;
 
     //initialize variables
-    int numOfNets, cutset=0, numOfCells;
-    double n;
+    int numOfNets, cutset=0, numOfCells, layoutCells;
+    double numOfRows, sqrtCells;
 
     fileIn >> numOfCells;
     fileIn >> numOfNets;
@@ -94,15 +94,26 @@ int main(int argc,char *argv[])
     //PLACEMENT/////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    n = std::sqrt(numOfCells);
 
-    //calculate the closest sqrt equal or greater than the current number of cells
-    if(n != (int) n)
+    //calculate the number of rows and cells per row to ensure the final layout is close to a square
+    sqrtCells = std::sqrt(numOfCells);
+    if(sqrtCells != (int) sqrtCells)
     {
-        n += 1;
+        sqrtCells += 1;
+    }
+    sqrtCells = int(sqrtCells);
+
+    numOfRows = sqrtCells/std::sqrt(2);
+    if(numOfRows != (int) numOfRows)
+    {
+        numOfRows += 1;
     }
 
-    n = int(n);
+    //the number of rows in the layout
+    numOfRows = int(numOfRows);
+
+    //the number of cells per row in the layout
+    layoutCells = numOfRows*2;
 
     cellData.resize(numOfCells);
 
@@ -122,12 +133,12 @@ int main(int argc,char *argv[])
 
 
     //perform the placement for each row of the layout
-    rowPlacement(netArray, cellList,  numOfCells, numOfNets, mainPartition, n);
+    rowPlacement(netArray, cellList,  numOfCells, numOfNets, mainPartition, numOfRows);
 
 
     //Create the 2d array for the placement layout
     createArray(cellData, mainPartition, numOfCells);
-    layout.resize(n*7-1, std::vector<int>(n*7-1, 0));
+    layout.resize(numOfRows*7-1, std::vector<int>(layoutCells*7-1, 0));
 
     //create the cell layout using the x and y coordinates from the previous function
     for(int i=0; i<cellData.size(); i++)
