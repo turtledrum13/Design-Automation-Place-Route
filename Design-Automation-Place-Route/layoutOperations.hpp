@@ -18,7 +18,7 @@ void makeCell(cell C, std::vector<std::vector<int> >& layout);
 
 void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> > & layout, std::vector<cell> &cellData, std::vector<net>& netlistPairs);
 
-void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, std::vector<std::vector<int> >& layout);
+void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, std::vector<std::vector<int> >& layout, int originalNets);
 
 void insertRows(int numRows, int atRow, std::vector<std::vector<int> > & layout);
 

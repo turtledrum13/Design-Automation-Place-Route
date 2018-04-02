@@ -46,11 +46,11 @@ int main()//int argc,char *argv[])
     startTime = std::clock();
 
     //initialize files
-    std::string benchNum = "2";
+    std::string benchNum = "6";
     //std::ifstream fileIn ("Resources/v1.2/"+benchNum);
     //std::ofstream outFile ("output"+benchNum+".csv");
 
-    std::ifstream fileIn ("Resources/v1.2/2");
+    std::ifstream fileIn ("Resources/v1.2/6");
     std::ofstream outFile ("output2.csv");
     std::ofstream outCSV ("magicCSV.csv");
     std::ofstream outMag ("magFile.mag");
@@ -160,7 +160,7 @@ int main()//int argc,char *argv[])
     //Second: Channel Routing
     channel(cellData, layout, netlistPairs, channels, boundaries);
 
-    makeBranches(cellData, netlistPairs, layout);
+    makeBranches(cellData, netlistPairs, layout, numOfNets);
 
 
     ////////////////////////////////////////////////////////////
@@ -254,8 +254,8 @@ int main()//int argc,char *argv[])
     outFile  << "ORIGINAL CELLS," << numOfCells <<"\n";
     std::cout<< "ORIGINAL CELLS: " << numOfCells <<"\n";
 
-    outFile  << "ORIGINAL NETS," << numOfCells <<"\n\n";
-    std::cout<< "ORIGINAL NETS: " << numOfCells <<"\n\n";
+    outFile  << "ORIGINAL NETS," << numOfNets <<"\n\n";
+    std::cout<< "ORIGINAL NETS: " << numOfNets <<"\n\n";
 
 
     int numFeedThru = 0;

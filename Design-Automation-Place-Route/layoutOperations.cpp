@@ -57,17 +57,16 @@ void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> > & layo
         else
         {
             cellData[currentNet->dest.first].y = atRow;
+            //currentNet->y = atRow;
             
             printf(" BELOW HERE @ %i -- cellData[%i].y = %i\n",atRow,currentNet->dest.first,cellData[currentNet->dest.first].y);
             printf(" BELOW HERE @ %i -- netlistPairs[%i].routed = %i\n",atRow,currentNet->num-1,netlistPairs[currentNet->num-1].routed);
         }
     }
     
-//    netlistPairs[currentNet->num-1].y = atRow;
 //    netlistPairs[currentNet->num-1].routed = true;
     
     netlistPairs[currentNet->num-1].y = atRow;
-    //currentNet->y = atRow;
     currentNet->routed = true;
     
     //currentNet->y = atRow;
@@ -78,11 +77,11 @@ void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> > & layo
 }
 
 
-void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, std::vector<std::vector<int> >& layout)
+void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, std::vector<std::vector<int> >& layout, int orgiginalNets)
 {
     int yTrunk, ySrc, yDest, xSrc, xDest, iSrc, iDest;
 
-    for(size_t i=0; i<netlistPairs.size(); i++)
+    for(size_t i=0; i<orgiginalNets; i++)
     {
         if(netlistPairs[i].routed)
         {
@@ -98,20 +97,24 @@ void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, s
             iSrc=0;
             iDest=0;
 
-            while(yTrunk+iSrc != ySrc)
+            if(!currentNet.dogleg)
             {
-                layout[yTrunk+iSrc][xSrc] = 8; //draw metal 2 onto layout;
+                while(yTrunk+iSrc != ySrc)
+                {
+                    layout[yTrunk+iSrc][xSrc] = 8; //draw metal 2 onto layout;
 
-                if(yTrunk<ySrc) iSrc++;
-                else iSrc--;
-            }
+                    if(yTrunk<ySrc) iSrc++;
+                    else iSrc--;
+                }
 
-            while(yTrunk+iDest != yDest)
-            {
-                layout[yTrunk+iDest][xDest] = 8; //draw metal 2 onto layout;
+            
+                while(yTrunk+iDest != yDest)
+                {
+                    layout[yTrunk+iDest][xDest] = 8; //draw metal 2 onto layout;
 
-                if(yTrunk<yDest) iDest++;
-                else iDest--;
+                    if(yTrunk<yDest) iDest++;
+                    else iDest--;
+                }
             }
 
             //draw via at intersections of metal 1 and metal 2
