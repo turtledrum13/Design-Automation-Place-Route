@@ -98,7 +98,8 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
 
         int cycleChild = NULL;
         int cycleParent = 1;                                //initialize non-zero to enter loop
-        bool cycleBroken = false;
+        std::vector<int> cycle_list;
+
         
         while(cycleParent > 0)
         {
@@ -111,16 +112,20 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             {
                 std::cout << i+1 <<":\t";
                 VCG[i].display();
-                std::cout << "\n\n";
+                std::cout << "\n";
             }
             std::cout << "\n\n\n\n";
 
-            std::vector<int> cycle_list;
-            cycleParent = detectCycle(VCG, cycle_list);                 //find a cycle
             
+            cycleParent = detectCycle(VCG, cycle_list);      //find a cycle
+            
+            
+            //Print Cycle List/////////////////
+            
+            printf("  <---------------\n");
             for(int i=0; i<cycle_list.size(); i++)
             {
-                printf("%i ", cycle_list[i]);
+                printf("%i --> ", cycle_list[i]);
             }
             
             //if(cycleParent!= 0) cycle_list = cycleList(VCG, cycleParent);
@@ -128,20 +133,9 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             if(cycleParent != 0)                            //get child from cycle parent for splitting
             {
                 cycleChild = VCG[cycleParent-1].returnList()[0];
-                while(cycleChild != NULL)
-                {
-                    cycleBroken = dogleg(cycleParent, cycleChild, netlistPairs, cellData, VCG, HCG, channelVec[N], cycle_list);
-                    
-                    if(cycleBroken)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        cycleParent = cycleChild;
-                        cycleChild = VCG[cycleParent-1].returnList()[0];
-                    }
-                }
+                
+                if(cycleChild != NULL)
+                    dogleg(cycleParent, cycleChild, netlistPairs, cellData, VCG, HCG, channelVec[N], cycle_list);
             }
         }
 
@@ -173,39 +167,39 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             //////////PRINT UNROUTED NETS///////////
 
 
-            if(!cycle)  //if not caught in a cycle, add a new track
-            {
+//            if(!cycle)  //if not caught in a cycle, add a new track
+//            {
                 addTrack(2, atRow, cellData, netlistPairs, layout, boundaries, channels);
                 numTracks++;
                 printf("Track: %i\n",numTracks);
                 printf("\n-------------------------------------------------------\n");
                 previousPlacement = 0;
-            }
-            else        //caught in a cycle and need to dogleg
-            {
-                printf("\n\nCYCLE  --  %i nets remaining\n", netsRemaining);
+//            }
+//            else        //caught in a cycle and need to dogleg
+//            {
+//                printf("\n\nCYCLE  --  %i nets remaining\n", netsRemaining);
+//
+//                for(size_t i=0; i<HCG.size(); i++)
+//                {
+//                    net* cycleNet = channelVec[N].nets[i];
+//                    printf("\t\tHCG SIZE %zu\n\n\n",HCG.size());
+//                    if(!cycleNet->routed)  //for the first unrouted net
+//                    {
+//                        //////////TEMP DOGLEG WORKAROUND///////////
+//                        printf("skipping net %i\n\n\n",cycleNet->num);
+//                        cycleNet->routed = true;
+//                        netsRemaining --;
+//                        addTrack(2, atRow, cellData, netlistPairs, layout, boundaries, channels);
+//                        numTracks++;
+//                        printf("Track: %i\n",numTracks);
+//                        previousPlacement = 0;
+//                        //////////TEMP DOGLEG WORKAROUND///////////
+//                    }
+//                }
+//            }
 
-                for(size_t i=0; i<HCG.size(); i++)
-                {
-                    net* cycleNet = channelVec[N].nets[i];
-                    printf("\t\tHCG SIZE %zu\n\n\n",HCG.size());
-                    if(!cycleNet->routed)  //for the first unrouted net
-                    {
-                        //////////TEMP DOGLEG WORKAROUND///////////
-                        printf("skipping net %i\n\n\n",cycleNet->num);
-                        cycleNet->routed = true;
-                        netsRemaining --;
-                        addTrack(2, atRow, cellData, netlistPairs, layout, boundaries, channels);
-                        numTracks++;
-                        printf("Track: %i\n",numTracks);
-                        previousPlacement = 0;
-                        //////////TEMP DOGLEG WORKAROUND///////////
-                    }
-                }
-            }
 
-
-            cycle = true; //assume cycle is true before scanning HCG (which could prove this assumption false)
+            //cycle = true; //assume cycle is true before scanning HCG (which could prove this assumption false)
 
             for(size_t i=0; i<HCG.size(); i++)
             {
@@ -219,7 +213,6 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
                     printf("%i  ",HCG[i].findHead());//channelVec[N].nets[HCG[i].findHead()-1]->num);
                     if(currentNet->span != 0) previousPlacement = ID;       //keep track of the most recently placed non-zero-span net
                     netsRemaining--;                                        //decrement counter for while loop
-                    cycle = false;                                          //reset cycle flag since a net was placed
                 }
             }
                        
@@ -387,9 +380,9 @@ std::vector<constraintList> makeVCG(chan C)//, std::vector<constraintList>& HCG)
             if(C.bottom[i+1] > 0 && C.bottom[i+1] != C.top[i])  graph[C.top[i]-1].appendNode(C.bottom[i+1]);
 
             //Find VCG cycles (length-2 only)////////////
-            if(C.bottom[i-1] > 0) if(graph[C.bottom[i-1]-1].findVal(C.top[i])) printf("\n\n\t\t\tCYCLE DETECTED @ %i and %i\n\n", C.top[i], C.bottom[i]);
+            if(C.bottom[i-1] > 0) if(graph[C.bottom[i-1]-1].findVal(C.top[i])) printf("\n\n\t\t\tCYCLE DETECTED @ %i and %i\n\n", C.top[i], C.bottom[i-1]);
             if(C.bottom[i] > 0) if(graph[C.bottom[i]-1].findVal(C.top[i])) printf("\n\n\t\t\tCYCLE DETECTED @ %i and %i\n\n", C.top[i], C.bottom[i]);
-            if(C.bottom[i+1] > 0) if(graph[C.bottom[i+1]-1].findVal(C.top[i])) printf("\n\n\t\t\tCYCLE DETECTED @ %i and %i\n\n", C.top[i], C.bottom[i]);
+            if(C.bottom[i+1] > 0) if(graph[C.bottom[i+1]-1].findVal(C.top[i])) printf("\n\n\t\t\tCYCLE DETECTED @ %i and %i\n\n", C.top[i], C.bottom[i+1]);
             /////////////////////////////////////////////
         }
     }
@@ -492,7 +485,7 @@ int detectCycle(std::vector<constraintList> &VCG, std::vector<int>& cycleList)
 }
 
 
-bool dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<constraintList>& VCG, std::vector<constraintList>& HCG, chan& channel, std::vector<int>& cycle_list)
+void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<constraintList>& VCG, std::vector<constraintList>& HCG, chan& channel, std::vector<int>& cycle_list)
 {
     //take the child and break in two         //child and parent will be the actual IDs of the child and parent
     //Rules for breaking: must happen at a place that does not cause any new vertical conflicts
@@ -503,8 +496,10 @@ bool dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
 
 
     //decide on a split point ???      ...arbitrary one for now (halfway point)
-    child = cycle_list[0];
-    parent = cycle_list[1];
+    //child = cycle_list[(netlistPairs.size()/3)%2];
+    //parent = cycle_list[(netlistPairs.size()/3)%2+1];
+    //child = cycle_list[1];
+    //parent = cycle_list[0];
     net* childNet = channel.nets[child-1];
     net* parentNet = channel.nets[parent-1];
     
@@ -513,8 +508,10 @@ bool dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
 
     
     bool goRight = false;
-    int splitPoint = childNet->x1 + 1;//abs(childNet->xSrc - childNet->xDest)/2; //approximate center of the child
+    //if((netlistPairs.size()/3)%2 == 0) goRight = true;
     
+    int splitPoint = childNet->x1;//abs(childNet->xSrc - childNet->xDest)/2; //approximate center of the child
+
     if(abs(childNet->x1-parentNet->x1) < 2 || abs(childNet->x1-parentNet->x2) < 2)
     {
         splitPoint = childNet->x1 + 1;//abs(childNet->xSrc - childNet->xDest)/2; //approximate center of the child
@@ -607,6 +604,7 @@ bool dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     std::pair<int,int> cellBPair (cellB.cell,0);
 
     newChildNet->src = childNet->dest;
+    
     childNet->dest = cellAPair;
     newChildNet->dest = cellBPair;
     childNet->dogleg = true;
@@ -624,14 +622,12 @@ bool dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
 
     //modify top and bottom boundaries as needed, including inserting or whatever...
     if(channel.top[newChildNet->xSrc] == child)
-    {
         channel.top[newChildNet->xSrc] = channel.numNets;
-    }
+    
     else if(channel.bottom[newChildNet->xSrc] == child)
-    {
         channel.bottom[newChildNet->xSrc] = channel.numNets;
-    }
 
+    
 
     //printing out channel boundaries for debugging
     printf("\n");
@@ -649,8 +645,6 @@ bool dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
 
     printf("Num of Cells: %zu\n\n",cellData.size());
 
-
-    return true;
 }
 
 //std::vector<int> cycleList(std::vector<constraintList> & VCG, int parent)
