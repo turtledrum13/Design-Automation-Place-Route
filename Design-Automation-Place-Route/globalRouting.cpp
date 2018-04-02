@@ -10,6 +10,7 @@
 #include "layoutOperations.hpp"
 #include "structures.h"
 #include <stdio.h>
+#include <string>
 
 
 void global(std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries,  std::vector<std::pair<int,int> > & channels)
@@ -25,7 +26,7 @@ void global(std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::
 
             //update the layout and cellData vector with new pass through cells
             coord newCoord = findVertical(source, destination, layout, boundaries, topTerminal);
-            updateLayout(newCoord, layout, cellData.size()+1);
+            updateLayout(newCoord, layout, "feed-through");
             updateRight(cellData, newCoord);
 
             //adding pass-through cell to end of cellData
@@ -63,6 +64,24 @@ void global(std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::
     for(size_t i=0; i<cellData.size(); i++)                     //put the lower left corners of layout cells back to normal
     {
         layout[cellData[i].y][cellData[i].x] = cellData[i].r;
+    }
+    
+    for(size_t i=0; i<channels.size()-1; i++)
+    {
+        int counter = 0;
+        int rowNum = channels[i].second;
+        for(int j=0; j<layout[rowNum].size(); j++)
+        {
+            if(layout[rowNum][j] > 0 && layout[rowNum][j] < 4) counter++;
+            else counter = 0;
+            
+            if(counter == 7)
+            {
+                coord newCord(j, rowNum);
+                updateLayout(newCord, layout, "space");
+                counter = 0;
+            }
+        }
     }
 
 }   //Finished with global routing///////////////////////////////////////
@@ -246,17 +265,32 @@ void updateRight(std::vector<cell> &cellData, coord XY)
 }
 
 
-void updateLayout(coord XY, std::vector<std::vector<int> > &layout, int cellNum)
+void updateLayout(coord XY, std::vector<std::vector<int> > &layout, std::string updateSetting)
 {
-    //insert pass through
+    int insertionVal = 0;
+    int width = 0;
+    
+    if(updateSetting == "feed-through")
+    {
+        insertionVal = 5;
+        width = 3;
+    }
+    else if(updateSetting == "space")
+    {
+        insertionVal = 0;
+        width = 1;
+    }
+    
+    
+    //insert new element
     for(int i=0; i<6; i++)
     {
-        layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,3, 5);
+        layout[XY.y-i].insert(layout[XY.y-i].begin()+XY.x,width, insertionVal);
     }
 
     //check end of rows
     int expansion = 0;
-    for(int i=1; i<4; i++)
+    for(int i=1; i<width+1; i++)
     {
         std::vector<int> layoutRow = layout[XY.y];
         if(layoutRow[layoutRow.size()-i] != 0) expansion++;
@@ -268,6 +302,6 @@ void updateLayout(coord XY, std::vector<std::vector<int> > &layout, int cellNum)
     //chop the nub
     for(int i=0; i<6; i++)
     {
-        layout[XY.y-i].resize(layout[XY.y-i].size()-3);
+        layout[XY.y-i].resize(layout[XY.y-i].size()-width);
     }
 }

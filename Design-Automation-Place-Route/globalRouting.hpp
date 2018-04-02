@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <vector>
 #include <fstream>
+#include <string>
 
 
 void global(std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries,  std::vector<std::pair<int,int> > & channels);
@@ -24,6 +25,6 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
 
 void updateRight(std::vector<cell> &cellData, coord XY);
 
-void updateLayout(coord XY, std::vector<std::vector<int> > &layout, int cellNum);
+void updateLayout(coord XY, std::vector<std::vector<int> > &layout, std::string updateSetting);
 
 #endif /* globalRouting_hpp */
