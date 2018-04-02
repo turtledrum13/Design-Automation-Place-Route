@@ -135,7 +135,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
                 cycleChild = VCG[cycleParent-1].returnList()[0];
                 
                 if(cycleChild != NULL)
-                    dogleg(cycleParent, cycleChild, netlistPairs, cellData, VCG, HCG, channelVec[N], cycle_list);
+                    dogleg(cycleParent, cycleChild, netlistPairs, cellData, VCG, HCG, channelVec[N], cycle_list, layout);
             }
         }
 
@@ -485,7 +485,7 @@ int detectCycle(std::vector<constraintList> &VCG, std::vector<int>& cycleList)
 }
 
 
-void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<constraintList>& VCG, std::vector<constraintList>& HCG, chan& channel, std::vector<int>& cycle_list)
+void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<constraintList>& VCG, std::vector<constraintList>& HCG, chan& channel, std::vector<int>& cycle_list, std::vector<std::vector<int> > &layout)
 {
     //take the child and break in two         //child and parent will be the actual IDs of the child and parent
     //Rules for breaking: must happen at a place that does not cause any new vertical conflicts
