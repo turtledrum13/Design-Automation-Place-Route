@@ -2,8 +2,7 @@
 //  globalRouting.cpp
 //  Design-Automation-Place-Route
 //
-//  Created by Aaron J Cunningham on 3/16/18.
-//  Copyright © 2018 Aaron Cunningham. All rights reserved.
+//  Created on 3/16/18.
 //
 
 #include "globalRouting.hpp"
@@ -13,7 +12,7 @@
 #include <stdio.h>
 
 
-void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries,  std::vector<std::pair<int,int> > & channels, std::ofstream & file)
+void global(std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries,  std::vector<std::pair<int,int> > & channels)
 {
     //for each net in the netlist
     for(size_t i=0; i<netlistPairs.size(); i++)
@@ -30,43 +29,38 @@ void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::
             updateRight(cellData, newCoord);
 
             //adding pass-through cell to end of cellData
-            cell newCell;
-            newCell.r = 5;
-            newCell.x = newCoord.x;
-            newCell.y = newCoord.y;
-            newCell.cell = cellData.size()+1;
-
+            int cellNum = cellData.size()+1;
+            cell newCell = {.r = 5, .x = newCoord.x, .y = newCoord.y, .cell = cellNum};
             cellData.push_back(newCell);
 
             //net splitting
-            std::pair<int,int> srcNet, destNet;
-            srcNet.first = cellData.size()-1;
-            destNet.first = cellData.size()-1;
+            std::pair<int,int> oldDest, newSrc;
+            oldDest.first = cellData.size()-1;
+            newSrc.first = cellData.size()-1;
 
             if(topTerminal)
             {
-                srcNet.second = 1;
-                destNet.second = 2;
+                oldDest.second = 1;
+                newSrc.second = 2;
             }
             else
             {
-                srcNet.second = 2;
-                destNet.second = 1;
+                oldDest.second = 2;
+                newSrc.second = 1;
             }
 
-            netlistPairs.push_back(netlistPairs[i]);        //copy the current netlist of focus to the end of the list
+            netlistPairs.push_back(netlistPairs[i]);            //copy the current netlist of focus to the end of the list
 
-            netlistPairs[i].dest = srcNet;                  //replace second cell with new pass through cell
+            netlistPairs[i].dest = oldDest;                     //replace second cell with new pass through cell
             isGlobal(channels, netlistPairs[i], cellData);
 
-            netlistPairs.back().src = destNet;              //replace first cell with new pass through cell
-            netlistPairs.back().num = cellData.size();      //assign new net number to the new net segment
+            netlistPairs.back().src = newSrc;                   //replace first cell with new pass through cell
+            netlistPairs.back().num = cellData.size();          //assign new net number to the new net segment
             isGlobal(channels, netlistPairs.back(), cellData);
         }
-        //printf("\n<%i,%i> <%i,%i> global = %i",netlistPairs[i].c1.first+1,netlistPairs[i].c1.second,netlistPairs[i].c2.first+1,netlistPairs[i].c2.second, netlistPairs[i].global);
     }
 
-    for(size_t i=0; i<cellData.size(); i++)                 //put the lower left corners of layout cells back to normal
+    for(size_t i=0; i<cellData.size(); i++)                     //put the lower left corners of layout cells back to normal
     {
         layout[cellData[i].y][cellData[i].x] = cellData[i].r;
     }
@@ -277,20 +271,3 @@ void updateLayout(coord XY, std::vector<std::vector<int> > &layout, int cellNum)
         layout[XY.y-i].resize(layout[XY.y-i].size()-3);
     }
 }
-
-
-void printOut(std::ofstream & file, std::vector<std::vector<int> > & layout)
-{
-    //print CSV -- using to paste into spreadsheet for debugging
-    for (int i=0; i<layout.size(); i++)
-    {
-        size_t index = layout[i].size();
-
-        for(int j=0; j<index; j++)
-        {
-            file << layout[i][j] << ",";
-        }
-        file << "\n";
-    }
-}
-

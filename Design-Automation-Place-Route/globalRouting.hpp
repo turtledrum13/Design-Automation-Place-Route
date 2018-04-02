@@ -2,8 +2,8 @@
 //  globalRouting.hpp
 //  Design-Automation-Place-Route
 //
-//  Created by Aaron J Cunningham on 3/16/18.
-//  Copyright © 2018 Aaron Cunningham. All rights reserved.
+//  Created on 3/16/18.
+
 //
 
 #ifndef globalRouting_hpp
@@ -16,7 +16,7 @@
 #include <fstream>
 
 
-void global(std::vector<net> & globalNets, std::vector<net> & channelNets, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries,  std::vector<std::pair<int,int> > & channels, std::ofstream & file);
+void global(std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<std::vector<int> > & layout, std::vector<int> boundaries,  std::vector<std::pair<int,int> > & channels);
 
 coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data);
 
@@ -25,8 +25,5 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
 void updateRight(std::vector<cell> &cellData, coord XY);
 
 void updateLayout(coord XY, std::vector<std::vector<int> > &layout, int cellNum);
-
-void printOut(std::ofstream & file, std::vector<std::vector<int> > & layout);
-
 
 #endif /* globalRouting_hpp */

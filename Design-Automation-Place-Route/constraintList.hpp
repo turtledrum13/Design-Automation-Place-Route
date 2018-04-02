@@ -2,8 +2,7 @@
 //  constraintList.hpp
 //  Design-Automation-Place-Route
 //
-//  Created by Aaron J Cunningham on 3/29/18.
-//  Copyright © 2018 Aaron Cunningham. All rights reserved.
+//  Created on 3/29/18.
 //
 
 #ifndef constraintList_hpp

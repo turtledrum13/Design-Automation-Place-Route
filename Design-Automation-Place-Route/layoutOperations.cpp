@@ -2,8 +2,7 @@
 //  layoutOperations.cpp
 //  Design-Automation-Place-Route
 //
-//  Created by Aaron J Cunningham on 3/16/18.
-//  Copyright © 2018 Aaron Cunningham. All rights reserved.
+//  Created on 3/16/18.
 //
 
 #include "layoutOperations.hpp"
@@ -33,7 +32,7 @@ void makeCell(cell C, std::vector<std::vector<int> > & layout)
 
 void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> > & layout, std::vector<cell> &cellData, std::vector<net>& netlistPairs)
 {
-    bool routedAlready = false;
+    int num = 0;
 
     for(int i=currentNet->x1; i < currentNet->x2+1; i++)
     {
@@ -41,60 +40,39 @@ void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> > & layo
     }
 
 
-    //if(currentNet->dogleg && netlistPairs[currentNet->num-1].routed)
-    //{
-        //cellData[currentNet->dest.first].y = netlistPairs[currentNet->num-1].y;
-    //}
-    //else if(currentNet->dogleg)
-int num;
     if(currentNet->dogleg)
     {
         for(int i=0; i<netlistPairs.size(); i++)
         {
             if(netlistPairs[i].num == currentNet->num && netlistPairs[i].routed)
             {
-                routedAlready = true;
-            num = i;
-            break;
+                //routedAlready = true;
+                num = i;
+                break;
             }
         }
 
-        if(routedAlready)
+        if(num > 0)
         {
             cellData[currentNet->dest.first].y = cellData[netlistPairs[num].dest.first].y;
             cellData[netlistPairs[num].dest.first].y = atRow;
-
-            printf(" WE HERE @ %i -- cellData[%i].y = %i\n",atRow,currentNet->dest.first,cellData[currentNet->dest.first].y);
-            printf(" WE HERE @ %i -- netlistPairs[%i].routed = %i\n",atRow,currentNet->num-1,netlistPairs[currentNet->num-1].routed);
         }
         else
         {
             cellData[currentNet->dest.first].y = atRow;
-            //currentNet->y = atRow;
-            
-            printf(" BELOW HERE @ %i -- cellData[%i].y = %i\n",atRow,currentNet->dest.first,cellData[currentNet->dest.first].y);
-            printf(" BELOW HERE @ %i -- netlistPairs[%i].routed = %i\n",atRow,currentNet->num-1,netlistPairs[currentNet->num-1].routed);
         }
     }
-    
-//    netlistPairs[currentNet->num-1].routed = true;
-    
-    netlistPairs[currentNet->num-1].y = atRow;
-    currentNet->routed = true;
-    
-    //currentNet->y = atRow;
-    //currentNet->routed = true;
 
-    //printf("Routed = %i",currentNet->num);
-    //printf("Netlist routed = %i",netlistPairs[currentNet->num-1].routed);
+    currentNet->routed = true;
+    currentNet->y = atRow;
 }
 
 
-void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, std::vector<std::vector<int> >& layout, int orgiginalNets)
+void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, std::vector<std::vector<int> >& layout)
 {
     int yTrunk, ySrc, yDest, xSrc, xDest, iSrc, iDest;
 
-    for(size_t i=0; i<orgiginalNets; i++)
+    for(size_t i=0; i<netlistPairs.size(); i++)
     {
         if(netlistPairs[i].routed)
         {
@@ -105,37 +83,34 @@ void makeBranches(std::vector<cell>& cellData, std::vector<net>& netlistPairs, s
             yTrunk = currentNet.y;
             ySrc = cellSrc.y + terminalOffset(currentNet.src.second, cellSrc.r);
             yDest = cellDest.y + terminalOffset(currentNet.dest.second, cellDest.r);
+            
             xSrc = currentNet.xSrc;
             xDest = currentNet.xDest;
             iSrc=0;
             iDest=0;
 
-            if(!currentNet.dogleg)
+            while(yTrunk+iSrc != ySrc)
             {
-                while(yTrunk+iSrc != ySrc)
-                {
-                    layout[yTrunk+iSrc][xSrc] = 8; //draw metal 2 onto layout;
+                layout[yTrunk+iSrc][xSrc] = 8; //draw metal 2 onto layout;
 
-                    if(yTrunk<ySrc) iSrc++;
-                    else iSrc--;
-                }
+                if(yTrunk<ySrc) iSrc++;
+                else iSrc--;
+            }
 
-            
-                while(yTrunk+iDest != yDest)
-                {
-                    layout[yTrunk+iDest][xDest] = 8; //draw metal 2 onto layout;
+            while(yTrunk+iDest != yDest)
+            {
+                layout[yTrunk+iDest][xDest] = 8; //draw metal 2 onto layout;
 
-                    if(yTrunk<yDest) iDest++;
-                    else iDest--;
-                }
+                if(yTrunk<yDest) iDest++;
+                else iDest--;
             }
 
             //draw via at intersections of metal 1 and metal 2
-//            if(xSrc != xDest)
-//            {
-//                layout[yTrunk][xSrc] = 9;
-//                layout[yTrunk][xDest] = 9;
-//            }
+            if(xSrc != xDest)
+            {
+                layout[yTrunk][xSrc] = 9;
+                layout[yTrunk][xDest] = 9;
+            }
         }
     }
 }
@@ -195,7 +170,7 @@ void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, i
         {
             if (mainPartition[z]!=numOfCells)
             {
-                cellData[mainPartition[z]].x = j*7;
+                cellData[mainPartition[z]].x = j*6;
                 cellData[mainPartition[z]].y = i*7+5;
                 cellData[mainPartition[z]].cell = mainPartition[z]+1;
             }
