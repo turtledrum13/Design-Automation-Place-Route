@@ -47,7 +47,7 @@ public:
 
     void removeAll(int num);
 
-    bool cycleDetection(int num, std::vector<constraintList> &VCG, std::vector<bool> &visited);
+    bool cycleDetection(int num, std::vector<constraintList> &VCG, std::vector<bool> &visited, std::vector<int> &cycleList);
 };
 
 #endif /* constraintList_hpp */

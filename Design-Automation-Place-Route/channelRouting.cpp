@@ -446,12 +446,12 @@ int detectCycle(std::vector<constraintList> &VCG)
     bool detected = false;
     int foundCycle = 0;
     std::vector<bool> visited;
-
+    std::vector<int> cycleList;
     for(int i=0; i<VCG.size(); i++)
     {
         visited.resize(0);
         visited.resize(VCG.size(), false);
-        detected = VCG[i].cycleDetection(i+1, VCG, visited);
+        detected = VCG[i].cycleDetection(i+1, VCG, visited, cycleList);
         if (detected)
         {
             foundCycle = i+1;

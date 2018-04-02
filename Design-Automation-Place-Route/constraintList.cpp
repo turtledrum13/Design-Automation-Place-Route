@@ -142,13 +142,17 @@ void constraintList::removeAll(int num)
     }
 }
 
-bool constraintList::cycleDetection(int num, std::vector<constraintList> &VCG, std::vector<bool> &visited)
+bool constraintList::cycleDetection(int num, std::vector<constraintList> &VCG, std::vector<bool> &visited, std::vector<int> &cycleList)
 {
     graphNode *newNode = head;
 
     while (newNode!=NULL)
     {
-        if (newNode->value==num) return true;
+        if (newNode->value==num)
+        {
+            cycleList.push_back(newNode->value);
+            return true;
+        }
         else if (visited[newNode->value-1])
         {
             newNode = newNode->next;
@@ -158,6 +162,7 @@ bool constraintList::cycleDetection(int num, std::vector<constraintList> &VCG, s
             visited[newNode->value-1] = true;
             if (VCG[newNode->value-1].cycleDetection(num, VCG, visited))
             {
+                cycleList.push_back(newNode->value);
                 return true;
             }
             else newNode=newNode->next;
