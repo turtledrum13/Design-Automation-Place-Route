@@ -2,8 +2,7 @@
 //  layoutOperations.hpp
 //  Design-Automation-Place-Route
 //
-//  Created by Aaron J Cunningham on 3/16/18.
-//  Copyright © 2018 Aaron Cunningham. All rights reserved.
+//  Created on 3/16/18.
 //
 
 #ifndef layoutOperations_hpp
@@ -26,6 +25,6 @@ void appendCols(int numCols, std::vector<std::vector<int> >& layout);
 
 void appendRows(int numRows, std::vector<std::vector<int> >& layout);
 
-
 void createArray(std::vector<cell> &cellData, std::vector<int> &mainPartition, int numOfCells);
+
 #endif /* layoutOperations_hpp */

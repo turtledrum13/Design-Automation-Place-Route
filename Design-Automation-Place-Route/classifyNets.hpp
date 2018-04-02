@@ -2,8 +2,7 @@
 //  classifyNets.hpp
 //  Design-Automation-Place-Route
 //
-//  Created by Aaron J Cunningham on 3/16/18.
-//  Copyright © 2018 Aaron Cunningham. All rights reserved.
+//  Created on 3/16/18.
 //
 
 #ifndef classifyNets_hpp
@@ -13,11 +12,9 @@
 #include <vector>
 #include "structures.h"
 
-void classifyNets(std::vector<cell> cellData, std::vector<std::vector<int> > layout, std::vector<net> & netsGlobal, std::vector<net> & netsChannel, std::vector<net> & netlistPairs, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels);
+void classifyNets(std::vector<cell> cellData, std::vector<std::vector<int> > layout, std::vector<net> & netlistPairs, std::vector<int> & boundaries, std::vector<std::pair<int,int> > & channels);
 
-void findBoundaries(std::vector<cell> cellData, std::vector<std::vector<int> > layout, std::vector<bool> & boundaryLoc);
-
-void makeBoundaryVec (std::vector<bool> boundaryLoc, std::vector<int> & boundaries);
+void makeBoundaryVec (int width, std::vector<int> & boundaries);
 
 void makeChannelVec (std::vector<int>& boundaries, std::vector<std::pair<int,int> > & channels);
 

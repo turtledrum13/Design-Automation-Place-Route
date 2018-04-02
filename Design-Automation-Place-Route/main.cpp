@@ -19,26 +19,27 @@ int main()//int argc,char *argv[])
 {
     //Extract bench number from user input////////////////////////////////
 
-//    std::string inputFile;
-//    std::string benchNum;
-//
-//    for(int i = 1; i < argc; i++)
-//    {
-//        inputFile += argv[i];
-//    }
-//    if(inputFile.size() >= 7)
-//    {
-//        benchNum = inputFile[0];
-//        if(inputFile[1] != '.') benchNum += inputFile[1];
-//    }
-//    else
-//    {
-//        benchNum = "X";
-//    }
-//
-//
-//    std::ifstream fileIn (argv[1]);
-//    std::ofstream outMag (argv[2]);
+    /*std::string inputFile;
+    std::string benchNum;
+
+    for(int i = 1; i < argc; i++)
+    {
+        inputFile += argv[i];
+    }
+
+    if(inputFile.size() >= 1)
+    {
+        benchNum = inputFile[0];
+        if(inputFile[1] != '.') benchNum += inputFile[1];
+    }
+    else
+    {
+        benchNum = "X";
+    }
+
+
+    std::ifstream fileIn (argv[1]);
+    std::ofstream outMag (argv[2]);*/
 
 
     //initiate program timer
@@ -46,15 +47,7 @@ int main()//int argc,char *argv[])
     startTime = std::clock();
 
     //initialize files
-    std::string benchNum = "6";
-    //std::ifstream fileIn ("Resources/v1.2/"+benchNum);
     //std::ofstream outFile ("output"+benchNum+".csv");
-
-    //std::ifstream fileIn ("Resources/v1.2/6");
-    //std::string benchNum = "2";
-    //std::ifstream fileIn ("Resources/v1.2/"+benchNum);
-    //std::ofstream outFile ("output"+benchNum+".csv");
-
     std::ifstream fileIn ("Resources/v1.2/9");
     std::ofstream outFile ("output2.csv");
     std::ofstream outCSV ("magic2CSV.csv");
@@ -63,7 +56,7 @@ int main()//int argc,char *argv[])
     //intitilaize vectors
     std::vector<numberList> cellList;
     std::vector<cell> cellData;
-    std::vector<net> netlistPairs, netsGlobal, netsChannel;
+    std::vector<net> netlistPairs;
     std::vector<std::vector<int> > netArray, layout, dummyLayout;
     std::vector<int> gains, fullPartition, mainPartition, boundaries;
     std::vector<std::pair <int,int> > netlist, channels;
@@ -168,9 +161,9 @@ int main()//int argc,char *argv[])
     }
 
     //First: Global Routing
-    classifyNets(cellData, layout, netsGlobal, netsChannel, netlistPairs, boundaries, channels);
+    classifyNets(cellData, layout, netlistPairs, boundaries, channels);
 
-    global(netsGlobal, netsChannel, netlistPairs, cellData, layout, boundaries, channels, outCSV);
+    global(netlistPairs, cellData, layout, boundaries, channels);
 
 
     //Second: Channel Routing
@@ -270,8 +263,8 @@ int main()//int argc,char *argv[])
     outFile  << "ORIGINAL CELLS," << numOfCells <<"\n";
     std::cout<< "ORIGINAL CELLS: " << numOfCells <<"\n";
 
-    outFile  << "ORIGINAL NETS," << numOfCells <<"\n\n";
-    std::cout<< "ORIGINAL NETS: " << numOfCells <<"\n\n";
+    outFile  << "ORIGINAL NETS," << numOfNets <<"\n\n";
+    std::cout<< "ORIGINAL NETS: " << numOfNets <<"\n\n";
 
 
     int numFeedThru = 0;
