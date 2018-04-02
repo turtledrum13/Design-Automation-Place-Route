@@ -52,7 +52,7 @@ int main()//int argc,char *argv[])
 
     std::ifstream fileIn ("Resources/v1.2/6");
     std::ofstream outFile ("output2.csv");
-    std::ofstream outCSV ("magicCSV.csv");
+    std::ofstream outCSV ("magic2CSV.csv");
     std::ofstream outMag ("magFile.mag");
 
     //intitilaize vectors

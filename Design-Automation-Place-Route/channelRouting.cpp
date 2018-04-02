@@ -100,7 +100,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         int cycleParent = 1;                                //initialize non-zero to enter loop
         std::vector<int> cycle_list;
 
-        
+
         while(cycleParent > 0)
         {
             HCG = makeHCG(channelVec[N], netlistPairs);     //Loop through boundary vectors to create HCG (undirected graph)
@@ -116,12 +116,12 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             }
             std::cout << "\n\n\n\n";
 
-            
+
             cycleParent = detectCycle(VCG, cycle_list);      //find a cycle
-            
-            
+
+
             //Print Cycle List/////////////////
-            
+
             printf("  <---------------\n");
             for(int i=0; i<cycle_list.size(); i++)
             {
@@ -133,7 +133,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             if(cycleParent != 0)                            //get child from cycle parent for splitting
             {
                 cycleChild = VCG[cycleParent-1].returnList()[0];
-                
+
                 if(cycleChild != NULL)
                     dogleg(cycleParent, cycleChild, netlistPairs, cellData, VCG, HCG, channelVec[N], cycle_list, layout);
             }
@@ -509,7 +509,7 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
 
     bool goRight = false;
     //if((netlistPairs.size()/3)%2 == 0) goRight = true;
-    
+
     int splitPoint = childNet->x1;//abs(childNet->xSrc - childNet->xDest)/2; //approximate center of the child
 
     if(abs(childNet->x1-parentNet->x1) < 2 || abs(childNet->x1-parentNet->x2) < 2)
@@ -625,7 +625,7 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     std::pair<int,int> cellBPair (cellB.cell,0);
 
     newChildNet->src = childNet->dest;
-    
+
     childNet->dest = cellAPair;
     newChildNet->dest = cellBPair;
     childNet->dogleg = true;
@@ -644,11 +644,11 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     //modify top and bottom boundaries as needed, including inserting or whatever...
     if(channel.top[newChildNet->xSrc] == child)
         channel.top[newChildNet->xSrc] = channel.numNets;
-    
+
     else if(channel.bottom[newChildNet->xSrc] == child)
         channel.bottom[newChildNet->xSrc] = channel.numNets;
 
-    
+
 
     //printing out channel boundaries for debugging
     printf("\n");
