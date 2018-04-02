@@ -37,8 +37,8 @@ void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> > & layo
     {
         layout[atRow][i] = currentNet->num;//7;
     }
-    
-    
+
+
     if(currentNet->dogleg && netlistPairs[currentNet->num-1].routed)
     {
         cellData[currentNet->dest.first].y = netlistPairs[currentNet->num-1].y;
@@ -47,11 +47,11 @@ void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> > & layo
     {
         cellData[currentNet->dest.first].y = atRow;
     }
-    
-    
+
+
     currentNet->y = atRow;
     currentNet->routed = true;
-    
+
     //printf("Routed = %i",currentNet->num);
     //printf("Netlist routed = %i",netlistPairs[currentNet->num-1].routed);
 }

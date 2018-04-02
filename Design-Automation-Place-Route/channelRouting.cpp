@@ -570,13 +570,12 @@ bool dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
         if(splitPoint+1==channel.top.size()-1)
         {
             appendCols(3, layout);
-            channel.top.push_back(0);
-            channel.top.push_back(0);
-            channel.top.push_back(0);
-            channel.bottom.push_back(0);
-            channel.bottom.push_back(0);
-            channel.bottom.push_back(0);
-            channel.bottom.push_back(0);
+            channel.top.push_back(1);
+            channel.top.push_back(1);
+            channel.top.push_back(1);
+            channel.bottom.push_back(1);
+            channel.bottom.push_back(1);
+            channel.bottom.push_back(1);
             splitPoint +=2;
             break;
         }
