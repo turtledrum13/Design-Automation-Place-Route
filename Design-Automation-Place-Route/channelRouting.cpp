@@ -60,7 +60,8 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         printf("%i  ",netID[i]);
         channelVec[i].numNets = netID[i];
     }
-    printf("\n\nTotal number of nets: %zu",netlistPairs.size());
+    printf("\n\nTotal number of nets: %zu\n",netlistPairs.size());
+    printf("\n\nTotal number of channels: %zu",channelVec.size());
 
 
 
@@ -68,13 +69,13 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
     //For each of the channels in layout....///////
     ///////////////////////////////////////////////
 
-    for(size_t N=4  ; N<5; N++) //channelVec.size()
+    for(size_t N=0  ; N<channelVec.size(); N++) //channelVec.size()
     {
         printf("\n\n\n");
         printf("\n\nCHANNEL %zu\n\n",N+1);
 
         int atRow = channels[N].first;
-        int netsRemaining = channelVec[N].numNets;
+        int netsRemaining;
         int previousPlacement;
         int numTracks = 0;
         bool cycle = false;
@@ -114,16 +115,22 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             }
             std::cout << "\n\n\n\n";
 
-            cycleParent = detectCycle(VCG);                 //find a cycle
             std::vector<int> cycle_list;
-            if(cycleParent!= 0) cycle_list = cycleList(VCG, cycleParent);
+            cycleParent = detectCycle(VCG, cycle_list);                 //find a cycle
+            
+            for(int i=0; i<cycle_list.size(); i++)
+            {
+                printf("%i ", cycle_list[i]);
+            }
+            
+            //if(cycleParent!= 0) cycle_list = cycleList(VCG, cycleParent);
             
             if(cycleParent != 0)                            //get child from cycle parent for splitting
             {
                 cycleChild = VCG[cycleParent-1].returnList()[0];
                 while(cycleChild != NULL)
                 {
-                    cycleBroken = dogleg(cycleParent, cycleChild, netlistPairs, cellData, VCG, HCG, channelVec[N]);
+                    cycleBroken = dogleg(cycleParent, cycleChild, netlistPairs, cellData, VCG, HCG, channelVec[N], cycle_list);
                     
                     if(cycleBroken)
                     {
@@ -143,6 +150,8 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         //ROUTE USING LEFT-EDGE ALGORITHM//////////////////
         ///////////////////////////////////////////////////
 
+        netsRemaining = channelVec[N].numNets;
+        
         while(netsRemaining > 0)
         {
             //////////PRINT UNROUTED NETS///////////
@@ -461,12 +470,12 @@ void removeChild(int netNum, std::vector<constraintList>& HCG, std::vector<const
 }
 
 
-int detectCycle(std::vector<constraintList> &VCG)
+int detectCycle(std::vector<constraintList> &VCG, std::vector<int>& cycleList)
 {
     bool detected = false;
     int foundCycle = 0;
     std::vector<bool> visited;
-    std::vector<int> cycleList;
+    //std::vector<int> cycleList;
     for(int i=0; i<VCG.size(); i++)
     {
         visited.resize(0);
@@ -483,7 +492,7 @@ int detectCycle(std::vector<constraintList> &VCG)
 }
 
 
-bool dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<constraintList>& VCG, std::vector<constraintList>& HCG, chan& channel)
+bool dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<constraintList>& VCG, std::vector<constraintList>& HCG, chan& channel, std::vector<int>& cycle_list)
 {
     //take the child and break in two         //child and parent will be the actual IDs of the child and parent
     //Rules for breaking: must happen at a place that does not cause any new vertical conflicts
@@ -494,6 +503,8 @@ bool dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
 
 
     //decide on a split point ???      ...arbitrary one for now (halfway point)
+    child = cycle_list[0];
+    parent = cycle_list[1];
     net* childNet = channel.nets[child-1];
     net* parentNet = channel.nets[parent-1];
     
@@ -516,14 +527,38 @@ bool dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     }
     
     
+    //add all-vertical nets to the cycle_list (can't put a dogleg there)
+    for(int i=0; i<channel.width; i++)
+    {
+        if(channel.top[i]==channel.bottom[i] && channel.top[i] > 0) cycle_list.push_back(channel.top[i]);
+    }
+    
+    int top1, top2, top3, bot1, bot2, bot3;
+    int prevSplitPoint = splitPoint;
+    
     while (true)
     {
-        if(abs(parentNet->x1-splitPoint) > 1 && abs(parentNet->x2-splitPoint) > 1) break;
-        else
+        top1 = channel.top[splitPoint-1];
+        top2 = channel.top[splitPoint];
+        top3 = channel.top[splitPoint+1];
+        bot1 = channel.bottom[splitPoint-1];
+        bot2 = channel.bottom[splitPoint];
+        bot3 = channel.bottom[splitPoint+1];
+        
+        for(int i=0; i<cycle_list.size(); i++)
         {
-            if(goRight) splitPoint += 1;
-            else splitPoint -= 1;
+            int x = cycle_list[i];
+            
+            if(top1 == x || top2 == x || top3 == x || bot1 == x || bot2 == x || bot3 == x)
+            {
+                if(goRight) splitPoint += 1;
+                else splitPoint -= 1;
+                break;
+            }
         }
+        
+        if(prevSplitPoint == splitPoint) break;
+        prevSplitPoint = splitPoint;
     }
 
     
@@ -618,26 +653,26 @@ bool dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     return true;
 }
 
-std::vector<int> cycleList(std::vector<constraintList> & VCG, int parent)
-{
-    std::vector<int> list;
-    list.push_back(parent);
-    
-    while(true)
-    {
-            list.push_back(VCG[list.back()-1].returnList()[0]);
-        
-            if(VCG[list.back()-1].returnList()[0] == parent) break;
-
-    }
-    
-    for(int i=0; i<list.size(); i++)
-    {
-        printf("%i ", list[i]);
-    }
-    
-    return list;
-}
+//std::vector<int> cycleList(std::vector<constraintList> & VCG, int parent)
+//{
+//    std::vector<int> list;
+//    list.push_back(parent);
+//
+//    while(true)
+//    {
+//            list.push_back(VCG[list.back()-1].returnList()[0]);
+//
+//            if(VCG[list.back()-1].returnList()[0] == parent) break;
+//
+//    }
+//
+//    for(int i=0; i<list.size(); i++)
+//    {
+//        printf("%i ", list[i]);
+//    }
+//
+//    return list;
+//}
 
 
 

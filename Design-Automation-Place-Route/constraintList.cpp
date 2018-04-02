@@ -160,7 +160,7 @@ bool constraintList::cycleDetection(int num, std::vector<constraintList> &VCG, s
         else
         {
             visited[newNode->value-1] = true;
-            if (VCG[newNode->value-1].cycleDetection(num, VCG, visited))
+            if (VCG[newNode->value-1].cycleDetection(num, VCG, visited, cycleList))
             {
                 cycleList.push_back(newNode->value);
                 return true;
