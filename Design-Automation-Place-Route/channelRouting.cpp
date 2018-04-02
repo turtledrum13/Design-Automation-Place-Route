@@ -68,7 +68,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
     //For each of the channels in layout....///////
     ///////////////////////////////////////////////
 
-    for(size_t N=0; N<5; N++) //channelVec.size()
+    for(size_t N=4  ; N<5; N++) //channelVec.size()
     {
         printf("\n\n\n");
         printf("\n\nCHANNEL %zu\n\n",N+1);
@@ -97,6 +97,7 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
         
         int cycleChild = NULL;
         int cycleParent = 1;                                //initialize non-zero to enter loop
+        bool cycleBroken = false;
         
         while(cycleParent > 0)
         {
@@ -115,11 +116,26 @@ void channel(std::vector<cell> & cellData, std::vector<std::vector<int> > & layo
             
             
             cycleParent = detectCycle(VCG);                 //find a cycle
+            std::vector<int> cycle_list;
+            if(cycleParent!= 0) cycle_list = cycleList(VCG, cycleParent);
             
             if(cycleParent != 0)                            //get child from cycle parent for splitting
             {
                 cycleChild = VCG[cycleParent-1].returnList()[0];
-                if(cycleChild != NULL) dogleg(cycleParent, cycleChild, netlistPairs, cellData, VCG, HCG, channelVec[N]);
+                while(cycleChild != NULL)
+                {
+                    cycleBroken = dogleg(cycleParent, cycleChild, netlistPairs, cellData, VCG, HCG, channelVec[N]);
+                    
+                    if(cycleBroken)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        cycleParent = cycleChild;
+                        cycleChild = VCG[cycleParent-1].returnList()[0];
+                    }
+                }
             }
         }
 
@@ -468,7 +484,7 @@ int detectCycle(std::vector<constraintList> &VCG)
 }
 
 
-void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<constraintList>& VCG, std::vector<constraintList>& HCG, chan& channel)
+bool dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<constraintList>& VCG, std::vector<constraintList>& HCG, chan& channel)
 {
     //take the child and break in two         //child and parent will be the actual IDs of the child and parent
     //Rules for breaking: must happen at a place that does not cause any new vertical conflicts
@@ -479,18 +495,36 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     
     
     //decide on a split point ???      ...arbitrary one for now (halfway point)
-    net* childNet = channel.nets[parent-1];
-    net* parentNet = channel.nets[child-1];
+    net* childNet = channel.nets[child-1];
+    net* parentNet = channel.nets[parent-1];
     
     printf("\nparent(%i): %i<-->%i\n",parent, parentNet->x1, parentNet->x2);
     printf("child(%i): %i<-->%i\n",child, childNet->x1, childNet->x2);
 
+    
+    bool goRight = false;
     int splitPoint = childNet->x1 + 1;//abs(childNet->xSrc - childNet->xDest)/2; //approximate center of the child
+    
+    if(abs(childNet->x1-parentNet->x1) < 2 || abs(childNet->x1-parentNet->x2) < 2)
+    {
+        splitPoint = childNet->x1 + 1;//abs(childNet->xSrc - childNet->xDest)/2; //approximate center of the child
+        goRight = true;
+    }
+    else if(abs(childNet->x2-parentNet->x1) < 2 || abs(childNet->x2-parentNet->x2) < 2)
+    {
+        splitPoint = childNet->x2 + 1;//abs(childNet->xSrc - childNet->xDest)/2; //approximate center of the child
+        goRight = false;
+    }
+    
     
     while (true)
     {
         if(abs(parentNet->x1-splitPoint) > 1 && abs(parentNet->x2-splitPoint) > 1) break;
-        else splitPoint += 1;
+        else
+        {
+            if(goRight) splitPoint += 1;
+            else splitPoint -= 1;
+        }
     }
 
     
@@ -582,11 +616,28 @@ void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<
     printf("Num of Cells: %zu\n\n",cellData.size());
     
 
+    return true;
+}
 
-    //recalculate VCG and HCG (but not in the full way, just update them)
+std::vector<int> cycleList(std::vector<constraintList> & VCG, int parent)
+{
+    std::vector<int> list;
+    list.push_back(parent);
+    
+    while(true)
+    {
+            list.push_back(VCG[list.back()-1].returnList()[0]);
+        
+            if(VCG[list.back()-1].returnList()[0] == parent) break;
 
-    //HCG = anything with a connection to the current net should be checked against both the new partial net and the old partial net, updated accordingly
-    //std::vector<int> HConstraints = HCG[child].returnList();
+    }
+    
+    for(int i=0; i<list.size(); i++)
+    {
+        printf("%i ", list[i]);
+    }
+    
+    return list;
 }
 
 
