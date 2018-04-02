@@ -204,7 +204,7 @@ int main()//int argc,char *argv[])
         {
             if(layout[i][j] == 1 || layout[i][j] == 3 || layout[i][j] == 5)
             {
-                outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+                outMag<<"rect\t"<<j<<"\t"<<i<<"\t"<<j+1<<"\t"<<i+1<<"\n";
                 cellArea++;
             }
         }
@@ -218,7 +218,7 @@ int main()//int argc,char *argv[])
         {
             if(layout[i][j] == 7)
             {
-                outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+                outMag<<"rect\t"<<j<<"\t"<<i<<"\t"<<j+1<<"\t"<<i+1<<"\n";
                 wireArea++;
             }
         }
@@ -232,7 +232,7 @@ int main()//int argc,char *argv[])
         {
             if(layout[i][j] == 8)
             {
-                outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+                outMag<<"rect\t"<<j<<"\t"<<i<<"\t"<<j+1<<"\t"<<i+1<<"\n";
                 wireArea++;
             }
         }
@@ -246,7 +246,7 @@ int main()//int argc,char *argv[])
         {
             if(layout[i][j] == 9)
             {
-                outMag<<"rect\t"<<i<<"\t"<<j<<"\t"<<i+1<<"\t"<<j+1<<"\n";
+                outMag<<"rect\t"<<j<<"\t"<<i<<"\t"<<j+1<<"\t"<<i+1<<"\n";
                 numVias++;
             }
         }

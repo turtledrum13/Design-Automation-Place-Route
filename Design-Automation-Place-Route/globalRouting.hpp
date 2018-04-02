@@ -23,7 +23,7 @@ coord terminalCoords(std::pair<int,int> cell_term, std::vector<cell> cell_data);
 
 coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout, std::vector<int> bound, bool & topTerm);
 
-void updateRight(std::vector<cell> &cellData, coord XY);
+void updateRight(std::vector<cell> &cellData, coord XY, std::string updateSetting);
 
 void updateLayout(coord XY, std::vector<std::vector<int> > &layout, std::string updateSetting);
 

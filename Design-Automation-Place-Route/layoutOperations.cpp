@@ -36,7 +36,7 @@ void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> > & layo
 
     for(int i=currentNet->x1; i < currentNet->x2+1; i++)
     {
-        layout[atRow][i] = currentNet->num;//7;
+        layout[atRow][i] = 7;
     }
 
 

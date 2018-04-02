@@ -27,7 +27,7 @@ void global(std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::
             //update the layout and cellData vector with new pass through cells
             coord newCoord = findVertical(source, destination, layout, boundaries, topTerminal);
             updateLayout(newCoord, layout, "feed-through");
-            updateRight(cellData, newCoord);
+            updateRight(cellData, newCoord, "feed-through");
 
             //adding pass-through cell to end of cellData
             int cellNum = cellData.size()+1;
@@ -77,8 +77,9 @@ void global(std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::
             
             if(counter == 7)
             {
-                coord newCord(j, rowNum);
-                updateLayout(newCord, layout, "space");
+                coord newCoord(j, rowNum);
+                updateLayout(newCoord, layout, "space");
+                updateRight(cellData, newCoord, "space");
                 counter = 0;
             }
         }
@@ -250,15 +251,21 @@ coord findVertical(coord src, coord dest, std::vector<std::vector<int> > layout,
 }
 
 
-void updateRight(std::vector<cell> &cellData, coord XY)
+void updateRight(std::vector<cell> &cellData, coord XY, std::string updateSetting)
 {
+    int width = 0;
+    
+    if(updateSetting == "feed-through") width = 3;
+    else if(updateSetting == "space") width = 1;
+    
+    
     for (size_t i=0; i<cellData.size(); i++)
     {
         if (cellData[i].y==XY.y)
         {
             if(cellData[i].x >= XY.x)
             {
-                cellData[i].x += 3;
+                cellData[i].x += width;
             }
         }
     }
