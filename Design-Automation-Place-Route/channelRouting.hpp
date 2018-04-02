@@ -29,7 +29,7 @@ void removeChild(int netNum, std::vector<constraintList>& HCG, std::vector<const
 
 int detectCycle(std::vector<constraintList> &VCG, std::vector<int>& cycleList);
 
-bool dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<constraintList>& VCG, std::vector<constraintList>& HCG, chan& channel, std::vector<int>& cycle_list, std::vector<std::vector<int> > &layout);
+void dogleg(int parent, int child, std::vector<net> & netlistPairs, std::vector<cell> & cellData, std::vector<constraintList>& VCG, std::vector<constraintList>& HCG, chan& channel, std::vector<int>& cycle_list, std::vector<std::vector<int> > &layout);
 
 //std::vector<int> cycleList(std::vector<constraintList> & VCG, int parent);
 

@@ -33,24 +33,66 @@ void makeCell(cell C, std::vector<std::vector<int> > & layout)
 
 void makeTrunk(net* currentNet, int atRow, std::vector<std::vector<int> > & layout, std::vector<cell> &cellData, std::vector<net>& netlistPairs)
 {
+    bool routedAlready = false;
+
     for(int i=currentNet->x1; i < currentNet->x2+1; i++)
     {
         layout[atRow][i] = currentNet->num;//7;
     }
 
 
-    if(currentNet->dogleg && netlistPairs[currentNet->num-1].routed)
+    //if(currentNet->dogleg && netlistPairs[currentNet->num-1].routed)
+    //{
+        //cellData[currentNet->dest.first].y = netlistPairs[currentNet->num-1].y;
+    //}
+    //else if(currentNet->dogleg)
+int num;
+    if(currentNet->dogleg)
     {
-        cellData[currentNet->dest.first].y = netlistPairs[currentNet->num-1].y;
+        for(int i=0; i<netlistPairs.size(); i++)
+        {
+            if(netlistPairs[i].num == currentNet->num && netlistPairs[i].routed)
+            {
+                routedAlready = true;
+            num = i;
+            break;
+            }
+        }
+
+        if(routedAlready)
+        {
+            cellData[currentNet->dest.first].y = cellData[netlistPairs[num].dest.first].y;
+            cellData[netlistPairs[num].dest.first].y = atRow;
+
+            printf(" WE HERE @ %i -- cellData[%i].y = %i\n",atRow,currentNet->dest.first,cellData[currentNet->dest.first].y);
+            printf(" WE HERE @ %i -- netlistPairs[%i].routed = %i\n",atRow,currentNet->num-1,netlistPairs[currentNet->num-1].routed);
+        }
+        else
+        {
+            cellData[currentNet->dest.first].y = atRow;
+
+            printf(" BELOW HERE @ %i -- cellData[%i].y = %i\n",atRow,currentNet->dest.first,cellData[currentNet->dest.first].y);
+            printf(" BELOW HERE @ %i -- netlistPairs[%i].routed = %i\n",atRow,currentNet->num-1,netlistPairs[currentNet->num-1].routed);
+        }
     }
-    else if(currentNet->dogleg)
-    {
-        cellData[currentNet->dest.first].y = atRow;
-    }
+    //else
+    //{
+        //currentNet->y = atRow;
+    //}
 
 
-    currentNet->y = atRow;
     currentNet->routed = true;
+    currentNet->y = atRow;
+
+   //netlistPairs[currentNet->num-1].y = atRow;
+//    netlistPairs[currentNet->num-1].routed = true;
+
+    //netlistPairs[currentNet->num-1].y = atRow;
+    //currentNet->y = atRow;
+    //currentNet->routed = true;
+
+    //currentNet->y = atRow;
+    //currentNet->routed = true;
 
     //printf("Routed = %i",currentNet->num);
     //printf("Netlist routed = %i",netlistPairs[currentNet->num-1].routed);
